@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1057141596113",
+    "project_id": "expo-notif-dev",
+    "storage_bucket": "expo-notif-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1057141596113:android:5ba16b9a325876b6558af0",
+        "android_client_info": {
+          "package_name": "com.proeliumx.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1057141596113-a6jagl44m0ee6i1l7h0976pnvdjk4k65.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3raoQbcSRZbPdyu-esSD4zbtcnuIFYBQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1057141596113-a6jagl44m0ee6i1l7h0976pnvdjk4k65.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
