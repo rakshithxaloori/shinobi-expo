@@ -82,6 +82,8 @@ class LolConnect extends Component {
             autoCorrect={false}
             placeholder="eg: rock_lee"
             label="Summoner Name"
+            labelStyle={{ color: darkTheme.on_background }}
+            inputStyle={{ color: darkTheme.on_background }}
             leftIcon={{ type: "ionicons", name: "person-outline" }}
             value={this.state.summoner_name}
             onChangeText={(value) => {
@@ -101,7 +103,10 @@ class LolConnect extends Component {
               this.setState({ platform: value });
             }}
             style={{ width: 200 }}
-            itemStyle={{ fontSize: 15 }}
+            itemStyle={{
+              fontSize: 15,
+              color: darkTheme.on_background,
+            }}
           >
             <Picker.Item label="Brazil" value="BR1" />
             <Picker.Item label="Europe Nordic & East" value="EUN1" />
@@ -123,7 +128,6 @@ class LolConnect extends Component {
           >
             <Text style={styles.buttonText}>Connect League of Legends</Text>
           </TouchableOpacity>
-          {/* PLATFORM DROP DOWN */}
         </>
       ) : (
         <>
@@ -136,13 +140,6 @@ class LolConnect extends Component {
             <Text style={styles.subtitle}>Then hit verify</Text>
           </View>
           <View style={{ flexDirection: "row", marginTop: 20 }}>
-            {/* <Avatar
-              rounded
-              size={this.profileIconSize}
-              title={this.state.summoner_name[0]}
-              source={{ uri: this.state.old_profile_icon }}
-              overlayContainerStyle={avatarDefaultStyling}
-            /> */}
             <Avatar
               rounded
               size={this.profileIconSize}
@@ -177,14 +174,21 @@ class LolConnect extends Component {
 }
 
 const styles = StyleSheet.create({
-  buttonText: { color: "white", fontWeight: "bold", marginHorizontal: 20 },
+  buttonText: {
+    color: darkTheme.on_background,
+    fontSize: 15,
+    fontWeight: "bold",
+    marginHorizontal: 20,
+  },
   button: {
     height: 40,
     marginTop: 10,
-    backgroundColor: "black",
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 20,
+    borderRadius: 10,
+    backgroundColor: darkTheme.surface,
+    borderWidth: 2,
+    borderColor: "white",
   },
   title: {
     color: darkTheme.on_surface_title,

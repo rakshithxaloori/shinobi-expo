@@ -194,13 +194,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   connect: {
-    backgroundColor: "black",
+    backgroundColor: darkTheme.surface,
     justifyContent: "center",
     alignItems: "center",
-    alignSelf: "center",
-    height: 40,
-    width: "80%",
+    height: 50,
+    width: "90%",
     borderRadius: 10,
+    borderWidth: 1,
+    borderColor: darkTheme.on_background,
   },
   gameData: { flex: 8 },
   container: {

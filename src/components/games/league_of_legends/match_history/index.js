@@ -161,7 +161,7 @@ class MatchHistory extends Component {
           <Text style={styles.emptyText}>
             Fetching matches from League of Legends servers.
           </Text>
-          <Text style={styles.emptyText}>Come back after quick break.</Text>
+          <Text style={styles.emptyText}>Come back after a quick break.</Text>
         </View>
       ) : (
         <View style={styles.empty}>
