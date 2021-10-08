@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { StatusBar } from "expo-status-bar";
 
 import GoogleSignIn from "./google";
 
 import { windowWidthRatio } from "../../../utils/constants";
+import { darkTheme } from "../../../utils/theme";
 
 const SignIn = () => {
   const [error, setError] = useState("");
@@ -12,6 +14,7 @@ const SignIn = () => {
     <View style={styles.container}>
       <Text style={styles.error}>{error !== "" && error}</Text>
       <GoogleSignIn setError={setError} />
+      <StatusBar style={darkTheme.status_bar} />
     </View>
   );
 };

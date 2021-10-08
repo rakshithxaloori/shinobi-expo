@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
+import { StatusBar } from "expo-status-bar";
 import { Input } from "react-native-elements";
 import axios from "axios";
 
@@ -8,6 +9,7 @@ import GoogleSignUp from "./google";
 import { windowWidthRatio } from "../../../utils/constants";
 import { createAPIKit } from "../../../utils/APIKit";
 import { handleAPIError } from "../../../utils";
+import { darkTheme } from "../../../utils/theme";
 
 const SignUp = ({ navigation }) => {
   let cancelTokenSource = axios.CancelToken.source();
@@ -82,6 +84,7 @@ const SignUp = ({ navigation }) => {
         username={username}
         checkUsername={checkUsername}
       />
+      <StatusBar style={darkTheme.status_bar} />
     </View>
   );
 };

@@ -9,7 +9,7 @@ import {
 import { Avatar } from "react-native-elements";
 import { dateTimeDiff } from "../../utils";
 import { avatarDefaultStyling } from "../../utils/styles";
-import { lightTheme } from "../../utils/theme";
+import { darkTheme } from "../../utils/theme";
 
 const screenWidth = Dimensions.get("screen").width;
 
@@ -46,9 +46,9 @@ const Notification = ({ avatarSize, notification, navigateProfile }) => {
 const styles = StyleSheet.create({
   text: {
     fontSize: 14,
-    color: lightTheme.titleText,
+    color: darkTheme.on_surface_title,
   },
-  date: { color: lightTheme.subtitleText, fontWeight: "500" },
+  date: { color: darkTheme.on_surface_subtitle, fontWeight: "500" },
   textArea: { flexDirection: "row", marginLeft: 10 },
   container: {
     flexDirection: "row",

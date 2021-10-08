@@ -1,8 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Constants from "expo-constants";
-
-import AuthContext from "../../authContext";
+import { darkTheme } from "../../utils/theme";
 
 const Cover = () => {
   return (
@@ -14,15 +13,19 @@ const Cover = () => {
 };
 
 const styles = StyleSheet.create({
-  subtitle: { color: "white", fontSize: 18, fontWeight: "600" },
+  subtitle: {
+    color: darkTheme.on_surface_title,
+    fontSize: 18,
+    fontWeight: "600",
+  },
   title: {
-    color: "white",
+    color: darkTheme.on_surface_title,
     fontSize: 30,
     fontWeight: "600",
   },
   container: {
-    height: 213,
-    backgroundColor: "#546bfb",
+    flex: 2,
+    backgroundColor: darkTheme.secondary,
     justifyContent: "center",
     alignItems: "center",
   },

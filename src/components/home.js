@@ -24,7 +24,7 @@ import Search from "./search";
 
 import { createAPIKit } from "../utils/APIKit";
 import { handleAPIError } from "../utils";
-import { lightTheme } from "../utils/theme";
+import { darkTheme } from "../utils/theme";
 import LolMatch from "./games/league_of_legends/match";
 import LolConnect from "./games/league_of_legends/connect";
 
@@ -37,7 +37,7 @@ const MyTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: lightTheme.background,
+    background: darkTheme.background,
   },
 };
 
@@ -83,8 +83,12 @@ const TabNavigatorComponent = () => {
         return (
           <Tab.Navigator
             screenOptions={{
-              tabBarStyle: { backgroundColor: lightTheme.background },
-              tabBarActiveTintColor: lightTheme.primary,
+              tabBarStyle: {
+                backgroundColor: darkTheme.surface,
+                elevation: 0,
+                shadowOpacity: 0,
+              },
+              tabBarActiveTintColor: darkTheme.primary,
               tabBarInactiveTintColor: "grey",
               style: { width: fullScreenWidth },
             }}
@@ -148,13 +152,15 @@ const StackNavigatorComponent = () => (
                   type="ionicon"
                   name="arrow-back-outline"
                   size={30}
+                  color={darkTheme.on_background}
                 />
               ),
               headerBackTitleVisible: false,
               headerTitleAlign: "center",
+              headerTintColor: darkTheme.on_background,
               headerTitleStyle: { fontSize: 20 },
               headerStyle: {
-                backgroundColor: lightTheme.background,
+                backgroundColor: darkTheme.background,
                 elevation: 0,
                 shadowOpacity: 0,
               },

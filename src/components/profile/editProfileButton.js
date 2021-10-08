@@ -7,10 +7,18 @@ import axios from "axios";
 import { createAPIKit } from "../../utils/APIKit";
 import { handleAPIError } from "../../utils";
 import { avatarDefaultStyling } from "../../utils/styles";
+import { darkTheme } from "../../utils/theme";
 
 const screen = Dimensions.get("screen");
 
-const EditProfileButton = ({ username, picture, bio, setBio, buttonStyle }) => {
+const EditProfileButton = ({
+  username,
+  picture,
+  bio,
+  setBio,
+  buttonStyle,
+  buttonTextStyle,
+}) => {
   let cancelTokenSource = axios.CancelToken.source();
   const [visible, setVisible] = React.useState(false);
   const [disable, setDisable] = React.useState(false);
@@ -53,14 +61,15 @@ const EditProfileButton = ({ username, picture, bio, setBio, buttonStyle }) => {
         title="Edit Profile"
         icon={
           <Ionicons
-            name="brush"
+            name="create"
             size={15}
-            color="white"
+            color={darkTheme.on_primary}
             style={{ paddingRight: 3 }}
           />
         }
         onPress={() => setVisible(true)}
         buttonStyle={buttonStyle}
+        titleStyle={buttonTextStyle}
       />
       <Overlay
         isVisible={visible}
@@ -101,6 +110,7 @@ const EditProfileButton = ({ username, picture, bio, setBio, buttonStyle }) => {
           disabled={disable || newBio == bio}
           onPress={saveProfile}
           buttonStyle={styles.button}
+          titleStyle={buttonTextStyle}
         />
       </Overlay>
     </View>

@@ -16,7 +16,7 @@ import AuthContext from "../../authContext";
 import { createWSKit } from "./WSKit";
 import { dateTimeDiff } from "../../utils";
 import { avatarDefaultStyling } from "../../utils/styles";
-import { lightTheme } from "../../utils/theme";
+import { darkTheme } from "../../utils/theme";
 
 const screenWidth = Dimensions.get("screen").width;
 
@@ -109,7 +109,7 @@ class ChatPreview extends Component {
               }
             : {
                 fontSize: 16,
-                color: lightTheme.subtitleText,
+                color: darkTheme.on_surface_subtitle,
                 fontWeight: "500",
               };
 
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   },
   username: {
     fontSize: 20,
-    color: lightTheme.titleText,
+    color: darkTheme.on_surface_title,
     fontWeight: "bold",
   },
   textArea: {

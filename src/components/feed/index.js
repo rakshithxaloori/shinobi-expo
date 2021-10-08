@@ -6,13 +6,14 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from "react-native";
+import { StatusBar } from "expo-status-bar";
 import { Avatar } from "react-native-elements";
 import IonIcons from "react-native-vector-icons/Ionicons";
 
 import TrendingList from "./trendingList";
 import AuthContext from "../../authContext";
 import { avatarDefaultStyling } from "../../utils/styles";
-import { lightTheme } from "../../utils/theme";
+import { darkTheme } from "../../utils/theme";
 
 const Feed = (props) => {
   const { user } = useContext(AuthContext);
@@ -43,14 +44,14 @@ const Feed = (props) => {
             }}
             style={{ marginRight: 10 }}
           >
-            <IonIcons name="search-sharp" size={32} />
+            <IonIcons name="search-sharp" size={32} color={darkTheme.primary} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               props.navigation.navigate("Settings");
             }}
           >
-            <IonIcons name="settings" size={32} />
+            <IonIcons name="settings" size={32} color={darkTheme.primary} />
           </TouchableOpacity>
         </View>
       </View>
@@ -58,6 +59,7 @@ const Feed = (props) => {
       <TrendingList navigateProfile={navigateProfile} />
 
       {/* <TestNotifications /> */}
+      <StatusBar style={darkTheme.status_bar} />
     </SafeAreaView>
   );
 };
@@ -71,12 +73,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    color: lightTheme.subtitleText,
+    color: darkTheme.on_surface_subtitle,
     fontWeight: "500",
   },
   name: {
     fontSize: 20,
-    color: lightTheme.titleText,
+    color: darkTheme.on_background,
     fontWeight: "bold",
   },
   options: {
@@ -92,7 +94,7 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    color: "#b8bec3",
+    color: darkTheme.on_background,
     fontWeight: "600",
     fontSize: 18,
     marginLeft: 20,

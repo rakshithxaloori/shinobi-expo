@@ -16,7 +16,7 @@ import { avatarDefaultStyling } from "../../../utils/styles";
 import CustomSwitch from "./switch";
 import AuthContext from "../../../authContext";
 
-import { lightTheme } from "../../../utils/theme";
+import { darkTheme } from "../../../utils/theme";
 
 class LeagueOfLegendsProfile extends Component {
   static contextType = AuthContext;
@@ -112,13 +112,17 @@ class LeagueOfLegendsProfile extends Component {
               size={avatarSize}
               title={this.state.name[0]}
               source={{ uri: this.state.profile_icon }}
-              avatarStyle={styles.avatar}
-              overlayContainerStyle={avatarDefaultStyling}
+              overlayContainerStyle={[avatarDefaultStyling, styles.avatar]}
             />
-            <Text style={styles.summonerName}>{this.state.name}</Text>
+            <View style={{ flexDirection: "row", flex: 2 }}>
+              <Text style={styles.summonerName}>{this.state.name}</Text>
+              <Text style={[styles.summonerName, { fontWeight: "bold" }]}>
+                #{this.state.platform.replace(/[0-9]/g, "")}
+              </Text>
+            </View>
             <Text style={styles.summonerLevel}>Lv.{this.state.level}</Text>
             <CustomSwitch
-              selectionColor={lightTheme.primary}
+              selectionColor={darkTheme.primary}
               onSelectSwitch={this.toggle}
               toggleVal={this.state.toggleVal}
             />
@@ -153,35 +157,41 @@ class LeagueOfLegendsProfile extends Component {
         ) : (
           <Text style={styles.noprofile}>{this.state.error}</Text>
         )}
-        {this.state.profile_loaded &&
-          (this.state.toggleVal === 1 ? (
-            <MatchHistory username={this.props.username} />
-          ) : (
-            <ChampionMasteries username={this.props.username} />
-          ))}
+        {this.state.profile_loaded && (
+          <View style={styles.gameData}>
+            {this.state.toggleVal === 1 ? (
+              <MatchHistory username={this.props.username} />
+            ) : (
+              <ChampionMasteries username={this.props.username} />
+            )}
+          </View>
+        )}
       </View>
     );
   };
 }
 
 const styles = StyleSheet.create({
-  noprofile: { color: lightTheme.titleText, fontWeight: "600" },
+  noprofile: { color: darkTheme.on_surface_title, fontWeight: "600" },
   avatar: { borderRadius: 10 },
   summonerName: {
-    flex: 2,
     fontSize: 17,
-    fontWeight: "bold",
     alignSelf: "center",
     marginLeft: 10,
+    color: darkTheme.on_surface_title,
   },
   summonerLevel: {
     flex: 1,
+    fontSize: 17,
     alignSelf: "center",
+    color: darkTheme.on_surface_subtitle,
   },
   profile: {
+    flex: 1,
     flexDirection: "row",
-    backgroundColor: "#f2f2f2",
+    backgroundColor: darkTheme.surface,
     alignItems: "center",
+    borderRadius: 10,
   },
   connect: {
     backgroundColor: "black",
@@ -192,7 +202,10 @@ const styles = StyleSheet.create({
     width: "80%",
     borderRadius: 10,
   },
+  gameData: { flex: 8 },
   container: {
+    flex: 1,
+    marginTop: 5,
     borderRadius: 10,
     justifyContent: "center",
   },

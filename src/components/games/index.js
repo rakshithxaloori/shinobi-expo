@@ -3,7 +3,7 @@ import { View, Text, ScrollView, StyleSheet, Dimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Avatar } from "react-native-elements";
 import { avatarDefaultStyling } from "../../utils/styles";
-import { lightTheme } from "../../utils/theme";
+import { darkTheme } from "../../utils/theme";
 
 import LeagueOfLegendsProfile from "./league_of_legends";
 
@@ -26,7 +26,7 @@ const Games = ({ username, reload }) => {
                 source={{ uri: game.logo }}
                 containerStyle={avatarDefaultStyling}
               />
-              <Text style={styles.text}>{game.name}</Text>
+              <Text style={styles.gameName}>{game.name}</Text>
             </View>
           ))}
         </ScrollView>
@@ -43,28 +43,26 @@ const Games = ({ username, reload }) => {
 };
 
 const styles = StyleSheet.create({
-  text: {
+  gameName: {
     fontWeight: "600",
     fontSize: 14,
     marginLeft: 8,
+    color: darkTheme.on_surface_subtitle,
   },
   game: {
     flexDirection: "row",
-    backgroundColor: "white",
-    height: 40,
+    backgroundColor: darkTheme.surface,
     paddingVertical: 12,
-    marginRight: 16,
     paddingHorizontal: 10,
-    borderRadius: 10,
-    elevation: 5,
-    alignItems: "center",
     marginHorizontal: 8,
     marginVertical: 10,
+    borderRadius: 10,
+    alignItems: "center",
   },
-  scroll: { marginBottom: 30 },
-  gameProfile: {},
+  scroll: { flex: 1 },
+  gameProfile: { flex: 6 },
   container: {
-    // flex: 1,
+    flex: 7,
     height: screenHeight,
     width: "100%",
     paddingHorizontal: 10,

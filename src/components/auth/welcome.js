@@ -1,6 +1,6 @@
 import React from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
-import { lightTheme } from "../../utils/theme";
+import { darkTheme } from "../../utils/theme";
 
 const Auth = (props) => {
   return (
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#d3d3d3",
   },
   signupTouchable: {
-    backgroundColor: lightTheme.primary,
+    backgroundColor: darkTheme.primary,
   },
   buttons: { flexDirection: "row", marginTop: 20 },
   container: {

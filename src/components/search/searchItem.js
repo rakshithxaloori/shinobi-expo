@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { Avatar } from "react-native-elements";
 import { avatarDefaultStyling } from "../../utils/styles";
+import { darkTheme } from "../../utils/theme";
 
 const screenWidth = Dimensions.get("screen").width;
 
@@ -43,7 +44,11 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "bold",
   },
-  subtitle: { color: "#b8bec3", fontWeight: "600", fontSize: 13 },
+  subtitle: {
+    color: darkTheme.on_surface_subtitle,
+    fontWeight: "600",
+    fontSize: 13,
+  },
   gameAlias: { flexDirection: "row" },
   text: { marginLeft: 15 },
   avatar: {

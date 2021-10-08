@@ -8,6 +8,7 @@ import {
   Dimensions,
   SafeAreaView,
 } from "react-native";
+import { StatusBar } from "expo-status-bar";
 import { Divider } from "react-native-elements";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
@@ -19,7 +20,7 @@ import ChatPreview from "./chatPreview";
 
 import { createAPIKit } from "../../utils/APIKit";
 import { handleAPIError } from "../../utils";
-import { lightTheme } from "../../utils/theme";
+import { darkTheme } from "../../utils/theme";
 
 const screenWidth = Dimensions.get("screen").width;
 
@@ -153,7 +154,7 @@ class AllChats extends Component {
           ListFooterComponent={
             <ActivityIndicator
               animating={this.state.isLoading}
-              color="#000000"
+              color={darkTheme.on_background}
             />
           }
         />
@@ -164,6 +165,7 @@ class AllChats extends Component {
           </Text>
         </View>
       )}
+      <StatusBar style={darkTheme.status_bar} />
     </SafeAreaView>
   );
 }
@@ -173,7 +175,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 10,
     marginHorizontal: 20,
-    color: "#b8bec3",
+    color: darkTheme.on_surface_subtitle,
     fontWeight: "600",
   },
   placeholder: {

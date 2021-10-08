@@ -1,11 +1,11 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { Overlay } from "react-native-elements";
 import axios from "axios";
 
 import { createAPIKit } from "../../../../utils/APIKit";
 import { handleAPIError } from "../../../../utils";
-import { lightTheme } from "../../../../utils/theme";
+import { disconnectStyles } from "..";
 
 const DisconnectTwitchOverlay = ({
   showOverlay,
@@ -47,73 +47,34 @@ const DisconnectTwitchOverlay = ({
     <Overlay
       isVisible={showOverlay}
       onBackdropPress={() => setShowOverlay(false)}
-      overlayStyle={styles.overlay}
+      overlayStyle={disconnectStyles.overlay}
     >
-      <Text style={styles.overlayTitle}>
+      <Text style={disconnectStyles.overlayTitle}>
         Are you sure? Disconnecting won't show Twitch link in your profile
       </Text>
       <View>
         <View style={{ marginBottom: 10 }}>
           <TouchableOpacity
-            style={[styles.button, styles.disconnect]}
+            style={[disconnectStyles.button, disconnectStyles.disconnect]}
             disabled={disabled}
             onPress={disconnect}
           >
-            <Text style={styles.disconnectText}>Disconnect Twitch</Text>
+            <Text style={disconnectStyles.disconnectText}>
+              Disconnect Twitch
+            </Text>
           </TouchableOpacity>
         </View>
         <View style={{ marginBottom: 10 }}>
           <TouchableOpacity
-            style={[styles.button, styles.cancel]}
+            style={[disconnectStyles.button, disconnectStyles.cancelButton]}
             onPress={() => setShowOverlay(false)}
           >
-            <Text style={styles.cancelText}>Cancel</Text>
+            <Text style={disconnectStyles.cancelText}>Cancel</Text>
           </TouchableOpacity>
         </View>
       </View>
     </Overlay>
   );
 };
-
-const styles = StyleSheet.create({
-  button: {
-    width: 200,
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: 3,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 8,
-  },
-  cancelText: {
-    fontSize: 15,
-    fontWeight: "bold",
-    color: lightTheme.primary,
-  },
-  cancel: {
-    backgroundColor: "white",
-    borderColor: lightTheme.primary,
-    borderWidth: 2,
-  },
-  disconnectText: {
-    fontSize: 15,
-    fontWeight: "bold",
-    color: "white",
-  },
-  disconnect: {
-    backgroundColor: lightTheme.primary,
-  },
-  overlayTitle: {
-    fontSize: 15,
-    color: lightTheme.titleText,
-    fontWeight: "bold",
-    marginVertical: 10,
-    marginHorizontal: 20,
-  },
-  overlay: {
-    alignItems: "center",
-    margin: 20,
-  },
-});
 
 export default DisconnectTwitchOverlay;

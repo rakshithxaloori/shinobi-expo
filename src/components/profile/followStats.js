@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
+import { darkTheme } from "../../utils/theme";
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
     flexDirection: "row",
   },
-  text: { fontSize: sectionHeight },
+  text: { fontSize: sectionHeight, color: darkTheme.on_surface_title },
   highlightText: { fontWeight: "bold" },
 });
 

@@ -11,7 +11,7 @@ import axios from "axios";
 import { createAPIKit } from "../../../../utils/APIKit";
 import { handleAPIError } from "../../../../utils";
 import Match from "./match";
-import { lightTheme } from "../../../../utils/theme";
+import { darkTheme } from "../../../../utils/theme";
 
 class MatchHistory extends Component {
   state = {
@@ -149,7 +149,7 @@ class MatchHistory extends Component {
                 <ActivityIndicator
                   style={{ marginTop: 10 }}
                   animating={this.state.isLoading}
-                  color="#000000"
+                  color={darkTheme.on_background}
                 />
               )
             }
@@ -177,14 +177,18 @@ class MatchHistory extends Component {
 
 const styles = StyleSheet.create({
   header: {
-    color: "#b8bec3",
+    color: darkTheme.on_surface_subtitle,
     fontWeight: "bold",
     fontSize: 15,
     textTransform: "uppercase",
     marginBottom: 5,
   },
-  endText: { color: lightTheme.subtitleText, fontWeight: "bold", marginTop: 5 },
-  emptyText: { fontWeight: "600" },
+  endText: {
+    color: darkTheme.on_surface_subtitle,
+    fontWeight: "bold",
+    marginTop: 5,
+  },
+  emptyText: { fontWeight: "600", color: darkTheme.on_surface_subtitle },
   empty: { justifyContent: "center", alignItems: "flex-start" },
   container: { paddingVertical: 5, paddingVertical: 10 },
 });

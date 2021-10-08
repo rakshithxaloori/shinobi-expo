@@ -8,8 +8,15 @@ import { handleAPIError } from "../../utils";
 import { createAPIKit } from "../../utils/APIKit";
 
 import UnfollowOverlay from "./unfollowOverlay";
+import { darkTheme } from "../../utils/theme";
 
-const FollowButton = ({ username, following, setFollowing, buttonStyle }) => {
+const FollowButton = ({
+  username,
+  following,
+  setFollowing,
+  buttonStyle,
+  buttonTextStyle,
+}) => {
   let cancelTokenSource = axios.CancelToken.source();
   const [showOverlay, setShowOverlay] = React.useState(false);
   const [disabled, setDisabled] = React.useState(false);
@@ -49,9 +56,15 @@ const FollowButton = ({ username, following, setFollowing, buttonStyle }) => {
         title="Following"
         onPress={() => setShowOverlay(true)}
         icon={
-          <Ionicons name="heart" size={15} color="white" style={styles.icon} />
+          <Ionicons
+            name="heart"
+            size={15}
+            color={darkTheme.on_primary}
+            style={styles.icon}
+          />
         }
         buttonStyle={buttonStyle}
+        titleStyle={buttonTextStyle}
       />
     </View>
   ) : (
@@ -63,11 +76,12 @@ const FollowButton = ({ username, following, setFollowing, buttonStyle }) => {
         <Ionicons
           name="heart-outline"
           size={15}
-          color="white"
+          color={darkTheme.on_primary}
           style={styles.icon}
         />
       }
       buttonStyle={buttonStyle}
+      titleStyle={buttonTextStyle}
     />
   );
 };

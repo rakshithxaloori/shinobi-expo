@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import IonIcons from "react-native-vector-icons/Ionicons";
 
 import AuthContext from "../../authContext";
-import { lightTheme } from "../../utils/theme";
+import { darkTheme } from "../../utils/theme";
 
 const LogOut = ({ icon, title, text }) => {
   const context = React.useContext(AuthContext);
@@ -11,7 +11,12 @@ const LogOut = ({ icon, title, text }) => {
 
   return (
     <TouchableOpacity style={styles.container} onPress={signOut}>
-      <IonIcons name="exit-outline" style={styles.icon} size={32} />
+      <IonIcons
+        name="exit-outline"
+        style={styles.icon}
+        size={32}
+        color={darkTheme.on_background}
+      />
       <View style={styles.content}>
         <Text style={styles.title}>Log out</Text>
         <Text style={styles.text}>Hasta la vista, baby!</Text>
@@ -22,12 +27,12 @@ const LogOut = ({ icon, title, text }) => {
 
 const styles = StyleSheet.create({
   title: {
-    color: lightTheme.titleText,
+    color: darkTheme.on_surface_title,
     fontSize: 24,
     fontWeight: "600",
   },
   text: {
-    color: lightTheme.titleText,
+    color: darkTheme.on_surface_title,
     fontWeight: "600",
     opacity: 0.6,
     marginTop: 5,

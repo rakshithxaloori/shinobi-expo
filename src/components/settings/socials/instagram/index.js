@@ -7,7 +7,7 @@ import axios from "axios";
 import { createAPIKit } from "../../../../utils/APIKit";
 import { handleAPIError } from "../../../../utils";
 import DisconnectInstagramOverlay from "./disconnect";
-import { lightTheme } from "../../../../utils/theme";
+import { darkTheme } from "../../../../utils/theme";
 
 const Instagram = ({ connectedBool, setError }) => {
   let cancelTokenSource = axios.CancelToken.source();
@@ -67,7 +67,12 @@ const Instagram = ({ connectedBool, setError }) => {
           }
         }}
       >
-        <IonIcons name="logo-instagram" style={styles.icon} size={32} />
+        <IonIcons
+          name="logo-instagram"
+          style={styles.icon}
+          size={32}
+          color={darkTheme.on_background}
+        />
         <View style={styles.content}>
           <Text style={styles.title}>
             {connected ? "Disconnect Instagram" : "Connect Instagram"}
@@ -89,12 +94,12 @@ const Instagram = ({ connectedBool, setError }) => {
 
 const styles = StyleSheet.create({
   title: {
-    color: lightTheme.titleText,
+    color: darkTheme.on_surface_title,
     fontSize: 24,
     fontWeight: "600",
   },
   text: {
-    color: lightTheme.titleText,
+    color: darkTheme.on_surface_title,
     fontWeight: "600",
     opacity: 0.6,
     marginTop: 5,

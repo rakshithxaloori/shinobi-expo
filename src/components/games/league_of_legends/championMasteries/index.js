@@ -17,6 +17,7 @@ import { handleAPIError } from "../../../../utils";
 import { createAPIKit } from "../../../../utils/APIKit";
 
 import ChampionMastery from "./championMastery";
+import { darkTheme } from "../../../../utils/theme";
 
 const numColumns = 4;
 
@@ -177,7 +178,7 @@ class ChampionMasteriesByLevel extends Component {
           ListFooterComponent={
             <ActivityIndicator
               animating={this.state.isLoading}
-              color="#000000"
+              color={darkTheme.on_background}
             />
           }
         />
@@ -197,7 +198,7 @@ const styles = StyleSheet.create({
   container: { height: "100%", paddingVertical: 5, paddingVertical: 10 },
   header: {
     marginBottom: 5,
-    color: "#b8bec3",
+    color: darkTheme.on_surface_subtitle,
     fontWeight: "bold",
     fontSize: 15,
     textTransform: "uppercase",
@@ -206,7 +207,7 @@ const styles = StyleSheet.create({
   emptyText: { fontWeight: "600" },
   empty: { justifyContent: "center", alignItems: "flex-start" },
   levelHeader: {
-    color: "#b8bec3",
+    color: darkTheme.on_surface_subtitle,
     fontWeight: "700",
     fontSize: 12,
     textTransform: "uppercase",

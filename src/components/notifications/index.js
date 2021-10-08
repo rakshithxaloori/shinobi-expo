@@ -7,6 +7,7 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
+import { StatusBar } from "expo-status-bar";
 import { Divider } from "react-native-elements";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
@@ -18,7 +19,7 @@ import Notification from "./notification";
 
 import { createAPIKit } from "../../utils/APIKit";
 import { handleAPIError } from "../../utils";
-import { lightTheme } from "../../utils/theme";
+import { darkTheme } from "../../utils/theme";
 
 class Notifications extends Component {
   state = {
@@ -160,7 +161,7 @@ class Notifications extends Component {
           ListFooterComponent={
             <ActivityIndicator
               animating={this.state.isLoading}
-              color="#000000"
+              color={darkTheme.on_background}
             />
           }
         />
@@ -171,6 +172,7 @@ class Notifications extends Component {
           </Text>
         </View>
       )}
+      <StatusBar style={darkTheme.status_bar} />
     </SafeAreaView>
   );
 }

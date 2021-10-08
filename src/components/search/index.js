@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import { View, SafeAreaView, ScrollView, Text, StyleSheet } from "react-native";
+import { StatusBar } from "expo-status-bar";
 import { SearchBar, Divider } from "react-native-elements";
-import Constants from "expo-constants";
 import axios from "axios";
 
 import SearchItem from "./searchItem";
 
 import { createAPIKit } from "../../utils/APIKit";
 import { handleAPIError } from "../../utils";
-import { lightTheme } from "../../utils/theme";
+import { darkTheme } from "../../utils/theme";
 
 class Search extends Component {
   state = {
@@ -82,7 +82,7 @@ class Search extends Component {
       <SafeAreaView style={styles.container}>
         <SearchBar
           autoCapitalize="none"
-          lightTheme={true}
+          darkTheme={true}
           onChangeText={this.updateSearch}
           value={this.state.search}
           onClear={() => {
@@ -122,6 +122,7 @@ class Search extends Component {
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={this.renderSeperator}
         /> */}
+        <StatusBar style={darkTheme.status_bar} />
       </SafeAreaView>
     );
   };
@@ -139,7 +140,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
   },
-  text: { fontWeight: "600", color: "#b8bec3" },
+  text: { fontWeight: "600", color: darkTheme.on_surface_subtitle },
   container: {
     flex: 1,
   },

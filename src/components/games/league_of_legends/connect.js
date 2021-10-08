@@ -4,7 +4,7 @@ import { Avatar, Input } from "react-native-elements";
 import { Picker } from "@react-native-picker/picker";
 
 import { createAPIKit } from "../../../utils/APIKit";
-import { lightTheme } from "../../../utils/theme";
+import { darkTheme } from "../../../utils/theme";
 import { handleAPIError } from "../../../utils";
 import { avatarDefaultStyling } from "../../../utils/styles";
 
@@ -187,13 +187,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   title: {
-    color: lightTheme.titleText,
+    color: darkTheme.on_surface_title,
     fontWeight: "bold",
     fontSize: 22,
     marginBottom: 10,
   },
   subtitle: {
-    color: lightTheme.subtitleText,
+    color: darkTheme.on_surface_subtitle,
     fontWeight: "bold",
     fontSize: 15,
     marginBottom: 3,

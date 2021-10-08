@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import Participant from "./participant";
 
-import { lightTheme } from "../../../../utils/theme";
+import { darkTheme } from "../../../../utils/theme";
 
 const Team = ({ team }) => {
   const { participants, color, win } = team;
@@ -49,8 +49,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     paddingHorizontal: 10,
     paddingVertical: 5,
-    color: lightTheme.background,
-    borderBottomColor: lightTheme.background,
+    color: darkTheme.on_background,
+    borderBottomColor: darkTheme.background,
     borderBottomWidth: 2,
   },
 });

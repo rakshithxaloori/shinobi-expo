@@ -7,48 +7,57 @@ import {
   StyleSheet,
 } from "react-native";
 import { Avatar } from "react-native-elements";
+import { useNavigation } from "@react-navigation/native";
 
 import { avatarDefaultStyling } from "../../../../utils/styles";
+import { darkTheme } from "../../../../utils/theme";
 
 const Participant = ({ participant }) => {
+  const navigation = useNavigation();
   const { summoner, stats, champion, role } = participant;
-  console.log(summoner);
 
   const renderItem = ({ item }) => (
     <View style={{ margin: 3 }}>
       <Avatar
         size={22}
         title={item[0]}
-        source={{ uri: item }}
+        source={{ uri: item.image }}
         overlayContainerStyle={[avatarDefaultStyling, { borderRadius: 5 }]}
       />
     </View>
   );
 
-  const itemKeyExtractor = (item) => {
-    const split_arr = item.split("/");
-    return split_arr[split_arr.length - 1];
-  };
+  const itemKeyExtractor = (item) => item.key;
 
   return (
     <TouchableOpacity
       style={styles.container}
-      //   onPress={() => {
-      //     navigation.navigate("LolMatch", { match_id: match.id });
-      //   }}
+      onPress={() => {
+        if (summoner.username) {
+          navigation.push("Profile", { username: summoner.username });
+        } else {
+          // Show alert profile doesn't exist
+        }
+      }}
     >
       <View style={styles.avatar}>
         <Avatar
-          size={55}
+          size={66}
           rounded
           title={summoner.name[0]}
           source={{ uri: summoner.profile_icon }}
           overlayContainerStyle={avatarDefaultStyling}
         />
       </View>
-
-      <View style={styles.stats}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
+      <View style={{ flex: 1 }}>
+        <Text style={styles.summonerName}>{summoner.name}</Text>
+        <View
+          style={{
+            flex: 3,
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
           <View style={{ marginRight: 5 }}>
             <Avatar
               size={30}
@@ -58,42 +67,29 @@ const Participant = ({ participant }) => {
               overlayContainerStyle={avatarDefaultStyling}
             />
           </View>
-          <Text style={styles.summonerName}>{summoner.name}</Text>
-        </View>
-        <View style={{ flexDirection: "row", alignItems: "flex-end" }}>
-          <View style={{ flexDirection: "row", marginRight: 10 }}>
-            <Text style={[styles.statsText, { color: "green" }]}>
-              {stats.kills}
+          {/* <Text style={styles.statsText}>{role.replace("_", " ")}</Text> */}
+          <View style={styles.stats}>
+            <Text
+              style={[styles.statsText, { color: darkTheme.on_surface_title }]}
+            >
+              K / D / A
             </Text>
-            <Text style={{ fontWeight: "bold" }}>/</Text>
-            <Text style={[styles.statsText, { color: "red" }]}>
-              {stats.deaths}
-            </Text>
-            <Text style={{ fontWeight: "bold" }}>/</Text>
-            <Text style={[styles.statsText, { color: "goldenrod" }]}>
-              {stats.assists}
-            </Text>
+            <Text
+              style={[
+                styles.statsText,
+                { color: darkTheme.on_surface_subtitle },
+              ]}
+            >{`${stats.kills} / ${stats.deaths} / ${stats.assists}`}</Text>
           </View>
-          <Text
-            style={[
-              styles.statsText,
-              {
-                color: "#b8bec3",
-                fontWeight: "600",
-              },
-            ]}
-          >
-            {role.replace("_", " ")}
-          </Text>
+          <View style={styles.items}>
+            <FlatList
+              data={stats.items}
+              renderItem={renderItem}
+              keyExtractor={itemKeyExtractor}
+              numColumns={Math.ceil(stats.items.length / 2)}
+            />
+          </View>
         </View>
-      </View>
-      <View style={styles.items}>
-        <FlatList
-          data={stats.items}
-          renderItem={renderItem}
-          keyExtractor={itemKeyExtractor}
-          numColumns={Math.ceil(stats.items.length / 2)}
-        />
       </View>
     </TouchableOpacity>
   );
@@ -101,11 +97,27 @@ const Participant = ({ participant }) => {
 
 const styles = StyleSheet.create({
   avatar: { paddingLeft: 5, paddingRight: 20 },
-  stats: { flex: 3, justifyContent: "center", marginLeft: 40 },
-  summonerName: { fontWeight: "bold", marginRight: 5 },
-  statsText: { fontSize: 15, fontWeight: "bold" },
-  items: {
+  stats: {
     flex: 2,
+    justifyContent: "center",
+    marginLeft: 40,
+    alignItems: "center",
+  },
+  summonerName: {
+    flex: 1,
+    fontWeight: "bold",
+    paddingTop: 10,
+    marginRight: 5,
+    color: darkTheme.on_surface_subtitle,
+  },
+  statsText: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: darkTheme.on_surface_subtitle,
+    fontWeight: "600",
+  },
+  items: {
+    flex: 3,
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-around",
@@ -114,8 +126,9 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     width: "100%",
-    height: 80,
+    height: 90,
     paddingLeft: 5,
+    paddingVertical: 5,
     alignItems: "center",
   },
 });

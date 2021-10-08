@@ -4,7 +4,7 @@ import { Avatar, Badge } from "react-native-elements";
 
 import ChampionOverlay from "./championOverlay";
 import { avatarDefaultStyling } from "../../../../utils/styles";
-import { lightTheme } from "../../../../utils/theme";
+import { darkTheme } from "../../../../utils/theme";
 
 const ChampionMastery = ({ championMastery, size }) => {
   const [visible, setVisible] = useState(false);
@@ -31,7 +31,7 @@ const ChampionMastery = ({ championMastery, size }) => {
             position: "absolute",
             top: 35,
             right: 5,
-            borderColor: lightTheme.background,
+            borderColor: darkTheme.background,
             borderWidth: 1,
             borderRadius: 10,
           }}

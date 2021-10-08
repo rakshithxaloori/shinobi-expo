@@ -16,7 +16,7 @@ import { createAPIKit } from "../../../../utils/APIKit";
 import { handleAPIError } from "../../../../utils";
 import { avatarDefaultStyling } from "../../../../utils/styles";
 import DisconnectYouTubeOverlay from "./disconnect";
-import { lightTheme } from "../../../../utils/theme";
+import { darkTheme } from "../../../../utils/theme";
 
 const YouTube = ({ connectedBool, setError }) => {
   let cancelTokenSource = axios.CancelToken.source();
@@ -145,7 +145,12 @@ const YouTube = ({ connectedBool, setError }) => {
           }
         }}
       >
-        <IonIcons name="logo-youtube" style={styles.icon} size={32} />
+        <IonIcons
+          name="logo-youtube"
+          style={styles.icon}
+          size={32}
+          color={darkTheme.on_background}
+        />
         <View style={styles.content}>
           <Text style={styles.title}>
             {connected ? "Disconnect YouTube" : "Connect YouTube"}
@@ -167,12 +172,12 @@ const YouTube = ({ connectedBool, setError }) => {
 
 const styles = StyleSheet.create({
   title: {
-    color: lightTheme.titleText,
+    color: darkTheme.on_surface_title,
     fontSize: 24,
     fontWeight: "600",
   },
   text: {
-    color: lightTheme.titleText,
+    color: darkTheme.on_surface_title,
     fontWeight: "600",
     opacity: 0.6,
     marginTop: 5,
@@ -194,12 +199,12 @@ const styles = StyleSheet.create({
 
   overlayTitle: {
     fontSize: 20,
-    color: lightTheme.titleText,
+    color: darkTheme.on_surface_title,
     fontWeight: "bold",
   },
   overlaySubtitle: {
     fontSize: 16,
-    color: lightTheme.subtitleText,
+    color: darkTheme.on_surface_subtitle,
     fontWeight: "500",
   },
   overlayHeader: {
@@ -210,14 +215,14 @@ const styles = StyleSheet.create({
   channelName: {
     paddingLeft: 20,
     fontSize: 20,
-    color: lightTheme.titleText,
+    color: darkTheme.on_surface_title,
     fontWeight: "bold",
   },
   channel: {
     padding: 7,
     marginBottom: 10,
-    borderRadius: 5,
-    backgroundColor: lightTheme.subtitleText,
+    borderRadius: 10,
+    backgroundColor: darkTheme.surface,
     flexDirection: "row",
     alignItems: "center",
   },
@@ -226,11 +231,14 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   overlay: {
-    borderRadius: 5,
     width: Dimensions.get("window").width - 60,
     maxHeight: Dimensions.get("window").height - 100,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: darkTheme.background,
+    borderColor: darkTheme.on_background,
+    borderWidth: 1,
+    borderRadius: 10,
   },
 
   container: {

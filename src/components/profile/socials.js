@@ -4,10 +4,9 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import * as Linking from "expo-linking";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
+import { darkTheme } from "../../utils/theme";
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
-
-const iconSize = 30;
 
 const Socials = ({
   profile_loaded,
@@ -15,6 +14,8 @@ const Socials = ({
   twitch_profile,
   youtube_channel_id,
 }) => {
+  const iconSize = 22;
+  const iconColor = darkTheme.on_surface_subtitle;
   const linkURL = async (URL) => {
     try {
       Linking.openURL(URL);
@@ -34,42 +35,24 @@ const Socials = ({
                 linkURL(`https://instagram.com/${instagram_username}`)
               }
             >
-              <Ionicons name="logo-instagram" size={iconSize} />
+              <Ionicons
+                name="logo-instagram"
+                size={iconSize}
+                color={iconColor}
+              />
             </TouchableOpacity>
           )}
-          {twitch_profile &&
-            (twitch_profile?.stream ? (
-              // Blinking icon
-              // Object {
-              //   "login": "uchiha_leo_06",
-              //   "stream": Object {
-              //     "game": Object {
-              //       "logo_url": "https://static-cdn.jtvnw.net/ttv-boxart/Just%20Chatting-{width}x{height}.jpg",
-              //       "name": "Just Chatting",
-              //     },
-              //     "thumbnail_url": "https://static-cdn.jtvnw.net/previews-ttv/live_user_uchiha_leo_06-{width}x{height}.jpg",
-              //     "title": "Test 4",
-              //   },
-              // }
+          {twitch_profile && (
+            <TouchableOpacity
+              style={styles.socialIcon}
+              onPress={() =>
+                linkURL(`https://twitch.tv/${twitch_profile?.login}`)
+              }
+            >
+              <Ionicons name="logo-twitch" size={iconSize} color={iconColor} />
+            </TouchableOpacity>
+          )}
 
-              <TouchableOpacity
-                style={styles.socialIcon}
-                onPress={() =>
-                  linkURL(`https://twitch.tv/${twitch_profile?.login}`)
-                }
-              >
-                <Ionicons name="logo-twitch" size={iconSize} />
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                style={styles.socialIcon}
-                onPress={() =>
-                  linkURL(`https://twitch.tv/${twitch_profile?.login}`)
-                }
-              >
-                <Ionicons name="logo-twitch" size={iconSize} />
-              </TouchableOpacity>
-            ))}
           {youtube_channel_id && (
             <TouchableOpacity
               style={styles.socialIcon}
@@ -77,7 +60,7 @@ const Socials = ({
                 linkURL(`https://youtube.com/channel/${youtube_channel_id}`)
               }
             >
-              <Ionicons name="logo-youtube" size={iconSize} />
+              <Ionicons name="logo-youtube" size={iconSize} color={iconColor} />
             </TouchableOpacity>
           )}
         </View>
@@ -99,6 +82,7 @@ const styles = StyleSheet.create({
   container: {
     position: "absolute",
     top: 100,
+    left: 10,
     flexDirection: "row",
     paddingTop: 5,
     alignItems: "center",

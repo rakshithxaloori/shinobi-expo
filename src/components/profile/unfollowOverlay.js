@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Overlay } from "react-native-elements";
 import axios from "axios";
 
-import { lightTheme } from "../../utils/theme";
+import { darkTheme } from "../../utils/theme";
 import { createAPIKit } from "../../utils/APIKit";
 import { handleAPIError } from "../../utils";
 
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   cancelText: {
     fontSize: 15,
     fontWeight: "bold",
-    color: lightTheme.primary,
+    color: darkTheme.primary,
   },
   button: {
     height: 50,
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
   },
   cancel: {
     backgroundColor: "white",
-    borderColor: lightTheme.primary,
+    borderColor: darkTheme.primary,
     width: "100%",
     borderWidth: 2,
   },
@@ -99,18 +99,18 @@ const styles = StyleSheet.create({
     color: "white",
   },
   unfollow: {
-    backgroundColor: lightTheme.primary,
+    backgroundColor: darkTheme.primary,
   },
   overlayTitle: {
     fontSize: 20,
-    color: lightTheme.titleText,
+    color: darkTheme.on_surface_title,
     fontWeight: "bold",
   },
   overlaySubtitle: {
     fontSize: 16,
     marginHorizontal: 5,
     marginTop: 5,
-    color: lightTheme.subtitleText,
+    color: darkTheme.on_surface_subtitle,
     fontWeight: "500",
   },
   overlay: {

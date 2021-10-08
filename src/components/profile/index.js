@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { View, StyleSheet } from "react-native";
+import { StatusBar } from "expo-status-bar";
 import { Avatar } from "react-native-elements";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
@@ -19,7 +20,7 @@ import AuthContext from "../../authContext";
 import { handleAPIError } from "../../utils";
 import EditProfileButton from "./editProfileButton";
 import { avatarDefaultStyling } from "../../utils/styles";
-import { lightTheme } from "../../utils/theme";
+import { darkTheme } from "../../utils/theme";
 
 class Profile extends Component {
   static contextType = AuthContext;
@@ -142,6 +143,7 @@ class Profile extends Component {
                   following={this.state.me_following}
                   setFollowing={this.setFollowing}
                   buttonStyle={styles.button}
+                  buttonTextStyle={styles.buttonText}
                 />
               ) : (
                 <EditProfileButton
@@ -150,6 +152,7 @@ class Profile extends Component {
                   bio={this.state.bio}
                   setBio={(newBio) => this.setState({ bio: newBio })}
                   buttonStyle={styles.button}
+                  buttonTextStyle={styles.buttonText}
                 />
               )}
             </View>
@@ -166,6 +169,7 @@ class Profile extends Component {
             reload={this.props.route?.params?.reload}
           />
         )}
+        <StatusBar style={darkTheme.status_bar} />
       </View>
     );
   };
@@ -173,8 +177,11 @@ class Profile extends Component {
 
 const styles = StyleSheet.create({
   profile: {
+    flex: 3,
     width: "100%",
-    height: 200,
+    backgroundColor: darkTheme.surface,
+    borderRadius: 10,
+    padding: 10,
   },
   profilePicture: {
     marginLeft: 10,
@@ -183,13 +190,14 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: "absolute",
-    top: 105,
-    left: 150,
+    top: 90,
+    left: 120,
   },
   button: {
     borderRadius: 5,
-    backgroundColor: lightTheme.primary,
+    backgroundColor: darkTheme.primary,
   },
+  buttonText: { color: darkTheme.on_primary },
   container: {
     flex: 1,
     paddingHorizontal: 10,

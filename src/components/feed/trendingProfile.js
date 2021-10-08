@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Avatar } from "react-native-elements";
 
 import { avatarDefaultStyling } from "../../utils/styles";
+import { darkTheme } from "../../utils/theme";
 
 const TrendingProfile = ({ profile, navigateProfile }) => {
   const { user, game_alias, follower_count } = profile?.item;
@@ -31,7 +32,12 @@ const TrendingProfile = ({ profile, navigateProfile }) => {
         <Text style={styles.title}>{user.username}</Text>
         {game_alias?.alias?.length > 0 && (
           <View style={styles.gameAlias}>
-            <Avatar size={18} source={{ uri: game_alias.logo }} />
+            <Avatar
+              rounded
+              size={18}
+              source={{ uri: game_alias.logo }}
+              containerStyle={avatarDefaultStyling}
+            />
             <Text style={styles.subtitle}>{game_alias.alias}</Text>
           </View>
         )}
@@ -46,16 +52,27 @@ const TrendingProfile = ({ profile, navigateProfile }) => {
 const styles = StyleSheet.create({
   avatar: {
     borderRadius: 10,
-    elevation: 5,
   },
-  title: { fontSize: 18, fontWeight: "bold" },
-  subtitle: { color: "#b8bec3", fontWeight: "600", fontSize: 15 },
+  title: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: darkTheme.on_surface_title,
+  },
+  subtitle: {
+    color: darkTheme.on_surface_subtitle,
+    paddingLeft: 3,
+    fontWeight: "600",
+    fontSize: 15,
+  },
   gameAlias: { flexDirection: "row" },
   text: { marginLeft: 15 },
   container: {
     alignItems: "center",
     flexDirection: "row",
     marginVertical: 5,
+    padding: 5,
+    borderRadius: 10,
+    backgroundColor: darkTheme.surface,
   },
 });
 

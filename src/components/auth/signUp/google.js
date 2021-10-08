@@ -9,7 +9,7 @@ import AuthContext from "../../../authContext";
 
 import { createAPIKit } from "../../../utils/APIKit";
 import { handleAPIError } from "../../../utils";
-import { lightTheme } from "../../../utils/theme";
+import { darkTheme } from "../../../utils/theme";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -72,7 +72,7 @@ const GoogleSignUp = ({
     <SocialIcon
       button
       disabled={!request || disabled}
-      title="Signup with Google"
+      title="signup with google"
       type="google"
       onPress={() => {
         submit();
@@ -83,7 +83,7 @@ const GoogleSignUp = ({
 };
 
 const styles = StyleSheet.create({
-  button: { backgroundColor: lightTheme.primary },
+  button: { backgroundColor: darkTheme.primary },
 });
 
 export default GoogleSignUp;
