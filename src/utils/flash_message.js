@@ -10,6 +10,5 @@ export const flashAlert = (message, description = "", big = false) => {
     color: "white",
     backgroundColor: darkTheme.secondary,
     textStyle: { fontSize: 14 },
-    style: { height: big ? 100 : 80 },
   });
 };
