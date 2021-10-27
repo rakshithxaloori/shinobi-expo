@@ -249,7 +249,10 @@ const NavigatorWithContext = () => {
       <NavigationContext.Provider value={navigateRoute}>
         <StackNavigatorComponent />
       </NavigationContext.Provider>
-      <StatusBar style={darkTheme.status_bar} />
+      <StatusBar
+        style={darkTheme.status_bar}
+        backgroundColor={darkTheme.background}
+      />
       <FlashMessage position="down" />
     </View>
   );
