@@ -104,12 +104,10 @@ class ChatPreview extends Component {
           lastMessageDate > lastReadDate
             ? {
                 fontSize: 16,
-                color: "black",
                 fontWeight: "bold",
               }
             : {
                 fontSize: 16,
-                color: darkTheme.on_surface_subtitle,
                 fontWeight: "500",
               };
 
@@ -128,11 +126,22 @@ class ChatPreview extends Component {
           <View style={styles.textArea}>
             <Text style={styles.username}>{chat.user.username}</Text>
             <View style={{ flexDirection: "row" }}>
-              <Text style={messageStyle}>
+              <Text
+                style={[messageStyle, { color: darkTheme.on_surface_subtitle }]}
+              >
                 {messageText}
                 {sliced ? "... " : " "}
               </Text>
-              {dateDiff && <Text style={[messageStyle]}>{dateDiff}</Text>}
+              {dateDiff && (
+                <Text
+                  style={[
+                    messageStyle,
+                    { color: darkTheme.on_surface_subtitle },
+                  ]}
+                >
+                  {dateDiff}
+                </Text>
+              )}
             </View>
           </View>
         </TouchableOpacity>
