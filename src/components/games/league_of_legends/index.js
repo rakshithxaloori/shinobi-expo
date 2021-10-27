@@ -197,6 +197,7 @@ const styles = StyleSheet.create({
     backgroundColor: darkTheme.surface,
     justifyContent: "center",
     alignItems: "center",
+    alignSelf: "center",
     height: 50,
     width: "90%",
     borderRadius: 10,
