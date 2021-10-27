@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { View, SafeAreaView, ScrollView, Text, StyleSheet } from "react-native";
-import { StatusBar } from "expo-status-bar";
 import { SearchBar, Divider } from "react-native-elements";
 import axios from "axios";
 
@@ -122,7 +121,6 @@ class Search extends Component {
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={this.renderSeperator}
         /> */}
-        <StatusBar style={darkTheme.status_bar} />
       </SafeAreaView>
     );
   };

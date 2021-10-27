@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from "react-native";
-import { StatusBar } from "expo-status-bar";
 import { Avatar } from "react-native-elements";
 import IonIcons from "react-native-vector-icons/Ionicons";
 
@@ -59,7 +58,6 @@ const Feed = (props) => {
       <TrendingList navigateProfile={navigateProfile} />
 
       {/* <TestNotifications /> */}
-      <StatusBar style={darkTheme.status_bar} />
     </SafeAreaView>
   );
 };

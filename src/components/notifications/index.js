@@ -7,7 +7,6 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
-import { StatusBar } from "expo-status-bar";
 import { Divider } from "react-native-elements";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
@@ -172,7 +171,6 @@ class Notifications extends Component {
           </Text>
         </View>
       )}
-      <StatusBar style={darkTheme.status_bar} />
     </SafeAreaView>
   );
 }

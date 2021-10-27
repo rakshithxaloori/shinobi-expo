@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { View, StyleSheet } from "react-native";
-import { StatusBar } from "expo-status-bar";
 import { Avatar } from "react-native-elements";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
@@ -169,7 +168,6 @@ class Profile extends Component {
             reload={this.props.route?.params?.reload}
           />
         )}
-        <StatusBar style={darkTheme.status_bar} />
       </View>
     );
   };
