@@ -58,7 +58,7 @@ const EditProfileButton = ({
   return (
     <View>
       <Button
-        title="Edit Profile"
+        title="Edit Bio"
         icon={
           <Ionicons
             name="create"
