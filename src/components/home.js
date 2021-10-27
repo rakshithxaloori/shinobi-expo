@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions } from "react-native";
+import { View, Dimensions } from "react-native";
 import {
   NavigationContainer,
   DefaultTheme,
@@ -10,6 +10,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Icon } from "react-native-elements";
 import axios from "axios";
 import * as Notifications from "expo-notifications";
+import { StatusBar } from "expo-status-bar";
+import FlashMessage from "react-native-flash-message";
 
 import * as RootNavigation from "./rootNavigation";
 
@@ -27,6 +29,7 @@ import { handleAPIError } from "../utils";
 import { darkTheme } from "../utils/theme";
 import LolMatch from "./games/league_of_legends/match";
 import LolConnect from "./games/league_of_legends/connect";
+import MatchHeader from "./headers/match_header";
 
 const NavigationContext = React.createContext();
 
@@ -192,6 +195,7 @@ const StackNavigatorComponent = () => (
               name="LolMatch"
               component={LolMatch}
               options={{ title: "Match" }}
+              // options={{ headerTitle: (props) => <MatchHeader {...props} /> }}
             />
             <Stack.Screen
               name="LolConnect"
@@ -241,9 +245,13 @@ const NavigatorWithContext = () => {
   };
 
   return (
-    <NavigationContext.Provider value={navigateRoute}>
-      <StackNavigatorComponent />
-    </NavigationContext.Provider>
+    <View style={{ flex: 1, backgroundColor: darkTheme.background }}>
+      <NavigationContext.Provider value={navigateRoute}>
+        <StackNavigatorComponent />
+      </NavigationContext.Provider>
+      <StatusBar style={darkTheme.status_bar} />
+      <FlashMessage position="down" />
+    </View>
   );
 };
 

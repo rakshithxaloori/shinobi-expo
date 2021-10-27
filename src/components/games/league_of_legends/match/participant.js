@@ -11,6 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import { avatarDefaultStyling } from "../../../../utils/styles";
 import { darkTheme } from "../../../../utils/theme";
+import { flashAlert } from "../../../../utils/flash_message";
 
 const Participant = ({ participant }) => {
   const navigation = useNavigation();
@@ -27,7 +28,7 @@ const Participant = ({ participant }) => {
     </View>
   );
 
-  const itemKeyExtractor = (item) => item.key;
+  const itemKeyExtractor = (item) => String(item.key);
 
   return (
     <TouchableOpacity
@@ -37,6 +38,7 @@ const Participant = ({ participant }) => {
           navigation.push("Profile", { username: summoner.username });
         } else {
           // Show alert profile doesn't exist
+          flashAlert(`"${summoner.name}" is not on Shinobi yet`);
         }
       }}
     >
