@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Alert, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { GiftedChat } from "react-native-gifted-chat";
 import axios from "axios";
 
@@ -7,6 +7,7 @@ import { createAPIKit } from "../../utils/APIKit";
 import { createWSKit } from "./WSKit";
 import { create_UUID, handleAPIError } from "../../utils";
 import AuthContext from "../../authContext";
+import { flashAlert } from "../../utils/flash_message";
 
 const messageCount = 25;
 const configureMessage = (message, my_username) => ({
@@ -122,19 +123,20 @@ class Chat extends Component {
     if (close.code === 4200) {
       // Chat deleted cause you got unfollowed
       // Happens when you send a text to person who just unfollowed you
-      this.setState({ error: "Chat closed" });
-      // TODO redirect to chat/index and show that chat has been closed
-      Alert.alert(
+
+      flashAlert(
         `${this.props.route.params.user.username} unfollowed you`,
         `You can't send texts to ${this.props.route.params.user.username}`
       );
-      this.setState({ chatClosed: true });
+      this.setState({ error: "Chat closed", chatClosed: true }, () => {
+        // Redirect to chat/index and show that chat has been closed
+      });
     }
   };
 
   sendMessages = (messages = []) => {
     if (this.state.chatClosed) {
-      Alert.alert(
+      flashAlert(
         `${this.props.route.params.user.username} unfollowed you`,
         `You can't send texts to ${this.props.route.params.user.username}`
       );
