@@ -28,7 +28,7 @@ class AllChats extends Component {
     initialLoading: true,
     chat_users: [],
     isLoading: false,
-    count: undefined,
+    isRefreshing: false,
     endReached: false,
     error: "",
   };
@@ -39,26 +39,27 @@ class AllChats extends Component {
 
   fetchChats = async () => {
     if (!this.state.endReached) {
-      this.setState({ isLoading: this.state.count !== undefined });
+      this.setState({ isLoading: this.state.chat_users.length > 0 });
 
       const onSuccess = (response) => {
         const { chat_users } = response.data?.payload;
-        const count = chat_users.length;
         this.setState((prevState) => ({
           initialLoading: false,
           chat_users: [...prevState.chat_users, ...chat_users],
-          count: prevState.count ? prevState.count + count : count,
-          endReached: count !== this.fetchCount,
+          endReached: chat_users.length !== this.fetchCount,
           isLoading: false,
+          isRefreshing: false,
         }));
       };
 
       const APIKit = await createAPIKit();
       APIKit.get(
-        `/chat/${this.state.count === undefined ? 0 : this.state.count}/${
-          this.state.count === undefined
+        `/chat/${
+          this.state.chat_users.length === 0 ? 0 : this.state.chat_users.length
+        }/${
+          this.state.chat_users.length === 0
             ? this.fetchCount
-            : this.state.count + this.fetchCount
+            : this.state.chat_users.length + this.fetchCount
         }/`,
         { cancelToken: this.cancelTokenSource.token }
       )
@@ -133,6 +134,22 @@ class AllChats extends Component {
     />
   );
 
+  refreshChats = () => {
+    this.setState(
+      {
+        initialLoading: true,
+        chat_users: [],
+        isLoading: false,
+        isRefreshing: true,
+        endReached: false,
+        error: "",
+      },
+      async () => {
+        await this.fetchChats();
+      }
+    );
+  };
+
   render = () => (
     <SafeAreaView style={styles.container}>
       <Text style={styles.info}>
@@ -140,7 +157,7 @@ class AllChats extends Component {
       </Text>
       {this.state.initialLoading ? (
         <View style={styles.container}>{this.renderPlaceholders()}</View>
-      ) : this.state.count > 0 ? (
+      ) : this.state.chat_users.length > 0 ? (
         <FlatList
           contentContainerStyle={styles.container}
           data={this.state.chat_users}
@@ -148,6 +165,8 @@ class AllChats extends Component {
           keyExtractor={this.keyExtractor}
           onEndReached={this.fetchChats}
           onEndReachedThreshold={5}
+          onRefresh={this.refreshChats}
+          refreshing={this.state.isRefreshing}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={this.renderSeperator}
           ListFooterComponent={
@@ -159,9 +178,7 @@ class AllChats extends Component {
         />
       ) : (
         <View style={styles.empty}>
-          <Text style={{ fontWeight: "600", fontSize: 18 }}>
-            Wow, such empty :(
-          </Text>
+          <Text style={styles.emptyText}>Wow, such empty</Text>
         </View>
       )}
     </SafeAreaView>
@@ -181,6 +198,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingBottom: 10,
     alignItems: "center",
+  },
+  emptyText: {
+    fontWeight: "600",
+    fontSize: 18,
+    color: darkTheme.on_background,
   },
   empty: { flex: 1, justifyContent: "center", alignItems: "center" },
   container: {
