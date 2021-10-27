@@ -5,7 +5,7 @@ import axios from "axios";
 
 import { createAPIKit } from "../../../../utils/APIKit";
 import { handleAPIError } from "../../../../utils";
-import { disconnectStyles } from "..";
+import { disconnectStyles } from "../styles";
 
 const DisconnectYouTubeOverlay = ({
   showOverlay,
