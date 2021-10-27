@@ -3,8 +3,8 @@ import * as SecureStore from "expo-secure-store";
 
 let API_ENDPOINT = undefined;
 if (process.env.CI_CD_STAGE === "production")
-  API_ENDPOINT = `https://${process.env.BASE_API_ENDPOINT}`;
-else API_ENDPOINT = `http://${process.env.BASE_API_ENDPOINT}`;
+  API_ENDPOINT = `https://${process.env.BASE_API_ENDPOINT}/`;
+else API_ENDPOINT = `http://${process.env.BASE_API_ENDPOINT}/`;
 
 // Create axios client, pre-configured with baseURL
 export const createAPIKit = async () => {
