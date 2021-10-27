@@ -11,6 +11,7 @@ import { handleAPIError } from "../../../../utils";
 
 import { createAPIKit } from "../../../../utils/APIKit";
 import { avatarDefaultStyling } from "../../../../utils/styles";
+import { darkTheme } from "../../../../utils/theme";
 
 class ChampionOverlay extends Component {
   state = {
@@ -80,7 +81,7 @@ class ChampionOverlay extends Component {
               />
             )}
             {this.state.champion ? (
-              <Text>{champion.name} says hello!</Text>
+              <Text style={styles.text}>{champion.name} says hello!</Text>
             ) : (
               <ShimmerPlaceHolder
                 width={60}
@@ -105,7 +106,7 @@ class ChampionOverlay extends Component {
               {this.state.champion.blurb && (
                 <View style={styles.section}>
                   <Text style={styles.headerText}>Blurb</Text>
-                  <Text>{this.state.champion.blurb}</Text>
+                  <Text style={styles.text}>{this.state.champion.blurb}</Text>
                 </View>
               )}
 
@@ -113,7 +114,9 @@ class ChampionOverlay extends Component {
                 <View style={styles.section}>
                   <Text style={styles.headerText}>Ally Tips</Text>
                   {this.state.champion.allyTips.map((ally_tip, index) => (
-                    <Text key={index}>{ally_tip}</Text>
+                    <Text style={styles.text} key={index}>
+                      {ally_tip}
+                    </Text>
                   ))}
                 </View>
               )}
@@ -122,7 +125,9 @@ class ChampionOverlay extends Component {
                 <View style={styles.section}>
                   <Text style={styles.headerText}>Enemy Tips</Text>
                   {this.state.champion.enemyTips.map((enemy_tip, index) => (
-                    <Text key={index}>{enemy_tip}</Text>
+                    <Text style={styles.text} key={index}>
+                      {enemy_tip}
+                    </Text>
                   ))}
                 </View>
               )}
@@ -147,7 +152,12 @@ class ChampionOverlay extends Component {
 
 const styles = StyleSheet.create({
   avatar: { marginHorizontal: 5 },
-  headerText: { fontWeight: "bold", fontSize: 20 },
+  text: { color: darkTheme.on_background },
+  headerText: {
+    fontWeight: "bold",
+    fontSize: 20,
+    color: darkTheme.on_background,
+  },
   shimmerLine: { marginVertical: 5 },
   section: { flex: 1, marginBottom: 10 },
   container: {
@@ -156,6 +166,7 @@ const styles = StyleSheet.create({
     maxHeight: Dimensions.get("window").height - 100,
     justifyContent: "center",
     margin: 10,
+    backgroundColor: darkTheme.background,
   },
 });
 
