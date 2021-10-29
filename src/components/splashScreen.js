@@ -1,17 +1,23 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
+import { darkTheme } from "../utils/theme";
 
-const SplashScreen = ({ error }) => (
+const SplashScreen = () => (
   <View style={styles.container}>
-    <Text style={styles.text}>SPLASH SCREEN</Text>
-    {error === "" && <Text>{error}</Text>}
+    <Image
+      source={require("../../assets/icon.png")}
+      style={{ width: "60%", resizeMode: "contain" }}
+    />
   </View>
 );
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", alignItems: "center" },
-  header: { fontSize: 40 },
-  error: { color: "red", fontWeight: "bold" },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "black",
+  },
 });
 
 export default SplashScreen;
