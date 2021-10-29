@@ -5,25 +5,17 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "notification": {
-      "icon": "./assets/notification-icon.png"
+      "icon": "assets/notification-icon.png"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": ["**/*"],
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
       "package": "cc.shinobi.android",
-      "permissions": []
+      "permissions": [],
+      "googleServicesFile": "./google-services.json"
     },
     "scheme": "shn"
   }
