@@ -18,6 +18,14 @@
       "googleServicesFile": "./google-services.json",
       "versionCode": 2
     },
-    "scheme": "shn"
+    "scheme": "shn",
+    "plugins": ["sentry-expo"],
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps"
+        }
+      ]
+    }
   }
 }
