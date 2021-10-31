@@ -47,7 +47,7 @@ const Content = () => {
     Clipboard.setString(
       "https://play.google.com/store/apps/details?id=cc.shinobi.android"
     );
-    flashAlert("Play Store link copied!");
+    flashAlert("Play Store app link copied!");
   };
 
   return (

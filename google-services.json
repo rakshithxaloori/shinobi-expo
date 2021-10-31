@@ -1,33 +1,41 @@
 {
   "project_info": {
-    "project_number": "1057141596113",
-    "project_id": "expo-notif-dev",
-    "storage_bucket": "expo-notif-dev.appspot.com"
+    "project_number": "680842267587",
+    "project_id": "shinobi-oauth",
+    "storage_bucket": "shinobi-oauth.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1057141596113:android:5ba16b9a325876b6558af0",
+        "mobilesdk_app_id": "1:680842267587:android:266342d0594286caa64b76",
         "android_client_info": {
-          "package_name": "com.proeliumx.android"
+          "package_name": "cc.shinobi.android"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1057141596113-a6jagl44m0ee6i1l7h0976pnvdjk4k65.apps.googleusercontent.com",
+          "client_id": "680842267587-3ovn5l2ibt944l1k7h0j1o2s9aurlkan.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cc.shinobi.android",
+            "certificate_hash": "b8f079dff27d428efa5a1ab5d35107c559e5d900"
+          }
+        },
+        {
+          "client_id": "680842267587-71ufp33teovp4bs4asnh6809rgcpk9ra.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD3raoQbcSRZbPdyu-esSD4zbtcnuIFYBQ"
+          "current_key": "AIzaSyDY6J7AHiIJq4FljB9TTXxsJtpZoAM8B5E"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1057141596113-a6jagl44m0ee6i1l7h0976pnvdjk4k65.apps.googleusercontent.com",
+              "client_id": "680842267587-71ufp33teovp4bs4asnh6809rgcpk9ra.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
