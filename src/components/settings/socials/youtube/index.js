@@ -6,10 +6,12 @@ import {
   TouchableOpacity,
   Dimensions,
   StyleSheet,
+  Platform,
 } from "react-native";
 import IonIcons from "react-native-vector-icons/Ionicons";
 import { Avatar, Overlay } from "react-native-elements";
 import * as AuthSession from "expo-auth-session";
+import * as Device from "expo-device";
 import axios from "axios";
 
 import { createAPIKit } from "../../../../utils/APIKit";
@@ -63,9 +65,19 @@ const YouTube = ({ connectedBool, setError }) => {
 
   const signInWithYouTube = async () => {
     setDisabled(true);
+    let YOUTUBE_CLIENT_ID = null;
+    if (!Device.isDevice)
+      YOUTUBE_CLIENT_ID = process.env.EXPO_YOUTUBE_CLIENT_ID;
+    else {
+      if (Platform.OS === "web")
+        YOUTUBE_CLIENT_ID = process.env.EXPO_YOUTUBE_CLIENT_ID;
+      else if (Platform.OS === "android")
+        YOUTUBE_CLIENT_ID = process.env.ANDROID_YOUTUBE_CLIENT_ID;
+    }
+
     const redirectUrl = AuthSession.makeRedirectUri({ useProxy: true });
     const scope = "https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube.readonly";
-    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.EXPO_YOUTUBE_CLIENT_ID}&redirect_uri=${redirectUrl}&response_type=token&scope=${scope}&force_verify=true`;
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${YOUTUBE_CLIENT_ID}&redirect_uri=${redirectUrl}&response_type=token&scope=${scope}&force_verify=true`;
     const { type, params } = await AuthSession.startAsync({ authUrl });
     if (type === "success") {
       const { access_token } = params;
@@ -156,7 +168,7 @@ const YouTube = ({ connectedBool, setError }) => {
             {connected ? "Disconnect YouTube" : "Connect YouTube"}
           </Text>
           <Text style={styles.text}>
-            {connected ? "Removes" : "Shows"} your YouTube channel in profile
+            {connected ? "Removes" : "Shows"} your YT channel link in profile
           </Text>
         </View>
       </TouchableOpacity>
