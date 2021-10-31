@@ -17,6 +17,10 @@ import HomeScreen from "./src/components/home";
 import { createAPIKit } from "./src/utils/APIKit";
 import { handleAPIError } from "./src/utils";
 
+if (process.env.CI_CD_STAGE === "production") {
+  console.log = () => {};
+}
+
 const App = () => {
   let cancelTokenSource = axios.CancelToken.source();
   const [error, setError] = React.useState("");
@@ -119,7 +123,6 @@ const App = () => {
   }, []);
 
   const handleAppStateChange = async (nextAppState) => {
-    console.log(nextAppState);
     if (state.userToken !== null) {
       if (nextAppState === "inactive" || nextAppState === "background") {
         const APIKit = await createAPIKit();
@@ -170,7 +173,10 @@ const App = () => {
 
       signOut: async () => {
         // revoke/delete expoPushToken in API
-        const expoPushToken = await registerForPushNotificationsAsync();
+        let expoPushToken = null;
+        if (Device.isDevice) {
+          expoPushToken = await registerForPushNotificationsAsync();
+        }
         const APIKit = await createAPIKit();
         APIKit.post(
           "/auth/logout/",
