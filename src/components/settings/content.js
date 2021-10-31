@@ -4,12 +4,14 @@ import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import * as Linking from "expo-linking";
+import * as Clipboard from "expo-clipboard";
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
 import SocialsSettings from "./socials";
 import LogOut from "./logout";
 import { darkTheme } from "../../utils/theme";
+import { flashAlert } from "../../utils/flash_message";
 
 const Content = () => {
   const linkURL = async (URL) => {
@@ -37,6 +39,17 @@ const Content = () => {
     </>
   );
 
+  const openSubReddit = () => {
+    linkURL("https://www.reddit.com/r/shinobi_app");
+  };
+
+  const copyAppLink = () => {
+    Clipboard.setString(
+      "https://play.google.com/store/apps/details?id=cc.shinobi.android"
+    );
+    flashAlert("Play Store link copied!");
+  };
+
   return (
     <View style={styles.container}>
       <SocialsSettings setSocialsLoaded={setSocialsLoaded} />
@@ -49,15 +62,40 @@ const Content = () => {
           paddingTop: 20,
         }}
       >
-        <TouchableOpacity style={{ alignItems: "center" }}>
-          <Ionicons
-            name="logo-reddit"
-            size={33}
-            color={darkTheme.on_surface_title}
-          />
-        </TouchableOpacity>
+        <View
+          style={{
+            flexDirection: "row",
+            alignContent: "center",
+            justifyContent: "center",
+          }}
+        >
+          <TouchableOpacity
+            style={{ alignItems: "center", paddingRight: 10 }}
+            onPress={openSubReddit}
+          >
+            <Ionicons
+              name="logo-reddit"
+              size={33}
+              color={darkTheme.on_surface_title}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ alignItems: "center", paddingLeft: 10 }}
+            onPress={copyAppLink}
+          >
+            <Ionicons
+              name="share-social-sharp"
+              size={33}
+              color={darkTheme.on_surface_title}
+            />
+          </TouchableOpacity>
+        </View>
         <Text style={styles.helpText}>
           Post on the subreddit to report bugs or request new features.
+        </Text>
+        <Text style={styles.helpText}>
+          Share the app with your friends! Click the share icon to the copy app
+          link.
         </Text>
       </View>
     </View>
