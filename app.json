@@ -19,13 +19,6 @@
       "versionCode": 2
     },
     "scheme": "shn",
-    "plugins": ["sentry-expo"],
-    "hooks": {
-      "postPublish": [
-        {
-          "file": "sentry-expo/upload-sourcemaps"
-        }
-      ]
-    }
+    "plugins": ["sentry-expo"]
   }
 }
