@@ -4,7 +4,6 @@ import { StatusBar } from "expo-status-bar";
 
 import GoogleSignIn from "./google";
 
-import { windowWidthRatio } from "../../../utils/constants";
 import { darkTheme } from "../../../utils/theme";
 
 const SignIn = () => {
@@ -24,7 +23,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    padding: 50 * windowWidthRatio,
+    alignItems: "center",
   },
 });
 

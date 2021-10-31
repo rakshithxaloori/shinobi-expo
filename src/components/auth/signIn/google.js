@@ -68,7 +68,7 @@ const GoogleSignIn = ({ setError }) => {
 };
 
 const styles = StyleSheet.create({
-  button: { backgroundColor: darkTheme.primary },
+  button: { backgroundColor: darkTheme.primary, width: "70%" },
 });
 
 export default GoogleSignIn;

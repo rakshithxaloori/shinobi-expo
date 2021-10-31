@@ -6,7 +6,6 @@ import axios from "axios";
 
 import GoogleSignUp from "./google";
 
-import { windowWidthRatio } from "../../../utils/constants";
 import { createAPIKit } from "../../../utils/APIKit";
 import { handleAPIError } from "../../../utils";
 import { darkTheme } from "../../../utils/theme";
@@ -93,7 +92,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    padding: 50 * windowWidthRatio,
+    alignItems: "center",
+    paddingHorizontal: 30,
   },
 });
 
