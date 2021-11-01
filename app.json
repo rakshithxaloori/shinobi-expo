@@ -18,7 +18,6 @@
       "googleServicesFile": "./google-services.json",
       "versionCode": 2
     },
-    "scheme": "shn",
-    "plugins": ["sentry-expo"]
+    "scheme": "shn"
   }
 }
