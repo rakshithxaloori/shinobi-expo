@@ -8,5 +8,9 @@
   },
   "submit": {
     "release": {}
+  },
+  "cli": {
+    "version": ">= 0.34.0",
+    "requireCommit": true
   }
 }
