@@ -16,7 +16,7 @@
       "package": "cc.shinobi.android",
       "permissions": [],
       "googleServicesFile": "./google-services.json",
-      "versionCode": 3
+      "versionCode": 4
     },
     "scheme": "shn"
   }
