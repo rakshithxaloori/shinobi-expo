@@ -1,6 +1,14 @@
 {
   "build": {
     "release": {},
+    "production": {
+      "env": {
+        "CI_CD_STAGE": "production",
+        "BASE_API_ENDPOINT": "api.shinobi.cc",
+        "SENTRY_ORG": "shinobi",
+        "SENTRY_PROJECT": "shinobi"
+      }
+    },
     "development": {
       "developmentClient": true,
       "distribution": "internal"
