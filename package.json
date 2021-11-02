@@ -1,6 +1,7 @@
 {
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
+    "eas-build-pre-install": "echo $ANDROID_GOOGLE_CLIENT_ID",
     "start": "expo start -c",
     "android": "expo start -c --android",
     "ios": "expo start -c --ios",
