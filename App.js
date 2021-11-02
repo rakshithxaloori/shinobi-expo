@@ -1,4 +1,12 @@
 // https://logomakr.com/2i81xD
+import * as Sentry from "sentry-expo";
+
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  enableInExpoDevelopment: true,
+  debug: process.env.CI_CD_STAGE !== "production", // Sentry will try to print out useful debugging information if something goes wrong with sending an event. Set this to `false` in production.
+});
+
 import React from "react";
 import { AppState, Platform } from "react-native";
 import * as SecureStore from "expo-secure-store";
