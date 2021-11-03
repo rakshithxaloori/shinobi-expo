@@ -94,6 +94,7 @@ const TabNavigatorComponent = () => {
               },
               tabBarActiveTintColor: darkTheme.primary,
               tabBarInactiveTintColor: "grey",
+              tabBarShowLabel: false,
               style: { width: fullScreenWidth },
             }}
             initialRouteName={navigateRoute}
