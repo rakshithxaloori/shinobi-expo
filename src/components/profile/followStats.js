@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import { darkTheme } from "../../utils/theme";
@@ -10,15 +11,28 @@ const sectionHeight = 15;
 const sectionWidth = 90;
 
 const Follow = (props) => {
-  const { followers, following, profile_loaded } = props;
+  const { username, followers_count, following_count, profile_loaded } = props;
+  const navigation = useNavigation();
+
+  const followersPress = () => {
+    navigation.navigate("Followers", { username });
+  };
+  const followingPress = () => {
+    navigation.navigate("Following", { username });
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.section}>
         {profile_loaded ? (
-          <TouchableOpacity style={{ flexDirection: "row" }}>
+          <TouchableOpacity
+            style={{ flexDirection: "row" }}
+            onPress={followersPress}
+          >
             <Text style={styles.text}>Followers </Text>
-            <Text style={[styles.text, styles.highlightText]}>{followers}</Text>
+            <Text style={[styles.text, styles.highlightText]}>
+              {followers_count}
+            </Text>
           </TouchableOpacity>
         ) : (
           <ShimmerPlaceHolder
@@ -30,9 +44,14 @@ const Follow = (props) => {
       </View>
       <View style={styles.section}>
         {profile_loaded ? (
-          <TouchableOpacity style={{ flexDirection: "row" }}>
+          <TouchableOpacity
+            style={{ flexDirection: "row" }}
+            onPress={followingPress}
+          >
             <Text style={styles.text}>Following </Text>
-            <Text style={[styles.text, styles.highlightText]}>{following}</Text>
+            <Text style={[styles.text, styles.highlightText]}>
+              {following_count}
+            </Text>
           </TouchableOpacity>
         ) : (
           <ShimmerPlaceHolder

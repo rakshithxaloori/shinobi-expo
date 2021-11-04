@@ -25,8 +25,8 @@ class Profile extends Component {
   static contextType = AuthContext;
   state = {
     user: undefined,
-    followers: undefined,
-    following: undefined,
+    followers_count: undefined,
+    following_count: undefined,
     me_following: undefined,
     bio: undefined,
     lol_profile: undefined,
@@ -49,8 +49,8 @@ class Profile extends Component {
 
       this.setState({
         user,
-        followers,
-        following,
+        followers_count: followers,
+        following_count: following,
         me_following,
         bio,
         instagram,
@@ -84,12 +84,12 @@ class Profile extends Component {
   setFollowing = (following) => {
     if (following) {
       this.setState((prevState) => ({
-        followers: prevState.followers + 1,
+        followers_count: prevState.followers_count + 1,
       }));
     } else {
       if (!following) {
         this.setState((prevState) => ({
-          followers: prevState.followers - 1,
+          followers_count: prevState.followers_count - 1,
         }));
       }
     }
@@ -124,8 +124,9 @@ class Profile extends Component {
             profile_loaded={this.state.profile_loaded}
           />
           <FollowStats
-            followers={this.state.followers}
-            following={this.state.following}
+            username={this.state.user?.username}
+            followers_count={this.state.followers_count}
+            following_count={this.state.following_count}
             profile_loaded={this.state.profile_loaded}
           />
           <Socials

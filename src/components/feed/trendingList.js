@@ -18,7 +18,6 @@ class TrendingList extends Component {
   cancelTokenSource = axios.CancelToken.source();
 
   componentDidMount = async () => {
-    console.log(typeof this.props.navigateProfile);
     // Load profiles
     const onSuccess = async (response) => {
       const { profiles } = response.data?.payload;

@@ -30,6 +30,7 @@ import { darkTheme } from "../utils/theme";
 import LolMatch from "./games/league_of_legends/match";
 import LolConnect from "./games/league_of_legends/connect";
 import MatchHeader from "./headers/match_header";
+import Followers from "./followers";
 
 const NavigationContext = React.createContext();
 
@@ -185,6 +186,7 @@ const StackNavigatorComponent = () => (
             />
             <Stack.Screen name="Chat" component={Chat} />
             <Stack.Screen name="Profile" component={Profile} />
+            <Stack.Screen name="Followers" component={Followers} />
             <Stack.Screen
               name="Settings"
               component={Settings}
