@@ -1,28 +1,18 @@
 import React, { useContext } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  SafeAreaView,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Avatar } from "react-native-elements";
 import IonIcons from "react-native-vector-icons/Ionicons";
 
-import TrendingList from "../feed/trendingList";
-import AuthContext from "../../authContext";
-import { avatarDefaultStyling } from "../../utils/styles";
-import { darkTheme } from "../../utils/theme";
+import AuthContext from "../authContext";
+import { avatarDefaultStyling } from "../utils/styles";
+import { darkTheme } from "../utils/theme";
+import MatchList from "../components/feed/matchList";
 
 const Feed = (props) => {
   const { user } = useContext(AuthContext);
 
-  const navigateProfile = (username) => {
-    props.navigation.navigate("Profile", { username });
-  };
-
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.titleBar}>
         <Avatar
           rounded
@@ -54,11 +44,9 @@ const Feed = (props) => {
           </TouchableOpacity>
         </View>
       </View>
-      <Text style={styles.header}>Trending Profiles</Text>
-      <TrendingList navigateProfile={navigateProfile} />
-
-      {/* <TestNotifications /> */}
-    </SafeAreaView>
+      <Text style={styles.header}>Feed</Text>
+      <MatchList />
+    </View>
   );
 };
 
@@ -100,7 +88,10 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
 
-  container: { flex: 1 },
+  container: {
+    height: "100%",
+    width: "100%",
+  },
 });
 
 export default Feed;
