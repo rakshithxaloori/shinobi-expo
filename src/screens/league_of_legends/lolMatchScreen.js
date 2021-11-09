@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
 import axios from "axios";
 
-import { createAPIKit } from "../../../utils/APIKit";
-import { handleAPIError } from "../../../utils";
+import { createAPIKit } from "../../utils/APIKit";
+import { handleAPIError } from "../../utils";
 
-import Team from "../../games/league_of_legends/match/team";
+import Team from "../../components/games/league_of_legends/match/team";
 
 class Match extends Component {
   state = {

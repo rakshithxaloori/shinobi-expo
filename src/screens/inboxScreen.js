@@ -15,11 +15,11 @@ import axios from "axios";
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
-import ChatPreview from "../chat/chatPreview";
+import ChatPreview from "../components/chat/chatPreview";
 
-import { createAPIKit } from "../../utils/APIKit";
-import { handleAPIError } from "../../utils";
-import { darkTheme } from "../../utils/theme";
+import { createAPIKit } from "../utils/APIKit";
+import { handleAPIError } from "../utils";
+import { darkTheme } from "../utils/theme";
 
 const screenWidth = Dimensions.get("screen").width;
 

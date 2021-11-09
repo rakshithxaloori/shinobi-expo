@@ -14,11 +14,11 @@ import axios from "axios";
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
-import Notification from "../notifications/notification";
+import Notification from "../components/notifications/notification";
 
-import { createAPIKit } from "../../utils/APIKit";
-import { handleAPIError } from "../../utils";
-import { darkTheme } from "../../utils/theme";
+import { createAPIKit } from "../utils/APIKit";
+import { handleAPIError } from "../utils";
+import { darkTheme } from "../utils/theme";
 
 class Notifications extends Component {
   state = {

@@ -2,8 +2,8 @@ import React from "react";
 import { View, TouchableOpacity, StyleSheet } from "react-native";
 import IonIcons from "react-native-vector-icons/Ionicons";
 
-import Content from "../settings/content";
-import Cover from "../settings/cover";
+import Content from "../components/settings/content";
+import Cover from "../components/settings/cover";
 
 import { darkTheme } from "../utils/theme";
 

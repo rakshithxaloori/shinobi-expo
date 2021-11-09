@@ -7,19 +7,19 @@ import axios from "axios";
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
-import Username from "../profile/username";
-import Socials from "../profile/socials";
-import FollowStats from "../profile/followStats";
-import FollowButton from "../profile/followButton";
-import BioText from "../profile/bioText";
-import Games from "../games";
+import Username from "../components/profile/username";
+import Socials from "../components/profile/socials";
+import FollowStats from "../components/profile/followStats";
+import FollowButton from "../components/profile/followButton";
+import BioText from "../components/profile/bioText";
+import Games from "../components/games";
 
-import { createAPIKit } from "../../utils/APIKit";
-import AuthContext from "../../authContext";
-import { handleAPIError } from "../../utils";
-import EditProfileButton from "../profile/editProfileButton";
-import { avatarDefaultStyling } from "../../utils/styles";
-import { darkTheme } from "../../utils/theme";
+import { createAPIKit } from "../utils/APIKit";
+import AuthContext from "../authContext";
+import { handleAPIError } from "../utils";
+import EditProfileButton from "../components/profile/editProfileButton";
+import { avatarDefaultStyling } from "../utils/styles";
+import { darkTheme } from "../utils/theme";
 
 class Profile extends Component {
   static contextType = AuthContext;

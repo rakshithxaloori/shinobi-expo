@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
 import axios from "axios";
 
-import MiniProfile from "../miniProfile";
-import { createAPIKit } from "../../utils/APIKit";
-import { handleAPIError } from "../../utils";
-import { darkTheme } from "../../utils/theme";
+import MiniProfile from "../components/miniProfile";
+import { createAPIKit } from "../utils/APIKit";
+import { handleAPIError } from "../utils";
+import { darkTheme } from "../utils/theme";
 
 class Followers extends Component {
   state = { followers: [], endReached: false, loaded: false, error: "" };

@@ -3,11 +3,11 @@ import { View, SafeAreaView, ScrollView, Text, StyleSheet } from "react-native";
 import { SearchBar, Divider } from "react-native-elements";
 import axios from "axios";
 
-import SearchItem from "../search/searchItem";
+import SearchItem from "../components/search/searchItem";
 
-import { createAPIKit } from "../../utils/APIKit";
-import { handleAPIError } from "../../utils";
-import { darkTheme } from "../../utils/theme";
+import { createAPIKit } from "../utils/APIKit";
+import { handleAPIError } from "../utils";
+import { darkTheme } from "../utils/theme";
 
 class Search extends Component {
   state = {

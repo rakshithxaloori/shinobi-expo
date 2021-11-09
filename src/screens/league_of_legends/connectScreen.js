@@ -3,10 +3,10 @@ import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { Avatar, Input } from "react-native-elements";
 import { Picker } from "@react-native-picker/picker";
 
-import { createAPIKit } from "../../../utils/APIKit";
-import { darkTheme } from "../../../utils/theme";
-import { handleAPIError } from "../../../utils";
-import { avatarDefaultStyling } from "../../../utils/styles";
+import { createAPIKit } from "../../utils/APIKit";
+import { darkTheme } from "../../utils/theme";
+import { handleAPIError } from "../../utils";
+import { avatarDefaultStyling } from "../../utils/styles";
 
 class LolConnect extends Component {
   state = {
