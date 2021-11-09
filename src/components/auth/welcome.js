@@ -6,6 +6,10 @@ const Auth = (props) => {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>welcome to shinobi!</Text>
+      <Text style={styles.subtitle}>
+        follow, chat and share match history of league of league with your
+        friends
+      </Text>
       <View style={styles.buttons}>
         <TouchableOpacity
           style={[styles.loginTouchable, styles.touchable]}
@@ -30,6 +34,13 @@ const Auth = (props) => {
 
 const styles = StyleSheet.create({
   header: { fontSize: 30, fontWeight: "bold" },
+  subtitle: {
+    fontSize: 15,
+    paddingHorizontal: 30,
+    paddingTop: 10,
+    paddingBottom: 30,
+    fontWeight: "200",
+  },
   buttonText: { fontWeight: "bold", fontSize: 15 },
   signupText: { color: "white" },
   touchable: {
