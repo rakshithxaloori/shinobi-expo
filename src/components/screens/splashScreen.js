@@ -4,7 +4,7 @@ import { View, StyleSheet, Image } from "react-native";
 const SplashScreen = () => (
   <View style={styles.container}>
     <Image
-      source={require("shinobi/assets/icon.png")}
+      source={require("../../../assets/icon.png")}
       style={{ width: "60%", resizeMode: "contain" }}
     />
   </View>
