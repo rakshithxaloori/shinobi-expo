@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet } from "react-native";
-import { GiftedChat } from "react-native-gifted-chat";
+import { GiftedChat, Bubble, InputToolbar } from "react-native-gifted-chat";
 import axios from "axios";
 
 import { createAPIKit } from "../../utils/APIKit";
@@ -8,6 +8,7 @@ import { createWSKit } from "../chat/WSKit";
 import { create_UUID, handleAPIError } from "../../utils";
 import AuthContext from "../../authContext";
 import { flashAlert } from "../../utils/flash_message";
+import { darkTheme } from "../../utils/theme";
 
 const messageCount = 25;
 const configureMessage = (message, my_username) => ({
@@ -186,9 +187,37 @@ class Chat extends Component {
     }
   };
 
+  renderBubble = (props) => {
+    return (
+      <Bubble
+        {...props}
+        wrapperStyle={{
+          left: {
+            backgroundColor: darkTheme.surface,
+          },
+        }}
+        textStyle={{
+          left: { color: darkTheme.on_surface_title },
+        }}
+      />
+    );
+  };
+
+  renderInputToolbar(props) {
+    return (
+      <InputToolbar
+        {...props}
+        containerStyle={styles.input}
+        placeholder="what's on your mind?"
+      />
+    );
+  }
+
   render() {
     return (
       <GiftedChat
+        renderInputToolbar={this.renderInputToolbar}
+        renderBubble={this.renderBubble}
         messages={this.state.messages}
         onSend={(messages) => {
           this.sendMessages(messages);
@@ -207,6 +236,7 @@ class Chat extends Component {
 }
 
 const styles = StyleSheet.create({
+  input: { backgroundColor: darkTheme.surface },
   container: { flex: 1, justifyContent: "center", alignItems: "center" },
 });
 
