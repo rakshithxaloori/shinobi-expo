@@ -110,7 +110,7 @@ class Search extends Component {
           </View>
         ) : (
           <View style={styles.empty}>
-            <Text style={styles.text}>Who are you looking for?</Text>
+            <Text style={styles.text}>who are you looking for?</Text>
           </View>
         )}
         {/* <FlatList
