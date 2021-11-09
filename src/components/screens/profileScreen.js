@@ -7,17 +7,17 @@ import axios from "axios";
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
-import Username from "./username";
-import Socials from "./socials";
-import FollowStats from "./followStats";
-import FollowButton from "./followButton";
-import BioText from "./bioText";
+import Username from "../profile/username";
+import Socials from "../profile/socials";
+import FollowStats from "../profile/followStats";
+import FollowButton from "../profile/followButton";
+import BioText from "../profile/bioText";
 import Games from "../games";
 
 import { createAPIKit } from "../../utils/APIKit";
 import AuthContext from "../../authContext";
 import { handleAPIError } from "../../utils";
-import EditProfileButton from "./editProfileButton";
+import EditProfileButton from "../profile/editProfileButton";
 import { avatarDefaultStyling } from "../../utils/styles";
 import { darkTheme } from "../../utils/theme";
 

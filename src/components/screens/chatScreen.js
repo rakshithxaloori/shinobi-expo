@@ -4,7 +4,7 @@ import { GiftedChat } from "react-native-gifted-chat";
 import axios from "axios";
 
 import { createAPIKit } from "../../utils/APIKit";
-import { createWSKit } from "./WSKit";
+import { createWSKit } from "../chat/WSKit";
 import { create_UUID, handleAPIError } from "../../utils";
 import AuthContext from "../../authContext";
 import { flashAlert } from "../../utils/flash_message";

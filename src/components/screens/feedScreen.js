@@ -9,7 +9,7 @@ import {
 import { Avatar } from "react-native-elements";
 import IonIcons from "react-native-vector-icons/Ionicons";
 
-import TrendingList from "./trendingList";
+import TrendingList from "../feed/trendingList";
 import AuthContext from "../../authContext";
 import { avatarDefaultStyling } from "../../utils/styles";
 import { darkTheme } from "../../utils/theme";

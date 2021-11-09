@@ -17,7 +17,7 @@ import axios from "axios";
 
 import AuthContext from "./src/authContext";
 
-import SplashScreen from "./src/components/splashScreen";
+import SplashScreen from "./src/components/screens/splashScreen";
 import AuthScreen from "./src/components/auth";
 import HomeScreen from "./src/components/home";
 

@@ -3,8 +3,8 @@ import { View, TouchableOpacity, StyleSheet } from "react-native";
 import IonIcons from "react-native-vector-icons/Ionicons";
 import { darkTheme } from "../../utils/theme";
 
-import Content from "./content";
-import Cover from "./cover";
+import Content from "../settings/content";
+import Cover from "../settings/cover";
 
 const Settings = (props) => {
   const closeSettings = () => {

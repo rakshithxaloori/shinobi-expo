@@ -1,5 +1,6 @@
 {
   "main": "node_modules/expo/AppEntry.js",
+  "name": "shinobi",
   "scripts": {
     "eas-build-pre-install": "echo $ANDROID_GOOGLE_CLIENT_ID",
     "start": "expo start -c",

@@ -15,7 +15,7 @@ import axios from "axios";
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
-import ChatPreview from "./chatPreview";
+import ChatPreview from "../chat/chatPreview";
 
 import { createAPIKit } from "../../utils/APIKit";
 import { handleAPIError } from "../../utils";

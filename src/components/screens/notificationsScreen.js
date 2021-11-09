@@ -14,7 +14,7 @@ import axios from "axios";
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
-import Notification from "./notification";
+import Notification from "../notifications/notification";
 
 import { createAPIKit } from "../../utils/APIKit";
 import { handleAPIError } from "../../utils";

@@ -3,7 +3,7 @@ import { View, SafeAreaView, ScrollView, Text, StyleSheet } from "react-native";
 import { SearchBar, Divider } from "react-native-elements";
 import axios from "axios";
 
-import SearchItem from "./searchItem";
+import SearchItem from "../search/searchItem";
 
 import { createAPIKit } from "../../utils/APIKit";
 import { handleAPIError } from "../../utils";

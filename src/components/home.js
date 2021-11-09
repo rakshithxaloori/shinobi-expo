@@ -15,22 +15,24 @@ import FlashMessage from "react-native-flash-message";
 
 import * as RootNavigation from "./rootNavigation";
 
-import FeedScreen from "./feed";
-import InboxScreen from "./chat";
-import NotificationsScreen from "./notifications";
+import FeedScreen from "./screens/feedScreen";
+import InboxScreen from "./screens/inboxScreen";
+import NotificationsScreen from "./screens/notificationsScreen";
 
-import Chat from "./chat/chat";
-import Settings from "./settings";
-import Profile from "./profile";
-import Search from "./search";
+import Chat from "./screens/chatScreen";
+import Settings from "./screens/settingsScreen";
+import Profile from "./screens/profileScreen";
+import Search from "./screens/searchScreen";
+import Followers from "./screens/followersScreen";
+import Followings from "./screens/followingScreen";
 
 import { createAPIKit } from "../utils/APIKit";
 import { handleAPIError } from "../utils";
 import { darkTheme } from "../utils/theme";
-import LolMatch from "./games/league_of_legends/match";
-import LolConnect from "./games/league_of_legends/connect";
+
+import LolMatch from "./screens/league_of_legends/lolMatchScreen";
+import LolConnect from "./screens/league_of_legends/connectScreen";
 import MatchHeader from "./headers/match_header";
-import Followers from "./followers";
 
 const NavigationContext = React.createContext();
 
@@ -187,6 +189,7 @@ const StackNavigatorComponent = () => (
             <Stack.Screen name="Chat" component={Chat} />
             <Stack.Screen name="Profile" component={Profile} />
             <Stack.Screen name="Followers" component={Followers} />
+            <Stack.Screen name="Following" component={Followings} />
             <Stack.Screen
               name="Settings"
               component={Settings}
