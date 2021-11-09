@@ -15,23 +15,23 @@ import FlashMessage from "react-native-flash-message";
 
 import * as RootNavigation from "./rootNavigation";
 
-import FeedScreen from "./screens/feedScreen";
-import InboxScreen from "./screens/inboxScreen";
-import NotificationsScreen from "./screens/notificationsScreen";
+import FeedScreen from "../screens/feedScreen";
+import InboxScreen from "../screens/inboxScreen";
+import NotificationsScreen from "../screens/notificationsScreen";
 
-import Chat from "./screens/chatScreen";
-import Settings from "./screens/settingsScreen";
-import Profile from "./screens/profileScreen";
-import Search from "./screens/searchScreen";
-import Followers from "./screens/followersScreen";
-import Followings from "./screens/followingScreen";
+import Chat from "../screens/chatScreen";
+import Settings from "../screens/settingsScreen";
+import Profile from "../screens/profileScreen";
+import Search from "../screens/searchScreen";
+import Followers from "../screens/followersScreen";
+import Followings from "../screens/followingScreen";
 
 import { createAPIKit } from "../utils/APIKit";
 import { handleAPIError } from "../utils";
 import { darkTheme } from "../utils/theme";
 
-import LolMatch from "./screens/league_of_legends/lolMatchScreen";
-import LolConnect from "./screens/league_of_legends/connectScreen";
+import LolMatch from "../screens/league_of_legends/lolMatchScreen";
+import LolConnect from "../screens/league_of_legends/connectScreen";
 import MatchHeader from "./headers/match_header";
 
 const NavigationContext = React.createContext();
