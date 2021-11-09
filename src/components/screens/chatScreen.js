@@ -37,7 +37,6 @@ class Chat extends Component {
     error: "",
   };
 
-  count = 0;
   cancelTokenSource = axios.CancelToken.source();
 
   componentDidMount = async () => {
@@ -66,29 +65,7 @@ class Chat extends Component {
     };
     this.closeSocket = () => chatSocket.close(1000);
 
-    const onSuccess = (response) => {
-      console.log(response.data);
-      const messages = response.data.payload.messages.map((message) =>
-        configureMessage(message, this.context.user.username)
-      );
-
-      this.setState({
-        chatLoaded: true,
-        endReached: messages.length < messageCount,
-        messages: messages,
-      });
-      this.count = messages.length;
-    };
-
-    const APIKit = await createAPIKit();
-    APIKit.get(
-      `/chat/messages/${this.props.route.params.chatId}/0/${messageCount}/`,
-      { cancelToken: this.cancelTokenSource.token }
-    )
-      .then(onSuccess)
-      .catch((e) => {
-        this.setState({ error: handleAPIError(e) });
-      });
+    await this.loadEarlierMessages();
   };
 
   componentWillUnmount = async () => {
@@ -109,7 +86,6 @@ class Chat extends Component {
 
     this.setState((prevState) => {
       const newMessages = [newMessage, ...prevState.messages];
-      this.count += 1;
       return {
         messages: newMessages,
       };
@@ -152,17 +128,15 @@ class Chat extends Component {
     if (!this.state.endReached) {
       this.setState({ earlierLoading: true });
       const onSuccess = (response) => {
-        if (response.data.payload.messages) {
+        if (response.data.payload?.messages) {
           const messages = response.data.payload.messages?.map((message) =>
             configureMessage(message, this.context.user.username)
           );
-          this.count += messages.length;
           this.setState((prevState) => {
-            const newMessages = [...prevState.messages, ...messages];
             return {
               earlierLoading: false,
               endReached: messages.length < messageCount,
-              messages: newMessages,
+              messages: [...prevState.messages, ...messages],
             };
           });
         } else {
@@ -175,9 +149,9 @@ class Chat extends Component {
 
       const APIKit = await createAPIKit();
       APIKit.get(
-        `/chat/messages/${this.props.route.params.chatId}/${this.count}/${
-          this.count + messageCount
-        }/`,
+        `/chat/messages/${this.props.route.params.chatId}/${
+          this.state.messages.length
+        }/${this.state.messages.length + messageCount}/`,
         { cancelToken: this.cancelTokenSource.token }
       )
         .then(onSuccess)
