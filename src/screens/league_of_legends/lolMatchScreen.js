@@ -40,9 +40,13 @@ class Match extends Component {
     };
 
     const APIKit = await createAPIKit();
-    APIKit.get(`/lol/match/${match_id}`, {
-      cancelToken: this.cancelTokenSource.token,
-    })
+    APIKit.post(
+      "/lol/match/",
+      { match_id },
+      {
+        cancelToken: this.cancelTokenSource.token,
+      }
+    )
       .then(onSuccess)
       .catch((e) => {
         this.setState({ error: handleAPIError(e) });

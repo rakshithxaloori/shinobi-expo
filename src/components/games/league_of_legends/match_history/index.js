@@ -68,11 +68,15 @@ class MatchHistory extends Component {
 
     const APIKit = await createAPIKit();
 
-    const url = `lol/matches/${this.props.username}/${
-      this.state.matchHistory.length
-    }/${this.state.matchHistory.length + this.fetchCount}/`;
-
-    APIKit.get(url, { cancelToken: this.cancelTokenSource.token })
+    APIKit.post(
+      "lol/matches/",
+      {
+        username: this.props.username,
+        begin_index: this.state.matchHistory.length,
+        end_index: this.state.matchHistory.length + this.fetchCount,
+      },
+      { cancelToken: this.cancelTokenSource.token }
+    )
       .then(onSuccess)
       .catch((e) => {
         console.log(url);
