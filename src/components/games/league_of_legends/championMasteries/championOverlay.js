@@ -30,9 +30,13 @@ class ChampionOverlay extends Component {
       };
 
       const APIKit = await createAPIKit();
-      APIKit.get(`/lol/champion/${this.props.champion.key}/`, {
-        cancelToken: this.cancelTokenSource.token,
-      })
+      APIKit.post(
+        "/lol/champion/",
+        { champion_key: this.props.champion.key },
+        {
+          cancelToken: this.cancelTokenSource.token,
+        }
+      )
         .then(onSuccess)
         .catch((e) => {
           this.setState({

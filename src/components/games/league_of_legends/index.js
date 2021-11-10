@@ -46,9 +46,13 @@ class LeagueOfLegendsProfile extends Component {
     };
 
     const APIKit = await createAPIKit();
-    APIKit.get(`/lol/profile/${this.props.username}/`, {
-      cancelToken: this.cancelTokenSource.token,
-    })
+    APIKit.post(
+      "/lol/profile/",
+      { username: this.props.username },
+      {
+        cancelToken: this.cancelTokenSource.token,
+      }
+    )
       .then(onSuccess)
       .catch((e) => {
         if (!axios.isCancel && e.response.status === 404) {

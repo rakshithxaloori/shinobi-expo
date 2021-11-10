@@ -89,10 +89,13 @@ class ChampionMasteriesByLevel extends Component {
       };
 
       const APIKit = await createAPIKit();
-      APIKit.get(
-        `lol/masteries/${this.props.username}/${
-          this.state.championMasteries.length
-        }/${this.state.championMasteries.length + this.fetchCount}/`,
+      APIKit.post(
+        "lol/masteries/",
+        {
+          username: this.props.username,
+          begin_index: this.state.championMasteries.length,
+          end_index: this.state.championMasteries.length + this.fetchCount,
+        },
         {
           cancelToken: this.cancelTokenSource.token,
         }
