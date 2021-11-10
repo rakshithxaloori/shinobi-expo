@@ -7,12 +7,13 @@ import AuthContext from "../authContext";
 import { avatarDefaultStyling } from "../utils/styles";
 import { darkTheme } from "../utils/theme";
 import MatchList from "../components/feed/matchList";
+import VirtualizedList from "../utils/virtualizedList";
 
 const Feed = (props) => {
   const { user } = useContext(AuthContext);
 
   return (
-    <View style={styles.container}>
+    <VirtualizedList style={styles.container}>
       <View style={styles.titleBar}>
         <Avatar
           rounded
@@ -46,7 +47,7 @@ const Feed = (props) => {
       </View>
       <Text style={styles.header}>Feed</Text>
       <MatchList />
-    </View>
+    </VirtualizedList>
   );
 };
 

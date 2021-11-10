@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
   },
   game: {
     flexDirection: "row",
+    height: 40,
     backgroundColor: darkTheme.surface,
     paddingVertical: 12,
     paddingHorizontal: 10,
@@ -63,7 +64,6 @@ const styles = StyleSheet.create({
   gameProfile: { flex: 6 },
   container: {
     flex: 7,
-    height: screenHeight,
     width: "100%",
     paddingHorizontal: 10,
     paddingBottom: 20,

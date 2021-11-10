@@ -103,7 +103,7 @@ class LeagueOfLegendsProfile extends Component {
   };
 
   render = () => {
-    const avatarSize = 55;
+    const avatarSize = 33;
     return (
       <View style={styles.container}>
         {this.state.profile_loaded === true ? (

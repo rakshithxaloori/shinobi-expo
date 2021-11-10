@@ -20,6 +20,7 @@ import { handleAPIError } from "../utils";
 import EditProfileButton from "../components/profile/editProfileButton";
 import { avatarDefaultStyling } from "../utils/styles";
 import { darkTheme } from "../utils/theme";
+import VirtualizedList from "../utils/virtualizedList";
 
 class Profile extends Component {
   static contextType = AuthContext;
@@ -100,7 +101,7 @@ class Profile extends Component {
     const profileIconSize = 80;
     const username = this.props.route?.params?.username;
     return (
-      <View style={styles.container}>
+      <VirtualizedList style={styles.container}>
         <View style={styles.profile}>
           <View style={styles.profilePicture}>
             {this.state.profile_loaded ? (
@@ -169,7 +170,7 @@ class Profile extends Component {
             reload={this.props.route?.params?.reload}
           />
         )}
-      </View>
+      </VirtualizedList>
     );
   };
 }
@@ -177,7 +178,7 @@ class Profile extends Component {
 const styles = StyleSheet.create({
   profile: {
     flex: 3,
-    width: "100%",
+    height: 200,
     backgroundColor: darkTheme.surface,
     borderRadius: 10,
     padding: 10,
@@ -198,10 +199,10 @@ const styles = StyleSheet.create({
   },
   buttonText: { color: darkTheme.on_primary },
   container: {
-    flex: 1,
+    height: "100%",
+    width: "100%",
     paddingHorizontal: 10,
     paddingBottom: 10,
-    alignItems: "center",
   },
 });
 

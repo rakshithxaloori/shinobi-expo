@@ -129,32 +129,30 @@ class MatchHistory extends Component {
       {this.state.initialLoading ? (
         <View>{this.placeholders()}</View>
       ) : this.state.matchHistory?.length > 0 ? (
-        <>
-          <FlatList
-            data={this.state.matchHistory}
-            refreshing={this.state.isRefreshing}
-            onRefresh={this.refresh}
-            renderItem={this.renderMatch}
-            keyExtractor={this.keyExtractor}
-            onEndReached={this.fetchMatches}
-            onEndReachedThreshold={3}
-            showsVerticalScrollIndicator={false}
-            ListFooterComponent={
-              this.state.endReached ? (
-                <Text style={styles.endText}>
-                  {this.props.username}'s latest{" "}
-                  {this.state.matchHistory.length} matches
-                </Text>
-              ) : (
-                <ActivityIndicator
-                  style={{ marginTop: 10 }}
-                  animating={this.state.isLoading}
-                  color={darkTheme.on_background}
-                />
-              )
-            }
-          />
-        </>
+        <FlatList
+          data={this.state.matchHistory}
+          refreshing={this.state.isRefreshing}
+          onRefresh={this.refresh}
+          renderItem={this.renderMatch}
+          keyExtractor={this.keyExtractor}
+          onEndReached={this.fetchMatches}
+          onEndReachedThreshold={3}
+          showsVerticalScrollIndicator={false}
+          ListFooterComponent={
+            this.state.endReached ? (
+              <Text style={styles.endText}>
+                {this.props.username}'s latest {this.state.matchHistory.length}{" "}
+                matches
+              </Text>
+            ) : (
+              <ActivityIndicator
+                style={{ marginTop: 10 }}
+                animating={this.state.isLoading}
+                color={darkTheme.on_background}
+              />
+            )
+          }
+        />
       ) : this.state.status_code === 412 ? (
         // TODO better way of doing this?
         <View style={styles.empty}>
@@ -190,7 +188,7 @@ const styles = StyleSheet.create({
   },
   emptyText: { fontWeight: "600", color: darkTheme.on_surface_subtitle },
   empty: { justifyContent: "center", alignItems: "flex-start" },
-  container: { paddingVertical: 5, paddingVertical: 10 },
+  container: { flex: 1, paddingVertical: 5, paddingVertical: 10 },
 });
 
 export default MatchHistory;
