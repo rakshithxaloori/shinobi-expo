@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     paddingTop: 10,
     paddingBottom: 30,
-    fontWeight: "200",
+    fontWeight: "300",
   },
   buttonText: { fontWeight: "bold", fontSize: 15 },
   signupText: { color: "white" },
