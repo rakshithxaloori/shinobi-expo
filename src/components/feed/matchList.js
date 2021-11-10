@@ -10,6 +10,7 @@ class MatchList extends Component {
   state = {
     matches: [],
     loaded: false,
+    isRefreshing: false,
     error: "",
   };
 
@@ -27,12 +28,11 @@ class MatchList extends Component {
 
   fetchMatches = async () => {
     const onSuccess = async (response) => {
-      console.log(
-        "-------------------------------\n",
-        response.data?.payload.feed[0]
-      );
       const { feed } = response.data?.payload;
-      this.setState({ matches: feed, loaded: true });
+      this.setState((prevState) => ({
+        matches: [...prevState.matches, ...feed],
+        loaded: true,
+      }));
     };
 
     const APIKit = await createAPIKit();
@@ -71,10 +71,11 @@ class MatchList extends Component {
         <FlatList
           contentContainerStyle={styles.container}
           data={this.state.matches}
+          onEndReached={this.fetchMatches}
+          onEndReachedThreshold={3}
           renderItem={this.renderMatch}
           keyExtractor={this.keyExtractor}
           showsVerticalScrollIndicator={false}
-          // ItemSeparatorComponent={this.renderSeperator}
         />
       </View>
     );
