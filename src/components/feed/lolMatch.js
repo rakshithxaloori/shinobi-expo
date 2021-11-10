@@ -17,16 +17,22 @@ const Match = ({ participation }) => {
 
   const split_arr = match?.champion?.image?.split("/");
 
+  const navigateProfile = () => {
+    navigation.navigate("Profile", { username: participation.user.username });
+  };
+
+  const navigateMatch = () => {
+    navigation.navigate("LolMatch", { match_id: match.id });
+  };
+
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() => {
-        navigation.navigate("LolMatch", { match_id: match.id });
-      }}
-    >
+    <TouchableOpacity style={styles.container} onPress={navigateMatch}>
       <View style={styles.content}>
-        <View style={{ flex: 9, flexDirection: "row", paddingTop: 5 }}>
-          <Avatar rounded source={{ uri: participation.user.picture }} />
+        <TouchableOpacity
+          style={{ flex: 9, flexDirection: "row", paddingTop: 5 }}
+          onPress={navigateProfile}
+        >
+          <Avatar rounded source={{ uri: participation.user.picture }} on />
           <View style={{ paddingLeft: 10 }}>
             <Text style={styles.username}>{participation.user.username}</Text>
             <View style={{ flexDirection: "row" }}>
@@ -43,7 +49,7 @@ const Match = ({ participation }) => {
               </Text>
             </View>
           </View>
-        </View>
+        </TouchableOpacity>
         <View style={{ flex: 11, flexDirection: "row" }}>
           <View style={styles.avatar}>
             <Avatar
