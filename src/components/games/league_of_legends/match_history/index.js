@@ -57,8 +57,6 @@ class MatchHistory extends Component {
         this.setState({ endReached: true });
       }
 
-      console.log(match_history.length);
-
       this.setState((prevState) => ({
         initialLoading: false,
         matchHistory: [...prevState.matchHistory, ...match_history],
@@ -79,8 +77,6 @@ class MatchHistory extends Component {
     )
       .then(onSuccess)
       .catch((e) => {
-        console.log(url);
-        console.log(e);
         if (!axios.isCancel(e)) {
           const status_code = e.response.status;
           if (status_code === 412) {

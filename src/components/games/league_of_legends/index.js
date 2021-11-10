@@ -66,7 +66,6 @@ class LeagueOfLegendsProfile extends Component {
   reloadLolProfile = async () => {
     // The screen is focused
     // Call any action
-    console.log(this.props);
     if (this.props.reload === true) {
       this.setState(
         {

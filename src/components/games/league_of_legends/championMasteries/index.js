@@ -50,7 +50,6 @@ class ChampionMasteriesByLevel extends Component {
 
       const onSuccess = (response) => {
         const { champion_masteries, count } = response.data?.payload;
-        console.log(champion_masteries, count);
         this.setState((prevState) => {
           let grouped = {};
 

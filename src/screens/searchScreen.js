@@ -25,10 +25,8 @@ class Search extends Component {
   };
 
   componentDidUpdate = async () => {
-    console.log("users", this.state.users);
     if (this.state.loading && this.state.search) {
       const onSuccess = (response) => {
-        console.log(response.data?.payload.users);
         this.setState({
           users: response.data?.payload?.users,
           loading: false,

@@ -22,7 +22,6 @@ class ChampionOverlay extends Component {
   cancelTokenSource = axios.CancelToken.source();
 
   componentDidUpdate = async () => {
-    console.log(this.props.champion);
     if (this.props.visible && this.state.champion === undefined) {
       const onSuccess = (response) => {
         this.setState({

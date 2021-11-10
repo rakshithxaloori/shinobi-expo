@@ -34,7 +34,6 @@ const Twitch = ({ connectedBool, setError }) => {
   const signInWithTwitch = async () => {
     setDisabled(true);
     const redirectUrl = AuthSession.makeRedirectUri({ useProxy: true });
-    console.log(redirectUrl);
     const authUrl = `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.TWITCH_CLIENT_ID}&redirect_uri=${redirectUrl}&response_type=token&scope=user_read&force_verify=true`;
     const { type, params } = await AuthSession.startAsync({ authUrl });
     if (type === "success") {

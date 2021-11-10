@@ -27,7 +27,6 @@ class Followers extends Component {
 
     const onSuccess = async (response) => {
       const { followers } = response.data?.payload;
-      console.log(followers);
       this.setState({
         followers: followers,
         loaded: true,

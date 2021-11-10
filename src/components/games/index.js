@@ -1,14 +1,11 @@
 import React from "react";
-import { View, Text, ScrollView, StyleSheet, Dimensions } from "react-native";
+import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Avatar } from "react-native-elements";
 import { avatarDefaultStyling } from "../../utils/styles";
 import { darkTheme } from "../../utils/theme";
 
 import LeagueOfLegendsProfile from "./league_of_legends";
-
-const screenHeight = Dimensions.get("window").width;
-console.log(screenHeight);
 
 const Games = ({ username, reload }) => {
   const navigation = useNavigation();

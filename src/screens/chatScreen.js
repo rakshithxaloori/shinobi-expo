@@ -74,7 +74,7 @@ class Chat extends Component {
     this.cancelTokenSource.cancel();
     const APIKit = await createAPIKit();
     APIKit.post("/chat/read/", { chat_id: chatId }).catch((e) => {
-      console.log(e);
+      flashAlert(e);
     });
   };
 

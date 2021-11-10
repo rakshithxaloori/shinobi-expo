@@ -17,6 +17,7 @@ import { createWSKit } from "./WSKit";
 import { dateTimeDiff } from "../../utils";
 import { avatarDefaultStyling } from "../../utils/styles";
 import { darkTheme } from "../../utils/theme";
+import { flashAlert } from "../../utils/flash_message";
 
 const screenWidth = Dimensions.get("screen").width;
 
@@ -47,7 +48,6 @@ class ChatPreview extends Component {
   };
 
   componentWillUnmount = () => {
-    console.log("CHAT PREVIEW UNMOUNTING");
     this.closeConn();
   };
 
@@ -61,7 +61,7 @@ class ChatPreview extends Component {
   };
 
   onError = (error) => {
-    console.log(error);
+    flashAlert(error);
   };
 
   render = () => {
@@ -70,8 +70,6 @@ class ChatPreview extends Component {
       // Do some whitespace slicing
       const sliceIndex = 15;
       let sliced = false;
-      console.log(this.state.lastMessage);
-      console.log(this.props.chat.last_message);
       const lastMessage =
         this.state.lastMessage || this.props.chat.last_message;
 

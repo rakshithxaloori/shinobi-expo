@@ -8,6 +8,7 @@ import { createAPIKit } from "../../utils/APIKit";
 import { handleAPIError } from "../../utils";
 import { avatarDefaultStyling } from "../../utils/styles";
 import { darkTheme } from "../../utils/theme";
+import { flashAlert } from "../../utils/flash_message";
 
 const screen = Dimensions.get("screen");
 
@@ -35,7 +36,6 @@ const EditProfileButton = ({
   const saveProfile = async () => {
     setDisable(true);
     const onSuccess = (response) => {
-      console.log(response.data.detail);
       setBio(newBio);
     };
 
@@ -47,7 +47,7 @@ const EditProfileButton = ({
     )
       .then(onSuccess)
       .catch((e) => {
-        console.log(handleAPIError(e));
+        flashAlert(handleAPIError(e));
       })
       .finally(() => {
         setDisable(false);

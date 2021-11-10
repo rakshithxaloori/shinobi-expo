@@ -31,7 +31,6 @@ class LolConnect extends Component {
     this.setState({ disabled: true, error: "" });
 
     const onSuccess = (response) => {
-      console.log(response.data.payload);
       const { old_profile_icon, new_profile_icon } = response.data?.payload;
       this.setState({
         old_profile_icon,
@@ -54,7 +53,6 @@ class LolConnect extends Component {
 
   verify = async () => {
     const onSuccess = (response) => {
-      console.log(response.data.detail);
       this.props.navigation.navigate("Profile", { reload: true });
     };
 

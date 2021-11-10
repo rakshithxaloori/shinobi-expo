@@ -25,7 +25,6 @@ class SocialsSettings extends Component {
 
   componentDidMount = async () => {
     const onSuccess = (response) => {
-      console.log(response.data.payload);
       const { instagram, twitch, youtube } = response.data.payload;
       this.setState({ instagram, twitch, youtube });
       this.props.setSocialsLoaded(true);

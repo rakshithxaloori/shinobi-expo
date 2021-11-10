@@ -36,8 +36,8 @@ export const createErrorStr = (error) => {
   console.log("NETWORK ERROR");
   if (error.response) {
     // Request made and server responded
-    console.log(error.response.data);
-    console.log(error.response.status);
+    console.log("ERROR DATA", error.response.data);
+    console.log("ERROR STATUS", error.response.status);
     if (error.response.status >= 500) return "Server Error";
     else return error.response.data.detail;
   } else if (error.request) {
@@ -47,7 +47,7 @@ export const createErrorStr = (error) => {
     return "No Internet Connection";
   } else {
     // Something happened in setting up the request that triggered an Error
-    console.log("ERROR", error.message);
+    console.log("ERROR MESSAGE", error.message);
     return error.message;
   }
 };

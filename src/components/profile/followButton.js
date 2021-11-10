@@ -9,6 +9,7 @@ import { createAPIKit } from "../../utils/APIKit";
 
 import UnfollowOverlay from "./unfollowOverlay";
 import { darkTheme } from "../../utils/theme";
+import { flashAlert } from "../../utils/flash_message";
 
 const FollowButton = ({
   username,
@@ -39,7 +40,7 @@ const FollowButton = ({
     })
       .then(onSuccess)
       .catch((e) => {
-        console.log(handleAPIError(e));
+        flashAlert(handleAPIError(e));
       })
       .finally(() => setDisabled(false));
   };
