@@ -2,7 +2,7 @@
   "expo": {
     "name": "Shinobi",
     "slug": "Shinobi",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "notification": {
@@ -16,7 +16,7 @@
       "package": "cc.shinobi.android",
       "permissions": [],
       "googleServicesFile": "./google-services.json",
-      "versionCode": 7
+      "versionCode": 8
     },
     "scheme": "shn"
   }
