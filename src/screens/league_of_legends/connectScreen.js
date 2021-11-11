@@ -18,6 +18,7 @@ class LolConnect extends Component {
     old_profile_icon: undefined,
     new_profile_icon: undefined,
 
+    labelColor: darkTheme.on_background,
     error: "",
   };
 
@@ -69,6 +70,15 @@ class LolConnect extends Component {
       });
   };
 
+  toggleLabelColor = () => {
+    this.setState((prevState) => ({
+      labelColor:
+        prevState.labelColor === darkTheme.background
+          ? darkTheme.on_background
+          : darkTheme.background,
+    }));
+  };
+
   render = () => (
     <View style={styles.container}>
       {this.state.stage === 1 ? (
@@ -93,31 +103,79 @@ class LolConnect extends Component {
             errorStyle={{ color: "red" }}
             errorMessage={this.state.error}
           />
-          <Picker
-            enabled={!this.state.disabled}
-            mode="dropdown"
-            selectedValue={this.state.platform}
-            onValueChange={(value) => {
-              this.setState({ platform: value });
-            }}
-            style={{ width: 200 }}
-            itemStyle={{
-              fontSize: 15,
-              color: darkTheme.on_background,
-            }}
-          >
-            <Picker.Item label="Brazil" value="BR1" />
-            <Picker.Item label="Europe Nordic & East" value="EUN1" />
-            <Picker.Item label="Europe West" value="EUW1" />
-            <Picker.Item label="Latin America North" value="LA1" />
-            <Picker.Item label="Latin America South" value="LA2" />
-            <Picker.Item label="Japan" value="JP1" />
-            <Picker.Item label="Republic of Korea" value="KR" />
-            <Picker.Item label="North America" value="NA1" />
-            <Picker.Item label="Oceania" value="OC1" />
-            <Picker.Item label="Russia" value="RU" />
-            <Picker.Item label="Turkey" value="TR1" />
-          </Picker>
+          <View style={styles.picker}>
+            <Picker
+              enabled={!this.state.disabled}
+              mode="dropdown"
+              selectedValue={this.state.platform}
+              onValueChange={(value) => {
+                this.setState({ platform: value });
+              }}
+              itemStyle={{
+                fontSize: 15,
+              }}
+              dropdownIconColor={darkTheme.on_background}
+              dropdownIconRippleColor={darkTheme.on_background}
+              onFocus={this.toggleLabelColor}
+              onBlur={this.toggleLabelColor}
+            >
+              <Picker.Item
+                color={this.state.labelColor}
+                label="Brazil"
+                value="BR1"
+              />
+              <Picker.Item
+                color={this.state.labelColor}
+                label="Europe Nordic & East"
+                value="EUN1"
+              />
+              <Picker.Item
+                color={this.state.labelColor}
+                label="Europe West"
+                value="EUW1"
+              />
+              <Picker.Item
+                color={this.state.labelColor}
+                label="Latin America North"
+                value="LA1"
+              />
+              <Picker.Item
+                color={this.state.labelColor}
+                label="Latin America South"
+                value="LA2"
+              />
+              <Picker.Item
+                color={this.state.labelColor}
+                label="Japan"
+                value="JP1"
+              />
+              <Picker.Item
+                color={this.state.labelColor}
+                label="Republic of Korea"
+                value="KR"
+              />
+              <Picker.Item
+                color={this.state.labelColor}
+                label="North America"
+                value="NA1"
+              />
+              <Picker.Item
+                color={this.state.labelColor}
+                label="Oceania"
+                value="OC1"
+              />
+              <Picker.Item
+                color={this.state.labelColor}
+                label="Russia"
+                value="RU"
+              />
+              <Picker.Item
+                color={this.state.labelColor}
+                label="Turkey"
+                value="TR1"
+              />
+            </Picker>
+          </View>
 
           <TouchableOpacity
             disabled={this.state.disabled}
@@ -172,6 +230,12 @@ class LolConnect extends Component {
 }
 
 const styles = StyleSheet.create({
+  picker: {
+    width: 200,
+    borderColor: "white",
+    borderWidth: 1,
+    borderRadius: 10,
+  },
   buttonText: {
     color: darkTheme.on_background,
     fontSize: 15,
@@ -180,7 +244,7 @@ const styles = StyleSheet.create({
   },
   button: {
     height: 40,
-    marginTop: 10,
+    marginTop: 30,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
