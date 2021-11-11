@@ -17,6 +17,7 @@ class MatchList extends Component {
   state = {
     matches: [],
     loaded: false,
+    connect: false,
     isRefreshing: false,
     error: "",
   };
@@ -35,9 +36,11 @@ class MatchList extends Component {
 
   fetchMatches = async () => {
     const onSuccess = async (response) => {
-      const { feed } = response.data?.payload;
+      console.log(response.data.payload);
+      const { feed, connect } = response.data?.payload;
       this.setState((prevState) => ({
         matches: [...prevState.matches, ...feed],
+        connect,
         loaded: true,
       }));
     };
@@ -55,6 +58,9 @@ class MatchList extends Component {
     )
       .then(onSuccess)
       .catch((e) => {
+        if (e.response.status === 404) {
+          this.setState({ connect: true });
+        }
         this.setState({
           error: handleAPIError(e),
         });
@@ -79,16 +85,23 @@ class MatchList extends Component {
   render = () => {
     return (
       <View style={styles.container}>
-        {this.state.loaded && this.state.matches.length <= 0 ? (
+        {this.state.connect && (
           <TouchableOpacity
             style={styles.connect}
             onPress={this.navigateLolConnect}
           >
-            <Text style={{ color: "white", fontWeight: "bold", fontSize: 20 }}>
+            <Text
+              style={{
+                color: "white",
+                fontWeight: "bold",
+                fontSize: 20,
+              }}
+            >
               Connect League of Legends
             </Text>
           </TouchableOpacity>
-        ) : (
+        )}
+        {this.state.loaded && this.state.matches.length > 0 ? (
           <FlatList
             contentContainerStyle={styles.container}
             data={this.state.matches}
@@ -98,6 +111,13 @@ class MatchList extends Component {
             keyExtractor={this.keyExtractor}
             showsVerticalScrollIndicator={false}
           />
+        ) : (
+          <Text style={{ color: "white", fontWeight: "bold", fontSize: 15 }}>
+            {this.state.connect
+              ? "Connect league of legends"
+              : "Play a few matches"}{" "}
+            or follow someone to fill up the feed!
+          </Text>
         )}
       </View>
     );
@@ -107,6 +127,7 @@ class MatchList extends Component {
 const styles = StyleSheet.create({
   connect: {
     backgroundColor: darkTheme.surface,
+    marginVertical: 10,
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "center",

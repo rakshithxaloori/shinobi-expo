@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { Avatar, Input } from "react-native-elements";
 import { Picker } from "@react-native-picker/picker";
+import { CommonActions } from "@react-navigation/native";
 
 import { createAPIKit } from "../../utils/APIKit";
 import { darkTheme } from "../../utils/theme";
@@ -32,6 +33,7 @@ class LolConnect extends Component {
     this.setState({ disabled: true, error: "" });
 
     const onSuccess = (response) => {
+      console.log(response.data.payload);
       const { old_profile_icon, new_profile_icon } = response.data?.payload;
       this.setState({
         old_profile_icon,
@@ -54,7 +56,13 @@ class LolConnect extends Component {
 
   verify = async () => {
     const onSuccess = (response) => {
-      this.props.navigation.navigate("Profile", { reload: true });
+      // this.props.navigation.navigate("Profile", { reload: true });
+      this.props.navigation.dispatch(
+        CommonActions.reset({
+          routes: [{ name: "Home" }, { name: "Profile" }],
+          index: 1,
+        })
+      );
     };
 
     const APIKit = await createAPIKit();
