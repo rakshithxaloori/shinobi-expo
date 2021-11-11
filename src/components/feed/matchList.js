@@ -1,10 +1,17 @@
 import React, { Component } from "react";
-import { View, FlatList, StyleSheet } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  FlatList,
+  StyleSheet,
+} from "react-native";
 import axios from "axios";
 
 import LolMatch from "./lolMatch";
 import { createAPIKit } from "../../utils/APIKit";
 import { handleAPIError } from "../../utils";
+import { darkTheme } from "../../utils/theme";
 
 class MatchList extends Component {
   state = {
@@ -65,24 +72,50 @@ class MatchList extends Component {
 
   keyExtractor = (match) => match.participation.id;
 
+  navigateLolConnect = () => {
+    this.props?.navigateConnect();
+  };
+
   render = () => {
     return (
       <View style={styles.container}>
-        <FlatList
-          contentContainerStyle={styles.container}
-          data={this.state.matches}
-          onEndReached={this.fetchMatches}
-          onEndReachedThreshold={3}
-          renderItem={this.renderMatch}
-          keyExtractor={this.keyExtractor}
-          showsVerticalScrollIndicator={false}
-        />
+        {this.state.loaded && this.state.matches.length <= 0 ? (
+          <TouchableOpacity
+            style={styles.connect}
+            onPress={this.navigateLolConnect}
+          >
+            <Text style={{ color: "white", fontWeight: "bold", fontSize: 20 }}>
+              Connect League of Legends
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <FlatList
+            contentContainerStyle={styles.container}
+            data={this.state.matches}
+            onEndReached={this.fetchMatches}
+            onEndReachedThreshold={3}
+            renderItem={this.renderMatch}
+            keyExtractor={this.keyExtractor}
+            showsVerticalScrollIndicator={false}
+          />
+        )}
       </View>
     );
   };
 }
 
 const styles = StyleSheet.create({
+  connect: {
+    backgroundColor: darkTheme.surface,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    height: 50,
+    width: "90%",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: darkTheme.on_background,
+  },
   container: { marginTop: 10, paddingHorizontal: 15 },
 });
 
