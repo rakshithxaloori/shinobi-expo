@@ -2,6 +2,7 @@ import React from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Avatar, Badge } from "react-native-elements";
+import FastImage from "react-native-fast-image";
 
 import Stats from "../games/league_of_legends/match_history/match/stats";
 
@@ -35,7 +36,11 @@ const Match = ({ participation, height, margin }) => {
           style={{ flex: 9, flexDirection: "row", paddingTop: 5 }}
           onPress={navigateProfile}
         >
-          <Avatar rounded source={{ uri: participation.user.picture }} />
+          <Avatar
+            rounded
+            source={{ uri: participation.user.picture }}
+            ImageComponent={FastImage}
+          />
           <View style={{ paddingLeft: 10 }}>
             <Text style={styles.username}>{participation.user.username}</Text>
             <View style={{ flexDirection: "row" }}>
