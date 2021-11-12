@@ -49,6 +49,7 @@ const Match = ({ participation, height, margin }) => {
                 size={15}
                 source={{ uri: participation.game.logo }}
                 containerStyle={avatarDefaultStyling}
+                ImageComponent={FastImage}
               />
               <Text style={styles.summoner_name}>
                 {participation.summoner.name +
@@ -68,6 +69,7 @@ const Match = ({ participation, height, margin }) => {
                 avatarDefaultStyling,
                 { borderRadius: 10 },
               ]}
+              ImageComponent={FastImage}
             />
             <Badge
               status={match.team.side === "R" ? "error" : "primary"}
