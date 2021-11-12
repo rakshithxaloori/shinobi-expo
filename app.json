@@ -18,6 +18,7 @@
       "googleServicesFile": "./google-services.json",
       "versionCode": 12
     },
-    "scheme": "shn"
+    "scheme": "shn",
+    "plugins": ["react-native-fast-image"]
   }
 }
