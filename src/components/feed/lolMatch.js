@@ -9,7 +9,7 @@ import { dateTimeDiff } from "../../utils";
 import { darkTheme } from "../../utils/theme";
 import { avatarDefaultStyling } from "../../utils/styles";
 
-const Match = ({ participation }) => {
+const Match = ({ participation, height, margin }) => {
   const match = participation.participation;
   const navigation = useNavigation();
   const dateThen = new Date(match.creation);
@@ -26,13 +26,16 @@ const Match = ({ participation }) => {
   };
 
   return (
-    <TouchableOpacity style={styles.container} onPress={navigateMatch}>
+    <TouchableOpacity
+      style={[styles.container, { height: height, marginVertical: margin }]}
+      onPress={navigateMatch}
+    >
       <View style={styles.content}>
         <TouchableOpacity
           style={{ flex: 9, flexDirection: "row", paddingTop: 5 }}
           onPress={navigateProfile}
         >
-          <Avatar rounded source={{ uri: participation.user.picture }} on />
+          <Avatar rounded source={{ uri: participation.user.picture }} />
           <View style={{ paddingLeft: 10 }}>
             <Text style={styles.username}>{participation.user.username}</Text>
             <View style={{ flexDirection: "row" }}>
@@ -108,9 +111,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     width: "100%",
-    height: 110,
     paddingLeft: 10,
-    marginVertical: 5,
     backgroundColor: darkTheme.surface,
     alignItems: "center",
     borderRadius: 10,

@@ -91,10 +91,11 @@ const Content = () => {
           </TouchableOpacity>
         </View>
         <Text style={styles.helpText}>
-          Post on the subreddit to report bugs or request new features.
+          Did you know there's r/shinobi_app? Post on the subreddit to report
+          bugs or request new features.
         </Text>
         <Text style={styles.helpText}>
-          Share the app with your friends! Click the share icon to the copy app
+          Share the app with your friends! Click the share icon to copy the app
           link.
         </Text>
       </View>
