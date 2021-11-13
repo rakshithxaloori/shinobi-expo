@@ -19,6 +19,8 @@
       "versionCode": 12
     },
     "scheme": "shn",
-    "plugins": ["react-native-fast-image"]
+    "plugins": ["react-native-fast-image"],
+    "currentFullName": "@rakshith.aloori/Shinobi",
+    "originalFullName": "@rakshith.aloori/Shinobi"
   }
 }

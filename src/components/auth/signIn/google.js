@@ -59,7 +59,7 @@ const GoogleSignIn = ({ setError }) => {
       title="login with google"
       type="google"
       onPress={() => {
-        promptAsync();
+        promptAsync({ useProxy: true });
       }}
       // iconColor={"orange"}
       style={styles.button}
