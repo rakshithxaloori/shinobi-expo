@@ -4,6 +4,7 @@ import { Avatar, Overlay, Divider } from "react-native-elements";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import axios from "axios";
+import FastImage from "react-native-fast-image";
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -75,6 +76,7 @@ class ChampionOverlay extends Component {
                 containerStyle={styles.avatar}
                 overlayContainerStyle={avatarDefaultStyling}
                 size={iconSize}
+                ImageComponent={FastImage}
               />
             ) : (
               <ShimmerPlaceHolder
@@ -164,12 +166,14 @@ const styles = StyleSheet.create({
   shimmerLine: { marginVertical: 5 },
   section: { flex: 1, marginBottom: 10 },
   container: {
-    borderRadius: 5,
+    borderRadius: 10,
     width: Dimensions.get("window").width - 60,
     maxHeight: Dimensions.get("window").height - 100,
     justifyContent: "center",
     margin: 10,
     backgroundColor: darkTheme.background,
+    borderWidth: 1,
+    borderColor: darkTheme.on_background,
   },
 });
 

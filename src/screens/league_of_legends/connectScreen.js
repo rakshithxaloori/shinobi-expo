@@ -3,6 +3,7 @@ import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { Avatar, Input } from "react-native-elements";
 import { Picker } from "@react-native-picker/picker";
 import { CommonActions } from "@react-navigation/native";
+import FastImage from "react-native-fast-image";
 
 import { createAPIKit } from "../../utils/APIKit";
 import { darkTheme } from "../../utils/theme";
@@ -210,6 +211,7 @@ class LolConnect extends Component {
               title={this.state.summoner_name[0]}
               source={{ uri: this.state.new_profile_icon }}
               overlayContainerStyle={avatarDefaultStyling}
+              ImageComponent={FastImage}
             />
           </View>
           <View style={{ alignItems: "flex-start" }}>

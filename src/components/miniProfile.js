@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Avatar } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
+import FastImage from "react-native-fast-image";
 
 import { avatarDefaultStyling } from "../utils/styles";
 import { darkTheme } from "../utils/theme";
@@ -20,6 +21,7 @@ const MiniProfile = ({ user, game_alias }) => {
         title={user.username[0]}
         source={{ uri: user?.picture }}
         overlayContainerStyle={avatarDefaultStyling}
+        ImageComponent={FastImage}
       />
       <View style={styles.text}>
         <Text style={styles.title}>{user.username}</Text>
@@ -30,6 +32,7 @@ const MiniProfile = ({ user, game_alias }) => {
               size={18}
               source={{ uri: game_alias.logo }}
               containerStyle={avatarDefaultStyling}
+              ImageComponent={FastImage}
             />
             <Text style={styles.subtitle}>{game_alias.alias}</Text>
           </View>

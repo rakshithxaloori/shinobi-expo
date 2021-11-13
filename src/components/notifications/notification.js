@@ -7,6 +7,8 @@ import {
   Dimensions,
 } from "react-native";
 import { Avatar } from "react-native-elements";
+import FastImage from "react-native-fast-image";
+
 import { dateTimeDiff } from "../../utils";
 import { avatarDefaultStyling } from "../../utils/styles";
 import { darkTheme } from "../../utils/theme";
@@ -31,6 +33,7 @@ const Notification = ({ avatarSize, notification, navigateProfile }) => {
         title={sender.username[0]}
         source={{ uri: sender.picture }}
         overlayContainerStyle={avatarDefaultStyling}
+        ImageComponent={FastImage}
       />
       <View style={styles.textArea}>
         <Text style={[styles.text, { fontWeight: "bold" }]}>

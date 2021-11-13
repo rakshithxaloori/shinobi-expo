@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import { Avatar } from "react-native-elements";
+import FastImage from "react-native-fast-image";
 
 import { avatarDefaultStyling } from "../../../../../utils/styles";
 import { darkTheme } from "../../../../../utils/theme";
@@ -12,6 +13,7 @@ const Stats = ({ match }) => {
       title={item[0]}
       source={{ uri: item.image }}
       overlayContainerStyle={[avatarDefaultStyling, styles.itemAvatar]}
+      ImageComponent={FastImage}
     />
   );
 

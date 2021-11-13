@@ -4,6 +4,7 @@ import { Avatar } from "react-native-elements";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import axios from "axios";
+import FastImage from "react-native-fast-image";
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -111,6 +112,7 @@ class Profile extends Component {
                 title={this.state.user.username[0]}
                 source={{ uri: this.state.user.picture }}
                 overlayContainerStyle={avatarDefaultStyling}
+                ImageComponent={FastImage}
               />
             ) : (
               <ShimmerPlaceHolder

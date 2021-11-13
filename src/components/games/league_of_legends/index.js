@@ -4,6 +4,7 @@ import { Avatar } from "react-native-elements";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import axios from "axios";
+import FastImage from "react-native-fast-image";
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -116,6 +117,7 @@ class LeagueOfLegendsProfile extends Component {
               title={this.state.name[0]}
               source={{ uri: this.state.profile_icon }}
               overlayContainerStyle={[avatarDefaultStyling, styles.avatar]}
+              ImageComponent={FastImage}
             />
             <View style={{ flexDirection: "row", flex: 2 }}>
               <Text style={styles.summonerName}>{this.state.name}</Text>

@@ -3,6 +3,7 @@ import { View, Text, TextInput, StyleSheet, Dimensions } from "react-native";
 import { Avatar, Button, Overlay } from "react-native-elements";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import axios from "axios";
+import FastImage from "react-native-fast-image";
 
 import { createAPIKit } from "../../utils/APIKit";
 import { handleAPIError } from "../../utils";
@@ -82,6 +83,7 @@ const EditProfileButton = ({
           source={{ uri: picture }}
           overlayContainerStyle={avatarDefaultStyling}
           size={60}
+          ImageComponent={FastImage}
         />
         <TextInput
           style={[

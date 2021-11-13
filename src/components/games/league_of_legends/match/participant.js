@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { Avatar } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
+import FastImage from "react-native-fast-image";
 
 import { avatarDefaultStyling } from "../../../../utils/styles";
 import { darkTheme } from "../../../../utils/theme";
@@ -24,6 +25,7 @@ const Participant = ({ participant }) => {
         title={item[0]}
         source={{ uri: item.image }}
         overlayContainerStyle={[avatarDefaultStyling, { borderRadius: 5 }]}
+        ImageComponent={FastImage}
       />
     </View>
   );
@@ -49,6 +51,7 @@ const Participant = ({ participant }) => {
           title={summoner.name[0]}
           source={{ uri: summoner.profile_icon }}
           overlayContainerStyle={avatarDefaultStyling}
+          ImageComponent={FastImage}
         />
       </View>
       <View style={{ flex: 1 }}>
@@ -67,6 +70,7 @@ const Participant = ({ participant }) => {
               title={champion.name[0]}
               source={{ uri: champion.image }}
               overlayContainerStyle={avatarDefaultStyling}
+              ImageComponent={FastImage}
             />
           </View>
           {/* <Text style={styles.statsText}>{role.replace("_", " ")}</Text> */}

@@ -2,9 +2,10 @@ import React from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Avatar } from "react-native-elements";
+import FastImage from "react-native-fast-image";
+
 import { avatarDefaultStyling } from "../../utils/styles";
 import { darkTheme } from "../../utils/theme";
-
 import LeagueOfLegendsProfile from "./league_of_legends";
 
 const Games = ({ username, reload }) => {
@@ -22,6 +23,7 @@ const Games = ({ username, reload }) => {
                 title={game.name[0]}
                 source={{ uri: game.logo }}
                 containerStyle={avatarDefaultStyling}
+                ImageComponent={FastImage}
               />
               <Text style={styles.gameName}>{game.name}</Text>
             </View>

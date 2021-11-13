@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Avatar } from "react-native-elements";
 import IonIcons from "react-native-vector-icons/Ionicons";
+import FastImage from "react-native-fast-image";
 
 import AuthContext from "../authContext";
 import { avatarDefaultStyling } from "../utils/styles";
@@ -24,6 +25,7 @@ const Feed = (props) => {
           onPress={() => {
             props.navigation.navigate("Profile");
           }}
+          ImageComponent={FastImage}
         />
         <Text style={styles.title}>Welcome back,</Text>
         <Text style={styles.name}>{user?.username}</Text>

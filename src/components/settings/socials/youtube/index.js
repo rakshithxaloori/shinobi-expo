@@ -13,6 +13,7 @@ import { Avatar, Overlay } from "react-native-elements";
 import * as AuthSession from "expo-auth-session";
 import * as Device from "expo-device";
 import axios from "axios";
+import FastImage from "react-native-fast-image";
 
 import { createAPIKit } from "../../../../utils/APIKit";
 import { handleAPIError } from "../../../../utils";
@@ -139,6 +140,7 @@ const YouTube = ({ connectedBool, setError }) => {
                 source={{ uri: channel.thumbnail?.url }}
                 size={66}
                 overlayContainerStyle={avatarDefaultStyling}
+                ImageComponent={FastImage}
               />
               <Text style={styles.channelName}>{channel.name}</Text>
             </TouchableOpacity>

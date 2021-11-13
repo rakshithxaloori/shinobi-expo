@@ -9,6 +9,7 @@ import {
 import { Avatar } from "react-native-elements/dist/avatar/Avatar";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
+import FastImage from "react-native-fast-image";
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -120,6 +121,7 @@ class ChatPreview extends Component {
             title={chat.user.username[0]}
             source={{ uri: chat.user.picture }}
             overlayContainerStyle={avatarDefaultStyling}
+            ImageComponent={FastImage}
           />
           <View style={styles.textArea}>
             <Text style={styles.username}>{chat.user.username}</Text>

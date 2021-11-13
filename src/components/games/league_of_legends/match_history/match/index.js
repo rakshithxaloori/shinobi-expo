@@ -2,8 +2,9 @@ import React from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Avatar, Badge } from "react-native-elements";
-import { dateTimeDiff } from "../../../../../utils";
+import FastImage from "react-native-fast-image";
 
+import { dateTimeDiff } from "../../../../../utils";
 import { avatarDefaultStyling } from "../../../../../utils/styles";
 import { darkTheme } from "../../../../../utils/theme";
 
@@ -29,6 +30,7 @@ const Match = ({ match }) => {
           title={split_arr ? split_arr[split_arr.length - 1][0] : "C"}
           source={{ uri: match?.champion?.image }}
           overlayContainerStyle={[avatarDefaultStyling, { borderRadius: 7 }]}
+          ImageComponent={FastImage}
         />
         <Badge
           status={match.team.side === "R" ? "error" : "primary"}
