@@ -44,69 +44,66 @@ class ChampionMasteriesByLevel extends Component {
   };
 
   fetchChampionMasteries = async () => {
-    if (!this.state.endReached) {
-      if (this.state.championMasteriesByLevel.length > 0)
-        this.setState({ isLoading: true });
+    if (this.state.endReached || this.state.isLoading) return;
 
-      const onSuccess = (response) => {
-        const { champion_masteries, count } = response.data?.payload;
-        this.setState((prevState) => {
-          let grouped = {};
+    this.setState({ isLoading: true });
 
-          for (const championMastery of [
-            ...prevState.championMasteries,
-            ...champion_masteries,
-          ]) {
-            let level = championMastery.level;
-            if (!grouped[`${level}`]) grouped[`${level}`] = [];
-            grouped[`${level}`].push(championMastery);
-          }
+    const onSuccess = (response) => {
+      const { champion_masteries, count } = response.data?.payload;
+      this.setState((prevState) => {
+        let grouped = {};
 
-          const newChampionMasteriesByLevel = [];
+        const newChampionMasteries = [
+          ...prevState.championMasteries,
+          ...champion_masteries,
+        ];
 
-          for (const [key, value] of Object.entries(grouped)) {
-            newChampionMasteriesByLevel.push({
-              level: key,
-              champion_masteries: value,
-            });
-          }
-
-          const compFunc = (firstEl, secondEl) =>
-            parseInt(secondEl.level) - parseInt(firstEl.level);
-
-          return {
-            initialLoading: false,
-            championMasteries: [
-              ...prevState.championMasteries,
-              ...champion_masteries,
-            ],
-            championMasteriesByLevel:
-              newChampionMasteriesByLevel.sort(compFunc),
-            endReached: count !== this.fetchCount,
-            isLoading: false,
-          };
-        });
-      };
-
-      const APIKit = await createAPIKit();
-      APIKit.post(
-        "lol/masteries/",
-        {
-          username: this.props.username,
-          begin_index: this.state.championMasteries.length,
-          end_index: this.state.championMasteries.length + this.fetchCount,
-        },
-        {
-          cancelToken: this.cancelTokenSource.token,
+        for (const championMastery of newChampionMasteries) {
+          const level = championMastery.level;
+          if (!grouped[level]) grouped[level] = [];
+          grouped[level].push(championMastery);
         }
-      )
-        .then(onSuccess)
-        .catch((e) => {
-          this.setState({
-            error: handleAPIError(e),
+
+        const newChampionMasteriesByLevel = [];
+
+        for (const [key, value] of Object.entries(grouped)) {
+          newChampionMasteriesByLevel.push({
+            level: key,
+            champion_masteries: value,
           });
+        }
+
+        const compFunc = (firstEl, secondEl) =>
+          parseInt(secondEl.level) - parseInt(firstEl.level);
+
+        return {
+          initialLoading: false,
+          championMasteries: newChampionMasteries,
+          championMasteriesByLevel: newChampionMasteriesByLevel.sort(compFunc),
+          endReached: count !== this.fetchCount,
+          isLoading: false,
+        };
+      });
+    };
+
+    const APIKit = await createAPIKit();
+    APIKit.post(
+      "lol/masteries/",
+      {
+        username: this.props.username,
+        begin_index: this.state.championMasteries.length,
+        end_index: this.state.championMasteries.length + this.fetchCount,
+      },
+      {
+        cancelToken: this.cancelTokenSource.token,
+      }
+    )
+      .then(onSuccess)
+      .catch((e) => {
+        this.setState({
+          error: handleAPIError(e),
         });
-    }
+      });
   };
 
   renderPlaceholder = () => (
@@ -174,7 +171,7 @@ class ChampionMasteriesByLevel extends Component {
           renderItem={this.renderLevel}
           keyExtractor={this.keyExtractor}
           onEndReached={this.fetchChampionMasteries}
-          onEndReachedThreshold={1}
+          onEndReachedThreshold={0.5}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={this.renderSeperator}
           ListFooterComponent={
