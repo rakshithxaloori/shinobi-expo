@@ -10,6 +10,7 @@ import AuthContext from "../../../authContext";
 import { createAPIKit } from "../../../utils/APIKit";
 import { handleAPIError } from "../../../utils";
 import { darkTheme } from "../../../utils/theme";
+import { makeRedirectUri } from "expo-auth-session"; //
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -20,7 +21,10 @@ const GoogleSignIn = ({ setError }) => {
     expoClientId: process.env.EXPO_GOOGLE_CLIENT_ID,
     androidClientId: process.env.ANDROID_GOOGLE_CLIENT_ID,
     scopes: ["profile", "email"],
+    redirectUri: makeRedirectUri({ useProxy: true }), //
   });
+
+  console.log(request); //
 
   React.useEffect(
     () => () => {
@@ -59,7 +63,7 @@ const GoogleSignIn = ({ setError }) => {
       title="login with google"
       type="google"
       onPress={() => {
-        promptAsync({ useProxy: true });
+        promptAsync(); //
       }}
       // iconColor={"orange"}
       style={styles.button}

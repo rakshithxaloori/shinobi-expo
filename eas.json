@@ -11,23 +11,7 @@
     },
     "development": {
       "developmentClient": true,
-      "distribution": "internal",
-      "env": {
-        "CI_CD_STAGE": "development",
-        "BASE_API_ENDPOINT": "192.168.1.2",
-        "API_KEY": "mxbiCCqK.3yuHXMjd94DpQgjYlt8Evu2TzmAHYPK7",
-        "EXPO_GOOGLE_CLIENT_ID": "519538322988-796go36t5391e2k3gq48qj4qkn4j7asb.apps.googleusercontent.com",
-        "ANDROID_GOOGLE_CLIENT_ID": "519538322988-vjk8f1uf1t9v6bsg3ifus05kjrovb2ba.apps.googleusercontent.com",
-        "EXPO_YOUTUBE_CLIENT_ID": "891169135374-0l9df4gl2nvf10p4r4knhr43dmclatdu.apps.googleusercontent.com",
-        "ANDROID_YOUTUBE_CLIENT_ID": "891169135374-0l9df4gl2nvf10p4r4knhr43dmclatdu.apps.googleusercontent.com",
-        "TWITCH_CLIENT_ID": "h0z4jkc4derlzowcbcn3o30lmy7g9s",
-        "INSTAGRAM_CLIENT_ID": "382042820242615",
-
-        "SENTRY_ORG": "test-dev-kq",
-        "SENTRY_PROJECT": "react-native-expo",
-        "SENTRY_DSN": "https://5715448b261640c8be090d646fe38661@o1067682.ingest.sentry.io/6061530",
-        "SENTRY_AUTH_TOKEN": "71efbd8c90cd404ab0a0a83cec656004da03753bd3f54a7cb034ccbae411e889"
-      }
+      "distribution": "internal"
     }
   },
   "submit": {
