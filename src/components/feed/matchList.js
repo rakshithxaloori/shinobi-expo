@@ -11,7 +11,7 @@ import axios from "axios";
 
 import LolMatch from "./lolMatch";
 import { createAPIKit } from "../../utils/APIKit";
-import { handleAPIError } from "../../utils";
+import { dateTimeDiff, handleAPIError } from "../../utils";
 import { darkTheme } from "../../utils/theme";
 
 const ITEM_HEIGHT = 110;
@@ -73,17 +73,22 @@ class MatchList extends Component {
         });
     };
 
-    this.setState({ loading: true }, async () => await fetchMatchesNow());
+    this.setState({ loading: true }, fetchMatchesNow);
   };
 
   renderMatch = ({ item }) => {
     switch (item.game.name) {
       case "lol":
+        const dateThen = new Date(item.participation.creation);
+        const dateDiff = dateTimeDiff(dateThen);
         return (
           <LolMatch
             participation={item}
             height={ITEM_HEIGHT}
             margin={ITEM_MARGIN}
+            dateDiff={dateDiff}
+            navigateLolMatch={this.navigateLolMatch}
+            navigateProfile={this.navigateProfile}
           />
         );
       default:
@@ -91,11 +96,27 @@ class MatchList extends Component {
     }
   };
 
-  keyExtractor = (match) =>
-    `${match.participation.id}+${Math.random().toFixed(3)}`;
+  keyExtractor = (match) => {
+    return match.participation.id;
+    // return `${match.participation.id}+${Math.random().toFixed(3)}`;
+  };
+
+  getItemLayout = (data, index) => ({
+    length: ITEM_HEIGHT,
+    offset: (ITEM_HEIGHT + ITEM_MARGIN) * index,
+    index,
+  });
 
   navigateLolConnect = () => {
-    this.props?.navigateConnect();
+    this.props.navigation.navigate("LolConnect");
+  };
+
+  navigateLolMatch = (match_id) => {
+    this.props.navigation.navigate("LolMatch", { match_id });
+  };
+
+  navigateProfile = (username) => {
+    this.props.navigation.navigate("Profile", { username });
   };
 
   render = () => {
@@ -134,11 +155,7 @@ class MatchList extends Component {
             }
             // Optimizations
             maxToRenderPerBatch={10}
-            getItemLayout={(data, index) => ({
-              length: ITEM_HEIGHT,
-              offset: (ITEM_HEIGHT + ITEM_MARGIN) * index,
-              index,
-            })}
+            getItemLayout={this.getItemLayout}
           />
         ) : this.state.initLoaded ? (
           <Text style={{ color: "white", fontWeight: "bold", fontSize: 15 }}>

@@ -12,10 +12,6 @@ import VirtualizedList from "../utils/virtualizedList";
 const Feed = (props) => {
   const { user } = useContext(AuthContext);
 
-  const navigateConnect = () => {
-    props.navigation.navigate("LolConnect");
-  };
-
   return (
     <VirtualizedList style={styles.container}>
       <View style={styles.titleBar}>
@@ -50,7 +46,7 @@ const Feed = (props) => {
         </View>
       </View>
       <Text style={styles.header}>Feed</Text>
-      <MatchList navigateConnect={navigateConnect} />
+      <MatchList navigation={props.navigation} />
     </VirtualizedList>
   );
 };
