@@ -16,7 +16,7 @@
       "package": "cc.shinobi.android",
       "permissions": [],
       "googleServicesFile": "./google-services.json",
-      "versionCode": 12
+      "versionCode": 13
     },
     "scheme": "shn",
     "plugins": ["react-native-fast-image"],
