@@ -16,7 +16,21 @@
       "package": "cc.shinobi.android",
       "permissions": [],
       "googleServicesFile": "./google-services.json",
-      "versionCode": 13
+      "versionCode": 13,
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "*.shinobi.cc",
+              "pathPrefix": "/lol"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
     },
     "scheme": "shn",
     "plugins": ["react-native-fast-image"],
