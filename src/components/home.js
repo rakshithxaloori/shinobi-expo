@@ -253,8 +253,14 @@ const NavigatorWithContext = () => {
   const _urlListener = (url) => {
     const { path, queryParams } = Linking.parse(url);
     switch (path) {
+      case "profile":
+        if (queryParams.hasOwnProperty("username")) {
+          RootNavigation.navigate("Profile", {
+            username: queryParams.username,
+          });
+        }
+        break;
       case "lol":
-        console.log(queryParams);
         if (queryParams.hasOwnProperty("match_id")) {
           RootNavigation.navigate("LolMatch", {
             match_id: queryParams.match_id,
