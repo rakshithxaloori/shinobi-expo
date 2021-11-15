@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View, TouchableOpacity } from "react-native";
-import { Icon } from "react-native-elements";
+import { Ionicons } from "@expo/vector-icons";
+
 import { darkTheme } from "../../../utils/theme";
 
 const CustomSwitch = ({ onSelectSwitch, toggleVal, selectionColor }) => {
@@ -18,8 +19,7 @@ const CustomSwitch = ({ onSelectSwitch, toggleVal, selectionColor }) => {
           },
         ]}
       >
-        <Icon
-          type="ionicon"
+        <Ionicons
           name="stats-chart"
           size={iconSize}
           color={toggleVal == 1 ? darkTheme.on_surface_title : selectionColor}
@@ -37,8 +37,7 @@ const CustomSwitch = ({ onSelectSwitch, toggleVal, selectionColor }) => {
           },
         ]}
       >
-        <Icon
-          type="ionicon"
+        <Ionicons
           name="skull"
           size={iconSize}
           color={toggleVal == 2 ? darkTheme.on_surface_title : selectionColor}

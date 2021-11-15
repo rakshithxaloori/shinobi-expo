@@ -26,14 +26,7 @@
               "scheme": "https",
               "host": "*.shinobi.cc",
               "pathPrefix": "/profile"
-            }
-          ],
-          "category": ["BROWSABLE", "DEFAULT"]
-        },
-        {
-          "action": "VIEW",
-          "autoVerify": true,
-          "data": [
+            },
             {
               "scheme": "https",
               "host": "*.shinobi.cc",

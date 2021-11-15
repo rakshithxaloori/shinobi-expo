@@ -7,12 +7,12 @@ import {
 } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Icon } from "react-native-elements";
 import axios from "axios";
 import * as Notifications from "expo-notifications";
 import * as Linking from "expo-linking";
 import { StatusBar } from "expo-status-bar";
 import FlashMessage from "react-native-flash-message";
+import { Ionicons } from "@expo/vector-icons";
 
 import * as RootNavigation from "./rootNavigation";
 
@@ -34,6 +34,7 @@ import { darkTheme } from "../utils/theme";
 import LolMatch from "../screens/league_of_legends/lolMatchScreen";
 import LolConnect from "../screens/league_of_legends/connectScreen";
 import MatchHeader from "./headers/match_header";
+import { shareLolMatch } from "../utils/share";
 
 const NavigationContext = React.createContext();
 
@@ -87,6 +88,7 @@ const TabNavigatorComponent = () => {
   return (
     <NavigationContext.Consumer>
       {(navigateRoute) => {
+        const iconSize = 22;
         return (
           <Tab.Navigator
             screenOptions={{
@@ -110,7 +112,9 @@ const TabNavigatorComponent = () => {
                 headerShown: false,
                 tabBarIcon: ({ focused, color }) => {
                   let iconName = focused ? "home" : "home-outline";
-                  return <Icon type="ionicon" name={iconName} color={color} />;
+                  return (
+                    <Ionicons name={iconName} size={iconSize} color={color} />
+                  );
                 },
               }}
             />
@@ -123,7 +127,9 @@ const TabNavigatorComponent = () => {
                   let iconName = focused
                     ? "chatbubble-ellipses"
                     : "chatbubble-ellipses-outline";
-                  return <Icon type="ionicon" name={iconName} color={color} />;
+                  return (
+                    <Ionicons name={iconName} size={iconSize} color={color} />
+                  );
                 },
               }}
             />
@@ -136,7 +142,9 @@ const TabNavigatorComponent = () => {
                   let iconName = focused
                     ? "notifications"
                     : "notifications-outline";
-                  return <Icon type="ionicon" name={iconName} color={color} />;
+                  return (
+                    <Ionicons name={iconName} size={iconSize} color={color} />
+                  );
                 },
               }}
             />
@@ -156,9 +164,8 @@ const StackNavigatorComponent = () => (
             initialRouteName={navigateRoute}
             screenOptions={{
               headerBackImage: () => (
-                <Icon
+                <Ionicons
                   style={{ marginLeft: 8 }}
-                  type="ionicon"
                   name="arrow-back-outline"
                   size={30}
                   color={darkTheme.on_background}
@@ -202,7 +209,20 @@ const StackNavigatorComponent = () => (
             <Stack.Screen
               name="LolMatch"
               component={LolMatch}
-              options={{ title: "Match" }}
+              options={({ route }) => ({
+                title: "Match",
+                headerRight: () => (
+                  <Ionicons
+                    name="share-social"
+                    size={28}
+                    color={darkTheme.on_background}
+                    onPress={async () => {
+                      await shareLolMatch(route.params?.match_id);
+                    }}
+                    style={{ marginRight: 16 }}
+                  />
+                ),
+              })}
               // options={{ headerTitle: (props) => <MatchHeader {...props} /> }}
             />
             <Stack.Screen
