@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Dimensions } from "react-native";
+import React, { useContext } from "react";
+import { View, StyleSheet, Dimensions, Share } from "react-native";
 import {
   NavigationContainer,
   DefaultTheme,
@@ -33,8 +33,8 @@ import { darkTheme } from "../utils/theme";
 
 import LolMatch from "../screens/league_of_legends/lolMatchScreen";
 import LolConnect from "../screens/league_of_legends/connectScreen";
-import MatchHeader from "./headers/match_header";
-import { shareLolMatch } from "../utils/share";
+import { shareLolMatch, shareProfile } from "../utils/share";
+import AuthContext from "../authContext";
 
 const NavigationContext = React.createContext();
 
@@ -58,6 +58,16 @@ Notifications.setNotificationHandler({
     shouldSetBadge: false,
   }),
 });
+
+const ShareIcon = ({ onPress }) => (
+  <Ionicons
+    name="share-social"
+    size={28}
+    color={darkTheme.on_background}
+    onPress={onPress}
+    style={styles.shareHeader}
+  />
+);
 
 const TabNavigatorComponent = () => {
   let cancelTokenSource = axios.CancelToken.source();
@@ -155,87 +165,105 @@ const TabNavigatorComponent = () => {
   );
 };
 
-const StackNavigatorComponent = () => (
-  <NavigationContext.Consumer>
-    {(navigateRoute) => {
-      return (
-        <NavigationContainer ref={RootNavigation.navigationRef} theme={MyTheme}>
-          <Stack.Navigator
-            initialRouteName={navigateRoute}
-            screenOptions={{
-              headerBackImage: () => (
-                <Ionicons
-                  style={{ marginLeft: 8 }}
-                  name="arrow-back-outline"
-                  size={30}
-                  color={darkTheme.on_background}
-                />
-              ),
-              headerBackTitleVisible: false,
-              headerTitleAlign: "center",
-              headerTintColor: darkTheme.on_background,
-              headerTitleStyle: { fontSize: 20 },
-              headerStyle: {
-                backgroundColor: darkTheme.background,
-                elevation: 0,
-                shadowOpacity: 0,
-              },
-            }}
+const StackNavigatorComponent = () => {
+  const { user } = useContext(AuthContext);
+
+  return (
+    <NavigationContext.Consumer>
+      {(navigateRoute) => {
+        return (
+          <NavigationContainer
+            ref={RootNavigation.navigationRef}
+            theme={MyTheme}
           >
-            <Stack.Screen
-              name="Home"
-              component={TabNavigatorComponent}
-              options={({ route }) => {
-                const routeName = getFocusedRouteNameFromRoute(route) || "Feed";
-                return routeName && routeName !== "Feed"
-                  ? {
-                      headerTitle: routeName,
-                    }
-                  : { headerShown: false };
-              }}
-            />
-            <Stack.Screen name="Chat" component={Chat} />
-            <Stack.Screen name="Profile" component={Profile} />
-            <Stack.Screen name="Followers" component={Followers} />
-            <Stack.Screen name="Following" component={Followings} />
-            <Stack.Screen
-              name="Settings"
-              component={Settings}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen name="Search" component={Search} />
-            <Stack.Screen
-              name="LolMatch"
-              component={LolMatch}
-              options={({ route }) => ({
-                title: "Match",
-                headerRight: () => (
+            <Stack.Navigator
+              initialRouteName={navigateRoute}
+              screenOptions={{
+                headerBackImage: () => (
                   <Ionicons
-                    name="share-social"
-                    size={28}
+                    style={{ marginLeft: 8 }}
+                    name="arrow-back-outline"
+                    size={30}
                     color={darkTheme.on_background}
-                    onPress={async () => {
-                      await shareLolMatch(route.params?.match_id);
-                    }}
-                    style={{ marginRight: 16 }}
                   />
                 ),
-              })}
-              // options={{ headerTitle: (props) => <MatchHeader {...props} /> }}
-            />
-            <Stack.Screen
-              name="LolConnect"
-              component={LolConnect}
-              options={{ title: "Connect" }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      );
-    }}
-  </NavigationContext.Consumer>
-);
+                headerBackTitleVisible: false,
+                headerTitleAlign: "center",
+                headerTintColor: darkTheme.on_background,
+                headerTitleStyle: { fontSize: 20 },
+                headerStyle: {
+                  backgroundColor: darkTheme.background,
+                  elevation: 0,
+                  shadowOpacity: 0,
+                },
+              }}
+            >
+              <Stack.Screen
+                name="Home"
+                component={TabNavigatorComponent}
+                options={({ route }) => {
+                  const routeName =
+                    getFocusedRouteNameFromRoute(route) || "Feed";
+                  return routeName && routeName !== "Feed"
+                    ? {
+                        headerTitle: routeName,
+                      }
+                    : { headerShown: false };
+                }}
+              />
+              <Stack.Screen name="Chat" component={Chat} />
+              <Stack.Screen
+                name="Profile"
+                component={Profile}
+                options={({ route }) => ({
+                  title: "Profile",
+                  headerRight: () => (
+                    <ShareIcon
+                      onPress={async () => {
+                        await shareProfile(
+                          route.params?.username || user?.username
+                        );
+                      }}
+                    />
+                  ),
+                })}
+              />
+              <Stack.Screen name="Followers" component={Followers} />
+              <Stack.Screen name="Following" component={Followings} />
+              <Stack.Screen
+                name="Settings"
+                component={Settings}
+                options={{
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen name="Search" component={Search} />
+              <Stack.Screen
+                name="LolMatch"
+                component={LolMatch}
+                options={({ route }) => ({
+                  title: "Match",
+                  headerRight: () => (
+                    <ShareIcon
+                      onPress={async () => {
+                        await shareLolMatch(route.params?.match_id);
+                      }}
+                    />
+                  ),
+                })}
+              />
+              <Stack.Screen
+                name="LolConnect"
+                component={LolConnect}
+                options={{ title: "Connect" }}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        );
+      }}
+    </NavigationContext.Consumer>
+  );
+};
 
 const NavigatorWithContext = () => {
   const [navigateRoute, setNavigateRoute] = React.useState("");
@@ -319,5 +347,7 @@ const NavigatorWithContext = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({ shareHeader: { marginRight: 16 } });
 
 export default NavigatorWithContext;

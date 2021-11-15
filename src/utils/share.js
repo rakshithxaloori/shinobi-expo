@@ -21,6 +21,11 @@ const _handleShare = async (message) => {
   }
 };
 
+export const shareProfile = async (username) => {
+  const message = `Here's a Shinobi profile https://www.shinobi.cc/profile?username=${username}`;
+  await _handleShare(message);
+};
+
 export const shareLolMatch = async (match_id) => {
   const message = `Here's a League of Legends' match https://www.shinobi.cc/lol?match_id=${match_id}`;
   await _handleShare(message);
