@@ -255,14 +255,14 @@ const NavigatorWithContext = () => {
     switch (path) {
       case "profile":
         if (queryParams.hasOwnProperty("username")) {
-          RootNavigation.navigate("Profile", {
+          RootNavigation.push("Profile", {
             username: queryParams.username,
           });
         }
         break;
       case "lol":
         if (queryParams.hasOwnProperty("match_id")) {
-          RootNavigation.navigate("LolMatch", {
+          RootNavigation.push("LolMatch", {
             match_id: queryParams.match_id,
           });
         }
@@ -274,11 +274,11 @@ const NavigatorWithContext = () => {
     switch (response.notification?.request?.content?.data?.type) {
       case "s":
         // Example of using RootNavigation
-        RootNavigation.navigate("Settings");
+        RootNavigation.push("Settings");
         setNavigateRoute("Settings");
         break;
       case "f":
-        RootNavigation.navigate("Home", { screen: "Notifications" });
+        RootNavigation.push("Home", { screen: "Notifications" });
         // navigateRoute is used when navigationRef is not yet ready
         // and the RootNavigation.navigate is ignored
         setNavigateRoute("Notifications");
