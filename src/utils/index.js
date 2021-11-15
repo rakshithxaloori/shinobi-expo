@@ -43,7 +43,6 @@ export const createErrorStr = (error) => {
   } else if (error.request) {
     // The request was made but no response was received
     console.log("The request was made but no response was received");
-    flashAlert("No Internet Connection");
     return "No Internet Connection";
   } else {
     // Something happened in setting up the request that triggered an Error
@@ -54,6 +53,8 @@ export const createErrorStr = (error) => {
 
 export const handleAPIError = (error) => {
   if (!axios.isCancel(error)) {
-    return createErrorStr(error);
+    const errorStr = createErrorStr(error);
+    flashAlert(errorStr);
+    return errorStr;
   } else return "";
 };

@@ -10,6 +10,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Icon } from "react-native-elements";
 import axios from "axios";
 import * as Notifications from "expo-notifications";
+import * as Linking from "expo-linking";
 import { StatusBar } from "expo-status-bar";
 import FlashMessage from "react-native-flash-message";
 
@@ -225,15 +226,43 @@ const NavigatorWithContext = () => {
     const nrrl = Notifications.addNotificationResponseReceivedListener(
       _handleNotificationResponse
     );
+
+    // Handle deep links
+    Linking.addEventListener("url", _foregroundURLListener);
+    Linking.getInitialURL().then((url) => {
+      if (url === null) return;
+      _urlListener(url);
+    });
+
     return () => {
       // Notifications.removeNotificationSubscription(nrl);
       Notifications.removeNotificationSubscription(nrrl);
+
+      Linking.removeEventListener("url", _foregroundURLListener);
     };
   }, []);
 
   // const _handleNotification = (notification) => {
   //   console.log("_handleNotification", notification);
   // };
+
+  const _foregroundURLListener = (event) => {
+    _urlListener(event.url);
+  };
+
+  const _urlListener = (url) => {
+    const { path, queryParams } = Linking.parse(url);
+    switch (path) {
+      case "lol":
+        console.log(queryParams);
+        if (queryParams.hasOwnProperty("match_id")) {
+          RootNavigation.navigate("LolMatch", {
+            match_id: queryParams.match_id,
+          });
+        }
+        break;
+    }
+  };
 
   const _handleNotificationResponse = (response) => {
     switch (response.notification?.request?.content?.data?.type) {
