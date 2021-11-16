@@ -15,3 +15,4 @@ web-build/
 # Custom
 .env
 yarn-error.log
+**custom.js
