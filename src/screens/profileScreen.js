@@ -135,7 +135,7 @@ class Profile extends Component {
           <Socials
             instagram_username={this.state.instagram?.username}
             twitch_profile={this.state.twitch}
-            youtube_channel_id={this.state.youtube}
+            youtube_channel_id={this.state.youtube?.channel_id}
             profile_loaded={this.state.profile_loaded}
           />
           {this.state.profile_loaded && (
