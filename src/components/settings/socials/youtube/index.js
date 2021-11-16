@@ -6,12 +6,11 @@ import {
   TouchableOpacity,
   Dimensions,
   StyleSheet,
-  Platform,
 } from "react-native";
 import IonIcons from "react-native-vector-icons/Ionicons";
 import { Avatar, Overlay } from "react-native-elements";
-import * as AuthSession from "expo-auth-session";
-import * as Device from "expo-device";
+import * as WebBrowser from "expo-web-browser";
+import * as Google from "expo-auth-session/providers/google";
 import axios from "axios";
 import FastImage from "react-native-fast-image";
 
@@ -21,21 +20,33 @@ import { avatarDefaultStyling } from "../../../../utils/styles";
 import DisconnectYouTubeOverlay from "./disconnect";
 import { darkTheme } from "../../../../utils/theme";
 
+WebBrowser.maybeCompleteAuthSession();
+
 const YouTube = ({ connectedBool, setError }) => {
   let cancelTokenSource = axios.CancelToken.source();
+
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    expoClientId: process.env.EXPO_GOOGLE_CLIENT_ID,
+    androidClientId: process.env.ANDROID_GOOGLE_CLIENT_ID,
+    scopes: ["https://www.googleapis.com/auth/youtube.readonly"],
+    extraParams: { force_verify: "true" },
+  });
+
   const [connected, setConnected] = React.useState(connectedBool);
   const [accessToken, setAccessToken] = React.useState(undefined);
-  const [disabled, setDisabled] = React.useState(false);
   const [showOptions, setShowOptions] = React.useState(false);
   const [options, setOptions] = React.useState([]);
   const [showOverlay, setShowOverlay] = React.useState(false);
 
-  React.useEffect(
-    () => () => {
+  React.useEffect(() => {
+    if (response?.type === "success") {
+      const { accessToken } = response?.authentication;
+      sendToAPI(accessToken);
+    }
+    return () => {
       cancelTokenSource.cancel();
-    },
-    []
-  );
+    };
+  }, [response]);
 
   const sendToAPI = async (youTubeToken) => {
     const onSuccess = (response) => {
@@ -62,32 +73,6 @@ const YouTube = ({ connectedBool, setError }) => {
           setAccessToken(youTubeToken);
         } else setError(handleAPIError(e));
       });
-  };
-
-  const signInWithYouTube = async () => {
-    setDisabled(true);
-    let YOUTUBE_CLIENT_ID = null;
-    if (!Device.isDevice)
-      YOUTUBE_CLIENT_ID = process.env.EXPO_YOUTUBE_CLIENT_ID;
-    else {
-      if (Platform.OS === "web")
-        YOUTUBE_CLIENT_ID = process.env.EXPO_YOUTUBE_CLIENT_ID;
-      else if (Platform.OS === "android")
-        YOUTUBE_CLIENT_ID = process.env.ANDROID_YOUTUBE_CLIENT_ID;
-    }
-
-    const redirectUrl = AuthSession.makeRedirectUri({ useProxy: true });
-    const scope = "https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube.readonly";
-    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${YOUTUBE_CLIENT_ID}&redirect_uri=${redirectUrl}&response_type=token&scope=${scope}&force_verify=true`;
-    const { type, params } = await AuthSession.startAsync({ authUrl });
-    if (type === "success") {
-      const { access_token } = params;
-      sendToAPI(access_token).then(() => {
-        setDisabled(false);
-      });
-    } else {
-      setDisabled(false);
-    }
   };
 
   const chooseChannel = async (channel_id) => {
@@ -148,14 +133,13 @@ const YouTube = ({ connectedBool, setError }) => {
         </ScrollView>
       </Overlay>
       <TouchableOpacity
-        disabled={disabled}
+        disabled={!request}
         style={styles.youtube}
         onPress={() => {
           if (connected) {
-            // TODO show overlay with ARE YOU SURE?
             setShowOverlay(true);
           } else {
-            signInWithYouTube();
+            promptAsync();
           }
         }}
       >
@@ -256,7 +240,6 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    // justifyContent: "center",
     alignItems: "center",
   },
 });
