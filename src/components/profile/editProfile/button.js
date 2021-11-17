@@ -12,7 +12,7 @@ const EditProfileButton = (props) => {
   return (
     <View>
       <Button
-        title="Edit Bio"
+        title="Edit Profile"
         icon={
           <Ionicons
             name="create"

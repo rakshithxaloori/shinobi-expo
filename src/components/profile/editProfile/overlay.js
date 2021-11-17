@@ -60,13 +60,13 @@ const EditProfileOverlay = ({
         });
 
         if (!result.cancelled) {
-          setImage(result.uri);
-          // const maniImage = await ImageManipulator.manipulateAsync(
-          //   result.uri,
-          //   [{ resize: { width: 10 } }, { rotate: 90 }],
-          //   { format: ImageManipulator.SaveFormat.PNG }
-          // );
-          // setImage(maniImage);
+          // setImage(result.uri);
+          const maniImage = await ImageManipulator.manipulateAsync(
+            result.uri,
+            [{ resize: { width: 10 } }, { rotate: 90 }],
+            { format: ImageManipulator.SaveFormat.PNG }
+          );
+          setImage(maniImage);
         }
       } else {
         flashAlert("Sorry, we need camera roll permissions to make this work!");
