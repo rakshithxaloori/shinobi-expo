@@ -33,7 +33,7 @@ import { darkTheme } from "../utils/theme";
 
 import LolMatch from "../screens/league_of_legends/lolMatchScreen";
 import LolConnect from "../screens/league_of_legends/connectScreen";
-import { shareLolMatch, shareProfile } from "../utils/share";
+import { ShareIcon, shareLolMatch, shareProfile } from "../utils/share";
 import AuthContext from "../authContext";
 
 const NavigationContext = React.createContext();
@@ -58,16 +58,6 @@ Notifications.setNotificationHandler({
     shouldSetBadge: false,
   }),
 });
-
-const ShareIcon = ({ onPress }) => (
-  <Ionicons
-    name="share-social"
-    size={28}
-    color={darkTheme.on_background}
-    onPress={onPress}
-    style={styles.shareHeader}
-  />
-);
 
 const TabNavigatorComponent = () => {
   let cancelTokenSource = axios.CancelToken.source();

@@ -1,6 +1,17 @@
 import { Share } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 import { flashAlert } from "./flash_message";
+
+export const ShareIcon = ({ onPress }) => (
+  <Ionicons
+    name="share-social"
+    size={28}
+    color={darkTheme.on_background}
+    onPress={onPress}
+    style={styles.shareHeader}
+  />
+);
 
 const _handleShare = async (message) => {
   try {
