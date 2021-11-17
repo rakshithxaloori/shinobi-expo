@@ -4,12 +4,12 @@ import { Button } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 
-import { handleAPIError } from "../../utils";
-import { createAPIKit } from "../../utils/APIKit";
+import { handleAPIError } from "../../../utils";
+import { createAPIKit } from "../../../utils/APIKit";
 
-import UnfollowOverlay from "./unfollowOverlay";
-import { darkTheme } from "../../utils/theme";
-import { flashAlert } from "../../utils/flash_message";
+import UnfollowOverlay from "./overlay";
+import { darkTheme } from "../../../utils/theme";
+import { flashAlert } from "../../../utils/flash_message";
 
 const FollowButton = ({
   username,

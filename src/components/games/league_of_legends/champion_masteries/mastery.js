@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Avatar, Badge } from "react-native-elements";
 import FastImage from "react-native-fast-image";
 
-import ChampionOverlay from "./championOverlay";
+import ChampionOverlay from "./overlay";
 import { avatarDefaultStyling } from "../../../../utils/styles";
 import { darkTheme } from "../../../../utils/theme";
 

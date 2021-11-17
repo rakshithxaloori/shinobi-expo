@@ -3,9 +3,9 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Overlay } from "react-native-elements";
 import axios from "axios";
 
-import { darkTheme } from "../../utils/theme";
-import { createAPIKit } from "../../utils/APIKit";
-import { handleAPIError } from "../../utils";
+import { createAPIKit } from "../../../utils/APIKit";
+import { handleAPIError } from "../../../utils";
+import { darkTheme } from "../../../utils/theme";
 
 const UnfollowOverlay = ({
   username,

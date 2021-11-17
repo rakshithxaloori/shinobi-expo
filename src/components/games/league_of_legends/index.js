@@ -9,7 +9,7 @@ import FastImage from "react-native-fast-image";
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
 import MatchHistory from "./match_history";
-import ChampionMasteries from "./championMasteries";
+import ChampionMasteries from "./champion_masteries";
 
 import { createAPIKit } from "../../../utils/APIKit";
 import { handleAPIError } from "../../../utils";

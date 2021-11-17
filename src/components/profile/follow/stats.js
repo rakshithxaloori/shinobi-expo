@@ -3,7 +3,8 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
-import { darkTheme } from "../../utils/theme";
+
+import { darkTheme } from "../../../utils/theme";
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 

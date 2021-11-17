@@ -16,7 +16,7 @@ const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 import { handleAPIError } from "../../../../utils";
 import { createAPIKit } from "../../../../utils/APIKit";
 
-import ChampionMastery from "./championMastery";
+import ChampionMastery from "./mastery";
 import { darkTheme } from "../../../../utils/theme";
 
 const numColumns = 4;
