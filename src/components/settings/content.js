@@ -4,14 +4,13 @@ import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import { Ionicons } from "@expo/vector-icons";
 import * as Linking from "expo-linking";
-import * as Clipboard from "expo-clipboard";
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
 import SocialsSettings from "./socials";
 import LogOut from "./logout";
 import { darkTheme } from "../../utils/theme";
-import { flashAlert } from "../../utils/flash_message";
+import { shareApp } from "../../utils/share";
 
 const Content = () => {
   const linkURL = async (URL) => {
@@ -43,11 +42,8 @@ const Content = () => {
     linkURL("https://www.reddit.com/r/shinobi_app");
   };
 
-  const copyAppLink = () => {
-    Clipboard.setString(
-      "https://play.google.com/store/apps/details?id=cc.shinobi.android"
-    );
-    flashAlert("Play Store app link copied!");
+  const shareAppLink = () => {
+    shareApp();
   };
 
   return (
@@ -84,7 +80,7 @@ const Content = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={{ alignItems: "center", paddingLeft: 10 }}
-            onPress={copyAppLink}
+            onPress={shareAppLink}
           >
             <Ionicons
               name="share-social-sharp"
@@ -98,8 +94,7 @@ const Content = () => {
           bugs or request new features.
         </Text>
         <Text style={styles.helpText}>
-          Share the app with your friends! Click the share icon to copy the app
-          link.
+          Tell your friends about Shinobi! Click the share icon to share.
         </Text>
       </View>
     </View>

@@ -30,3 +30,8 @@ export const shareLolMatch = async (match_id) => {
   const message = `Here's a League of Legends' match https://www.shinobi.cc/lol?match_id=${match_id}`;
   await _handleShare(message);
 };
+
+export const shareApp = async () => {
+  const message = `Track your League matches and champion masteries https://play.google.com/store/apps/details?id=cc.shinobi.android`;
+  await _handleShare(message);
+};
