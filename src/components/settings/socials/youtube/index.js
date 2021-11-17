@@ -7,7 +7,7 @@ import {
   Dimensions,
   StyleSheet,
 } from "react-native";
-import IonIcons from "react-native-vector-icons/Ionicons";
+import { Ionicons } from "@expo/vector-icons";
 import { Avatar, Overlay } from "react-native-elements";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
@@ -143,7 +143,7 @@ const YouTube = ({ connectedBool, setError }) => {
           }
         }}
       >
-        <IonIcons
+        <Ionicons
           name="logo-youtube"
           style={styles.icon}
           size={32}

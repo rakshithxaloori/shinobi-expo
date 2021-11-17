@@ -1,6 +1,6 @@
 import * as React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import IonIcons from "react-native-vector-icons/Ionicons";
+import { Ionicons } from "@expo/vector-icons";
 import * as AuthSession from "expo-auth-session";
 import axios from "axios";
 
@@ -67,7 +67,7 @@ const Instagram = ({ connectedBool, setError }) => {
           }
         }}
       >
-        <IonIcons
+        <Ionicons
           name="logo-instagram"
           style={styles.icon}
           size={32}

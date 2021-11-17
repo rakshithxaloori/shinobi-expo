@@ -1,9 +1,17 @@
 import React from "react";
-import { View, Text, TextInput, StyleSheet, Dimensions } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  TextInput,
+  StyleSheet,
+  Dimensions,
+} from "react-native";
 import { Avatar, Button, Overlay } from "react-native-elements";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 import FastImage from "react-native-fast-image";
+import * as ImagePicker from "expo-image-picker";
 
 import { createAPIKit } from "../../utils/APIKit";
 import { handleAPIError } from "../../utils";
@@ -25,6 +33,8 @@ const EditProfileButton = ({
   const [visible, setVisible] = React.useState(false);
   const [disable, setDisable] = React.useState(false);
   const [newBio, setNewBio] = React.useState(bio);
+  const [image, setImage] = React.useState(null);
+
   const maxBioLength = 150;
 
   React.useEffect(
@@ -33,6 +43,21 @@ const EditProfileButton = ({
     },
     []
   );
+
+  const selectPicture = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  };
 
   const saveProfile = async () => {
     setDisable(true);
@@ -77,18 +102,34 @@ const EditProfileButton = ({
         onBackdropPress={() => setVisible(false)}
         overlayStyle={styles.overlay}
       >
-        <Avatar
-          rounded
-          title={username[0]}
-          source={{ uri: picture }}
-          overlayContainerStyle={avatarDefaultStyling}
-          size={60}
-          ImageComponent={FastImage}
-        />
+        <TouchableOpacity
+          style={styles.pictureTouchable}
+          onPress={selectPicture}
+        >
+          <Avatar
+            rounded
+            title={username[0]}
+            source={{ uri: picture }}
+            overlayContainerStyle={[avatarDefaultStyling, { paddingRight: 10 }]}
+            size={60}
+            ImageComponent={FastImage}
+          />
+          <Ionicons
+            name="camera"
+            size={30}
+            color={darkTheme.on_background}
+            style={{
+              paddingLeft: 10,
+            }}
+          />
+        </TouchableOpacity>
         <TextInput
           style={[
             styles.bio,
-            { color: newBio.length > maxBioLength ? "red" : "black" },
+            {
+              color:
+                newBio.length > maxBioLength ? "red" : darkTheme.on_background,
+            },
           ]}
           multiline
           textAlignVertical="top"
@@ -102,7 +143,10 @@ const EditProfileButton = ({
         <Text
           style={[
             styles.count,
-            { color: newBio.length > maxBioLength ? "red" : "black" },
+            {
+              color:
+                newBio.length > maxBioLength ? "red" : darkTheme.on_background,
+            },
           ]}
         >
           {newBio.length}/{maxBioLength}
@@ -120,22 +164,31 @@ const EditProfileButton = ({
 };
 
 const styles = StyleSheet.create({
+  pictureTouchable: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 20,
+  },
   bio: {
     height: 150,
     width: "100%",
     padding: 10,
-    borderWidth: 2,
+    borderWidth: 1,
     borderRadius: 10,
+    borderColor: darkTheme.on_background,
   },
   count: {
     alignSelf: "flex-end",
   },
   overlay: {
-    borderRadius: 5,
+    borderRadius: 10,
     padding: 20,
     width: screen.width - 60,
     maxHeight: screen.height - 100,
     alignItems: "center",
+    backgroundColor: darkTheme.background,
+    borderWidth: 1,
+    borderColor: darkTheme.on_background,
   },
 });
 

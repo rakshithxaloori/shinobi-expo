@@ -1,7 +1,8 @@
 import * as React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import IonIcons from "react-native-vector-icons/Ionicons";
-import * as AuthSession from "expo-auth-session";
+import { Ionicons } from "@expo/vector-icons";
+import * as WebBrowser from "expo-web-browser";
+import { makeRedirectUri, useAuthRequest } from "expo-auth-session";
 import axios from "axios";
 
 import { createAPIKit } from "../../../../utils/APIKit";
@@ -9,18 +10,50 @@ import { handleAPIError } from "../../../../utils";
 import DisconnectTwitchOverlay from "./disconnect";
 import { darkTheme } from "../../../../utils/theme";
 
+WebBrowser.maybeCompleteAuthSession();
+
+// Endpoint
+const discovery = {
+  authorizationEndpoint: "https://id.twitch.tv/oauth2/authorize",
+  tokenEndpoint: "https://id.twitch.tv/oauth2/token",
+  revocationEndpoint: "https://id.twitch.tv/oauth2/revoke",
+};
+
 const Twitch = ({ connectedBool, setError }) => {
   let cancelTokenSource = axios.CancelToken.source();
-  const [disabled, setDisabled] = React.useState(false);
+
+  const [request, response, promptAsync] = useAuthRequest(
+    {
+      clientId: process.env.TWITCH_CLIENT_ID,
+      redirectUri: makeRedirectUri({
+        native: "cc.shinobi.android:/oauthredirect",
+      }),
+      scopes: ["user_read"],
+      responseType: "token",
+      extraParams: { force_verify: "true" },
+    },
+    discovery
+  );
+
+  console.log(request);
+
+  // const [disabled, setDisabled] = React.useState(false);
   const [connected, setConnected] = React.useState(connectedBool);
   const [showOverlay, setShowOverlay] = React.useState(false);
 
-  React.useEffect(
-    () => () => {
+  React.useEffect(() => {
+    console.log("RESPONSE", response);
+    if (response?.type === "success") {
+      console.log(response);
+      const { code } = response.params;
+      sendToAPI(code).then(() => {
+        setDisabled(false);
+      });
+    }
+    return () => {
       cancelTokenSource.cancel();
-    },
-    []
-  );
+    };
+  }, [response]);
 
   const sendToAPI = async (twitchToken) => {
     const APIKit = await createAPIKit();
@@ -31,42 +64,18 @@ const Twitch = ({ connectedBool, setError }) => {
       });
   };
 
-  const signInWithTwitch = async () => {
-    setDisabled(true);
-    const redirectUrl = AuthSession.makeRedirectUri({ useProxy: true });
-    const authUrl = `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.TWITCH_CLIENT_ID}&redirect_uri=${redirectUrl}&response_type=token&scope=user_read&force_verify=true`;
-    const { type, params } = await AuthSession.startAsync({ authUrl });
-    if (type === "success") {
-      // console.log(params);
-      // Object {
-      //   "access_token": "743u8i5n7y861zlifx0rst2fr04seb",
-      //   "exp://192.168.1.4:19000/--/expo-auth-session": "",
-      //   "scope": "user_read",
-      //   "token_type": "bearer",
-      // }
-
-      const { access_token } = params;
-      sendToAPI(access_token).then(() => {
-        setDisabled(false);
-      });
-    } else {
-      setDisabled(false);
-    }
-  };
-
   return (
     <>
       <TouchableOpacity
-        disabled={disabled}
+        disabled={!request}
         style={styles.container}
         onPress={() => {
           if (connected) {
-            // Show overlay, "ARE YOU SURE TO DISCONNECT?"
             setShowOverlay(true);
-          } else signInWithTwitch();
+          } else promptAsync();
         }}
       >
-        <IonIcons
+        <Ionicons
           name="logo-twitch"
           style={styles.icon}
           size={32}

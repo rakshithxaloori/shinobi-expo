@@ -1,6 +1,6 @@
 import React from "react";
 import { View, TouchableOpacity, StyleSheet } from "react-native";
-import IonIcons from "react-native-vector-icons/Ionicons";
+import { Ionicons } from "@expo/vector-icons";
 
 import Content from "../components/settings/content";
 import Cover from "../components/settings/cover";
@@ -16,7 +16,7 @@ const Settings = (props) => {
     <View style={styles.container}>
       <Cover />
       <TouchableOpacity style={styles.closeButton} onPress={closeSettings}>
-        <IonIcons name="close-outline" size={44} />
+        <Ionicons name="close-outline" size={44} />
       </TouchableOpacity>
       <Content />
     </View>

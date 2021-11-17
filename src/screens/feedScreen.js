@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Avatar } from "react-native-elements";
-import IonIcons from "react-native-vector-icons/Ionicons";
+import { Ionicons } from "@expo/vector-icons";
 import FastImage from "react-native-fast-image";
 
 import AuthContext from "../authContext";
@@ -36,14 +36,14 @@ const Feed = (props) => {
             }}
             style={{ marginRight: 10 }}
           >
-            <IonIcons name="search-sharp" size={32} color={darkTheme.primary} />
+            <Ionicons name="search-sharp" size={32} color={darkTheme.primary} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               props.navigation.navigate("Settings");
             }}
           >
-            <IonIcons name="settings" size={32} color={darkTheme.primary} />
+            <Ionicons name="settings" size={32} color={darkTheme.primary} />
           </TouchableOpacity>
         </View>
       </View>

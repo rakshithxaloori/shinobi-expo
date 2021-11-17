@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import IonIcons from "react-native-vector-icons/Ionicons";
+import { Ionicons } from "@expo/vector-icons";
 
 import AuthContext from "../../authContext";
 import { darkTheme } from "../../utils/theme";
@@ -11,7 +11,7 @@ const LogOut = ({ icon, title, text }) => {
 
   return (
     <TouchableOpacity style={styles.container} onPress={signOut}>
-      <IonIcons
+      <Ionicons
         name="exit-outline"
         style={styles.icon}
         size={32}

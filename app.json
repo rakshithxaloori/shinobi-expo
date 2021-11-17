@@ -38,7 +38,13 @@
       ]
     },
     "scheme": "shn",
-    "plugins": ["react-native-fast-image"],
+    "plugins": [
+      "react-native-fast-image",
+      "expo-image-picker",
+      {
+        "photosPermission": "The app accesses your photos to let you update your profile picture."
+      }
+    ],
     "currentFullName": "@rakshith.aloori/Shinobi",
     "originalFullName": "@rakshith.aloori/Shinobi"
   }
