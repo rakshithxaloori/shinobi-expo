@@ -1,7 +1,9 @@
-import { Share } from "react-native";
+import React from "react";
+import { Share, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 import { flashAlert } from "./flash_message";
+import { darkTheme } from "./theme";
 
 export const ShareIcon = ({ onPress }) => (
   <Ionicons
@@ -12,6 +14,8 @@ export const ShareIcon = ({ onPress }) => (
     style={styles.shareHeader}
   />
 );
+
+const styles = StyleSheet.create({ shareHeader: { marginRight: 16 } });
 
 const _handleShare = async (message) => {
   try {
