@@ -14,7 +14,7 @@
     "assetBundlePatterns": ["**/*"],
     "android": {
       "package": "cc.shinobi.android",
-      "permissions": [],
+      "permissions": ["CAMERA"],
       "googleServicesFile": "./google-services.json",
       "versionCode": 16,
       "intentFilters": [
