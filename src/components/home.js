@@ -338,6 +338,4 @@ const NavigatorWithContext = () => {
   );
 };
 
-const styles = StyleSheet.create({ shareHeader: { marginRight: 16 } });
-
 export default NavigatorWithContext;

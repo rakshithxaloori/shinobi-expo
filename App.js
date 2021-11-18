@@ -154,28 +154,35 @@ const App = () => {
   const authContext = React.useMemo(
     () => ({
       saveUser: async ({ token_key, username, picture }) => {
-        await SecureStore.setItemAsync("token_key", token_key);
+        if (token_key) {
+          await SecureStore.setItemAsync("token_key", token_key);
 
-        // register for notifications and send token to API
-        if (Device.isDevice) {
-          const expoPushToken = await registerForPushNotificationsAsync();
-          const APIKit = await createAPIKit();
-          APIKit.post(
-            "/notification/token/create/",
-            {
-              token: expoPushToken,
-            },
-            { cancelToken: cancelTokenSource.token }
-          ).catch((e) => {
-            setError(handleAPIError(e));
+          // register for notifications and send token to API
+          if (Device.isDevice) {
+            const expoPushToken = await registerForPushNotificationsAsync();
+            const APIKit = await createAPIKit();
+            APIKit.post(
+              "/notification/token/create/",
+              {
+                token: expoPushToken,
+              },
+              { cancelToken: cancelTokenSource.token }
+            ).catch((e) => {
+              setError(handleAPIError(e));
+            });
+          }
+
+          dispatch({
+            type: "SIGN_IN",
+            userToken: token_key,
+            user: { username, picture },
+          });
+        } else {
+          dispatch({
+            type: "SIGN_IN",
+            user: { username, picture },
           });
         }
-
-        dispatch({
-          type: "SIGN_IN",
-          userToken: token_key,
-          user: { username, picture },
-        });
       },
 
       signOut: async () => {

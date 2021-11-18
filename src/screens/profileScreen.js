@@ -47,6 +47,11 @@ class Profile extends Component {
       const { user, followers, following, me_following, bio, socials } =
         response.data.payload.profile;
 
+      if (this.context.user.username === user?.username) {
+        const { saveUser } = this.context;
+        saveUser(user);
+      }
+
       const { instagram, twitch_profile, youtube } = socials;
 
       this.setState({
@@ -109,7 +114,7 @@ class Profile extends Component {
               <Avatar
                 rounded
                 size={profileIconSize}
-                title={this.state.user.username[0]}
+                title={this.state.user?.username[0] || "s"}
                 source={{ uri: this.state.user.picture }}
                 overlayContainerStyle={avatarDefaultStyling}
                 ImageComponent={FastImage}
@@ -153,7 +158,20 @@ class Profile extends Component {
                   username={this.context.user.username}
                   picture={this.state.user.picture}
                   bio={this.state.bio}
-                  setBio={(newBio) => this.setState({ bio: newBio })}
+                  updateBioProfile={(newBio) => this.setState({ bio: newBio })}
+                  updatePictureProfile={(newPicture) => {
+                    const { saveUser } = this.context;
+                    this.setState((prevState) => {
+                      const newUser = {
+                        username: prevState.user.username,
+                        picture: newPicture,
+                      };
+                      saveUser(newUser);
+                      return {
+                        user: newUser,
+                      };
+                    });
+                  }}
                   buttonStyle={styles.button}
                   buttonTextStyle={styles.buttonText}
                 />

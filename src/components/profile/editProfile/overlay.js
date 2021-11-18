@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   TouchableOpacity,
   Text,
@@ -19,6 +19,7 @@ import { handleAPIError } from "../../../utils";
 import { avatarDefaultStyling } from "../../../utils/styles";
 import { flashAlert } from "../../../utils/flash_message";
 import { darkTheme } from "../../../utils/theme";
+import AuthContext from "../../../authContext";
 
 const screen = Dimensions.get("screen");
 
@@ -26,26 +27,31 @@ const EditProfileOverlay = ({
   username,
   picture,
   bio,
-  setBio,
+  updateBioProfile,
+  updatePictureProfile,
   buttonStyle,
   buttonTextStyle,
   visible,
   setVisible,
 }) => {
+  const { user } = useContext(AuthContext);
   let cancelTokenSource = axios.CancelToken.source();
 
   const [disable, setDisable] = React.useState(true);
   const [newBio, setNewBio] = React.useState(bio);
-  const [image, setImage] = React.useState(picture);
+  const [newPicture, setNewPicture] = React.useState(picture);
 
   const maxBioLength = 150;
 
   React.useEffect(() => {
-    (async () => {})();
     return () => {
       cancelTokenSource.cancel();
     };
   }, []);
+
+  React.useEffect(() => {
+    console.log(disable);
+  }, [disable]);
 
   const selectPicture = async () => {
     if (Platform.OS !== "web") {
@@ -57,16 +63,16 @@ const EditProfileOverlay = ({
           allowsEditing: true,
           aspect: [1, 1],
           quality: 1,
+          base64: true,
         });
 
         if (!result.cancelled) {
-          // setImage(result.uri);
           const maniImage = await ImageManipulator.manipulateAsync(
             result.uri,
-            [{ resize: { width: 10 } }, { rotate: 90 }],
+            [{ resize: { width: 500 } }],
             { format: ImageManipulator.SaveFormat.PNG }
           );
-          setImage(maniImage);
+          setNewPicture(maniImage.uri);
         }
       } else {
         flashAlert("Sorry, we need camera roll permissions to make this work!");
@@ -75,30 +81,35 @@ const EditProfileOverlay = ({
   };
 
   const saveProfile = async () => {
+    if (bio === newBio && newPicture === picture) return;
+    setDisable(true);
     const onSuccess = (response) => {
-      setBio(newBio);
+      updateBioProfile(newBio);
+      updatePictureProfile(newPicture);
+      setVisible(false);
     };
 
     const APIKit = await createAPIKit();
-    let newData = {};
-    if (bio !== newBio) newData["bio"] = newBio;
-    if (image !== picture) newData["picture"] = image;
+    let formData = new FormData();
+    if (bio !== newBio) formData.append("bio", newBio);
+    if (newPicture !== picture) {
+      formData.append("picture", {
+        uri: newPicture,
+        name: user.username,
+        type: "image/png",
+      });
+    }
 
-    if (newData == {}) return;
-
-    console.log(newData);
-    setDisable(true);
-
-    APIKit.post("/profile/update/", newData, {
+    APIKit.post("/profile/update/", formData, {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
       cancelToken: cancelTokenSource.token,
     })
       .then(onSuccess)
       .catch((e) => {
         flashAlert(handleAPIError(e));
-      })
-      .finally(() => {
         setDisable(false);
-        setVisible(false);
       });
   };
 
@@ -112,7 +123,7 @@ const EditProfileOverlay = ({
         <Avatar
           rounded
           title={username[0]}
-          source={{ uri: image }}
+          source={{ uri: newPicture }}
           overlayContainerStyle={[avatarDefaultStyling, { paddingRight: 10 }]}
           size={60}
           ImageComponent={FastImage}
@@ -156,7 +167,7 @@ const EditProfileOverlay = ({
       </Text>
       <Button
         title="Save Profile"
-        disabled={bio === newBio && picture === image && disable}
+        disabled={bio === newBio && picture === newPicture && disable}
         onPress={saveProfile}
         buttonStyle={buttonStyle}
         titleStyle={buttonTextStyle}
