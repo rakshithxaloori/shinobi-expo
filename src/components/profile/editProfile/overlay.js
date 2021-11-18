@@ -49,10 +49,6 @@ const EditProfileOverlay = ({
     };
   }, []);
 
-  React.useEffect(() => {
-    console.log(disable);
-  }, [disable]);
-
   const selectPicture = async () => {
     if (Platform.OS !== "web") {
       const { status } =
