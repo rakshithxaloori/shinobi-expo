@@ -291,7 +291,7 @@ const NavigatorWithContext = () => {
   const _urlListener = (url) => {
     const { path, queryParams } = Linking.parse(url);
     switch (path) {
-      case "profile":
+      case "s":
         if (queryParams.hasOwnProperty("username")) {
           RootNavigation.push("Profile", {
             username: queryParams.username,

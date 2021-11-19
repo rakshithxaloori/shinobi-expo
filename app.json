@@ -25,7 +25,7 @@
             {
               "scheme": "https",
               "host": "*.shinobi.cc",
-              "pathPrefix": "/profile"
+              "pathPrefix": "/s"
             },
             {
               "scheme": "https",

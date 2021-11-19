@@ -37,7 +37,7 @@ const _handleShare = async (message) => {
 };
 
 export const shareProfile = async (username) => {
-  const message = `Here's a Shinobi profile https://www.shinobi.cc/profile?username=${username}`;
+  const message = `Here's a Shinobi profile https://www.shinobi.cc/s?username=${username}`;
   await _handleShare(message);
 };
 
