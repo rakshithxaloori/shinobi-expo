@@ -14,7 +14,7 @@ import { createAPIKit } from "../../utils/APIKit";
 import { dateTimeDiff, handleAPIError } from "../../utils";
 import { darkTheme } from "../../utils/theme";
 
-const ITEM_HEIGHT = 110;
+const ITEM_HEIGHT = 120;
 const ITEM_MARGIN = 5;
 
 class MatchList extends Component {
