@@ -13,8 +13,9 @@ import axios from "axios";
 import FastImage from "react-native-fast-image";
 import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
+import * as FileSystem from "expo-file-system";
 
-import { createAPIKit } from "../../../utils/APIKit";
+import { uploadFile } from "../../../utils/APIKit";
 import { handleAPIError } from "../../../utils";
 import { avatarDefaultStyling } from "../../../utils/styles";
 import { flashAlert } from "../../../utils/flash_message";
@@ -85,23 +86,7 @@ const EditProfileOverlay = ({
       setVisible(false);
     };
 
-    const APIKit = await createAPIKit();
-    let formData = new FormData();
-    if (bio !== newBio) formData.append("bio", newBio);
-    if (newPicture !== picture) {
-      formData.append("picture", {
-        uri: newPicture,
-        name: user.username,
-        type: "image/png",
-      });
-    }
-
-    APIKit.post("/profile/update/", formData, {
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-      cancelToken: cancelTokenSource.token,
-    })
+    uploadFile("/profile/update/", newPicture, "picture", { bio: newBio })
       .then(onSuccess)
       .catch((e) => {
         flashAlert(handleAPIError(e));
