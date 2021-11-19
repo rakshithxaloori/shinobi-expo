@@ -32,6 +32,18 @@ const Feed = (props) => {
         <View style={styles.options}>
           <TouchableOpacity
             onPress={() => {
+              props.navigation.navigate("Upload");
+            }}
+            style={{ marginRight: 10 }}
+          >
+            <Ionicons
+              name="cloud-upload-outline"
+              size={32}
+              color={darkTheme.primary}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
               props.navigation.navigate("Search");
             }}
             style={{ marginRight: 10 }}

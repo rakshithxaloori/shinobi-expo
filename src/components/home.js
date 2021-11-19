@@ -220,6 +220,7 @@ const StackNavigatorComponent = () => {
               />
               <Stack.Screen name="Followers" component={Followers} />
               <Stack.Screen name="Following" component={Followings} />
+              <Stack.Screen name="Upload" component={null} />
               <Stack.Screen
                 name="Settings"
                 component={Settings}
