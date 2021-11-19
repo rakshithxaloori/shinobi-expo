@@ -35,6 +35,7 @@ import LolMatch from "../screens/league_of_legends/lolMatchScreen";
 import LolConnect from "../screens/league_of_legends/connectScreen";
 import { ShareIcon, shareLolMatch, shareProfile } from "../utils/share";
 import AuthContext from "../authContext";
+import UploadScreen from "../screens/uploadScreen";
 
 const NavigationContext = React.createContext();
 
@@ -220,7 +221,11 @@ const StackNavigatorComponent = () => {
               />
               <Stack.Screen name="Followers" component={Followers} />
               <Stack.Screen name="Following" component={Followings} />
-              <Stack.Screen name="Upload" component={null} />
+              <Stack.Screen
+                name="Upload"
+                component={UploadScreen}
+                options={{ title: "Upload Clip" }}
+              />
               <Stack.Screen
                 name="Settings"
                 component={Settings}
