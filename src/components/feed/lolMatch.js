@@ -30,7 +30,7 @@ class Match extends React.PureComponent {
       >
         <View style={styles.content}>
           <TouchableOpacity
-            style={{ flex: 9, flexDirection: "row", paddingTop: 5 }}
+            style={{ flex: 9, flexDirection: "row", paddingTop: 10 }}
             onPress={this.navigateProfile}
           >
             <Avatar
