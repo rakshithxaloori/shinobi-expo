@@ -7,8 +7,7 @@ const Auth = (props) => {
     <View style={styles.container}>
       <Text style={styles.header}>welcome to shinobi!</Text>
       <Text style={styles.subtitle}>
-        follow, chat and share match history of league of league with your
-        friends
+        share video game clips, follow and chat with your friends!
       </Text>
       <View style={styles.buttons}>
         <TouchableOpacity

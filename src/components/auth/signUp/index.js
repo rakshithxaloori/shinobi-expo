@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Input } from "react-native-elements";
 import axios from "axios";
@@ -62,6 +62,10 @@ const SignUp = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.text}>
+        Choices make us who we are. So choose your username wisely, for it is
+        eternal!
+      </Text>
       <Input
         editable={!disabled}
         autoCapitalize="none"
@@ -95,6 +99,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 30,
   },
+  text: { paddingBottom: 20, fontWeight: "bold" },
 });
 
 export default SignUp;
