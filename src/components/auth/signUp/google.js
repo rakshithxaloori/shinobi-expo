@@ -53,6 +53,8 @@ const GoogleSignUp = ({
             setDisabled(false);
             setError(handleAPIError(e));
           });
+      } else {
+        setDisabled(false);
       }
     };
 
