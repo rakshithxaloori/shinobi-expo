@@ -23,6 +23,7 @@ import HomeScreen from "./src/components/home";
 
 import { createAPIKit } from "./src/utils/APIKit";
 import { handleAPIError } from "./src/utils";
+import { flashAlert } from "./src/utils/flash_message";
 
 if (process.env.CI_CD_STAGE === "production") {
   console.log = () => {};
@@ -90,12 +91,18 @@ const App = () => {
           const handleResponse = async ({ status, data }) => {
             if (status < 500) {
               try {
+                flashAlert;
                 await SecureStore.deleteItemAsync("token_key");
               } catch (e) {}
 
               dispatch({ type: "INVALID_TOKEN" });
             } else {
-              setError("Looks like we're having trouble in the server");
+              flashAlert(
+                "Trouble connecting to the internet",
+                undefined,
+                undefined,
+                5000
+              );
             }
           };
 
@@ -103,7 +110,7 @@ const App = () => {
             if (error.response) {
               await handleResponse(error.response);
             } else {
-              setError(handleAPIError(error));
+              flashAlert(handleAPIError(error));
             }
           };
 
