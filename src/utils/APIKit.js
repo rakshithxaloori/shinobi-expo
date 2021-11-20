@@ -48,3 +48,19 @@ export const uploadFile = async (
   );
   return response;
 };
+
+export const uploadFileToS3 = async (
+  presignedUri,
+  localFileUri,
+  parameters = {}
+) => {
+  const videoInfo = await FileSystem.getInfoAsync(localFileUri);
+  if (!videoInfo.exists) return;
+
+  const response = await FileSystem.uploadAsync(presignedUri, localFileUri, {
+    uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+    fieldName: "file",
+    parameters: parameters,
+  });
+  return response;
+};
