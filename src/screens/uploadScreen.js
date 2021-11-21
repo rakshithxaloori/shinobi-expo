@@ -8,15 +8,14 @@ import {
   Platform,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import * as SecureStore from "expo-secure-store";
 import * as FileSystem from "expo-file-system";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
-import { Video, AVPlaybackStatus } from "expo-av";
+import { Video } from "expo-av";
 
 import { flashAlert } from "../utils/flash_message";
 import { darkTheme } from "../utils/theme";
-import { createAPIKit, uploadFile, uploadFileToS3 } from "../utils/APIKit";
+import { createAPIKit, uploadFileToS3 } from "../utils/APIKit";
 import { handleAPIError } from "../utils";
 
 const { width, height } = Dimensions.get("window");
@@ -54,6 +53,15 @@ class UploadScreen extends Component {
       .catch((e) => {
         flashAlert(handleAPIError(e));
       });
+
+    const beforeRemove = (e) => {
+      if (this.state.is_uploading) {
+        e.preventDefault();
+        flashAlert("Uploading clip...");
+      }
+    };
+
+    this.props.navigation.addListener("beforeRemove", beforeRemove);
   };
 
   componentWillUnmount = () => {
@@ -107,7 +115,8 @@ class UploadScreen extends Component {
         // Send that upload is successful
         const APIKit = await createAPIKit();
         const onSuccess = () => {
-          flashAlert("Clip uploaded!");
+          this.setState({ is_uploading: false });
+          flashAlert("Clip uploaded!", undefined, undefined, 5000);
           this.props.navigation.navigate("Home");
         };
         APIKit.post(
@@ -131,6 +140,7 @@ class UploadScreen extends Component {
           clip_size: videoInfo.size,
           clip_type: splitList[splitList.length - 1],
           game_code: "30035",
+          title: this.state.title,
         },
         { cancelToken: this.cancelTokenSource.token }
       );
