@@ -5,6 +5,7 @@ import * as Linking from "expo-linking";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import { darkTheme } from "../../utils/theme";
+import { flashAlert } from "../../utils/flash_message";
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -20,7 +21,7 @@ const Socials = ({
     try {
       Linking.openURL(URL);
     } catch (error) {
-      console.log(error);
+      flashAlert(error);
     }
   };
 

@@ -83,7 +83,6 @@ class UploadScreen extends Component {
         });
 
         if (!result.cancelled) {
-          console.log(result);
           // Check atleast 10 secs, atmost 5 mins
           if (result.duration < 5000) {
             flashAlert("Video has to be atleast 5 seconds");
@@ -197,6 +196,7 @@ class UploadScreen extends Component {
               editable={!this.state.disable}
               autoCapitalize="none"
               autoCorrect={false}
+              maxLength={30}
               placeholder="One tap headshots y'all!"
               label="Clip title"
               inputStyle={{ color: darkTheme.on_background, fontSize: 15 }}

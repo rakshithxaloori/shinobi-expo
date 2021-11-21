@@ -93,7 +93,7 @@ class Chat extends Component {
   };
 
   onError = (error) => {
-    console.log(error);
+    flashAlert(error);
   };
 
   onClose = (close) => {

@@ -6,6 +6,7 @@ import axios from "axios";
 import { createAPIKit } from "../../../utils/APIKit";
 import { handleAPIError } from "../../../utils";
 import { darkTheme } from "../../../utils/theme";
+import { flashAlert } from "../../../utils/flash_message";
 
 const UnfollowOverlay = ({
   username,
@@ -38,7 +39,7 @@ const UnfollowOverlay = ({
       .then(onSuccess)
       .catch((e) => {
         setDisabled(false);
-        console.log(handleAPIError(e));
+        flashAlert(handleAPIError(e));
       });
   };
 
