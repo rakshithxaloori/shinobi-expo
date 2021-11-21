@@ -18,14 +18,14 @@ class Match extends React.PureComponent {
   };
 
   render = () => {
-    const { participation, height, margin, dateDiff } = this.props;
+    const { participation, HEIGHT, MARGIN, dateDiff } = this.props;
     const match = participation.participation;
 
     const split_arr = match?.champion?.image?.split("/");
 
     return (
       <TouchableOpacity
-        style={[styles.container, { height: height, marginVertical: margin }]}
+        style={[styles.container, { height: HEIGHT, marginVertical: MARGIN }]}
         onPress={this.navigateMatch}
       >
         <View style={styles.content}>

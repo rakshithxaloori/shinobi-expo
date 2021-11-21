@@ -34,7 +34,6 @@ class UploadScreen extends Component {
     disable: true,
     loaded: false,
   };
-  video = React.createRef();
   cancelTokenSource = axios.CancelToken.source();
 
   componentDidMount = async () => {
@@ -175,14 +174,13 @@ class UploadScreen extends Component {
         {this.state.videoUri && (
           <View style={styles.videoView}>
             <Video
-              ref={this.video}
               style={styles.video}
               source={{
                 uri: this.state.videoUri,
               }}
               useNativeControls
               resizeMode="contain"
-              shouldPlay={false}
+              shouldPlay={true}
               isLooping={false}
               onPlaybackStatusUpdate={(status) => {
                 if (status.error) {

@@ -84,8 +84,8 @@ class MatchList extends Component {
         return (
           <LolMatch
             participation={item}
-            height={ITEM_HEIGHT}
-            margin={ITEM_MARGIN}
+            HEIGHT={ITEM_HEIGHT}
+            MARGIN={ITEM_MARGIN}
             dateDiff={dateDiff}
             navigateLolMatch={this.navigateLolMatch}
             navigateProfile={this.navigateProfile}

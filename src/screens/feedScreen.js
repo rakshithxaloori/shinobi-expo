@@ -7,6 +7,7 @@ import FastImage from "react-native-fast-image";
 import AuthContext from "../authContext";
 import { avatarDefaultStyling } from "../utils/styles";
 import { darkTheme } from "../utils/theme";
+import ClipsFeed from "../components/feed/clips";
 import MatchList from "../components/feed/matchList";
 import VirtualizedList from "../utils/virtualizedList";
 
@@ -60,7 +61,8 @@ const Feed = (props) => {
         </View>
       </View>
       <Text style={styles.header}>Feed</Text>
-      <MatchList navigation={props.navigation} />
+      {/* <MatchList navigation={props.navigation} /> */}
+      <ClipsFeed navigation={props.navigation} />
     </VirtualizedList>
   );
 };
