@@ -78,12 +78,12 @@ class UploadScreen extends Component {
           // Check atleast 10 secs, atmost 5 mins
           if (result.duration < 10000) {
             flashAlert("Video has to be atleast 10 seconds");
-          } else if (result.duration > 45000) {
-            flashAlert("Video has to be shorter than 45 seconds");
+          } else if (result.duration > 20000) {
+            flashAlert("Video has to be shorter than 20 seconds");
           } else {
             const videoInfo = await FileSystem.getInfoAsync(result.uri);
-            if (videoInfo.size > 100000000) {
-              flashAlert("Video should be smaller than 100 MB");
+            if (videoInfo.size > 50000000) {
+              flashAlert("Video should be smaller than 50 MB");
             } else this.setState({ videoUri: result.uri });
           }
         }
