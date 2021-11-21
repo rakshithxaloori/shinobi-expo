@@ -76,8 +76,8 @@ class UploadScreen extends Component {
         if (!result.cancelled) {
           console.log(result);
           // Check atleast 10 secs, atmost 5 mins
-          if (result.duration < 10000) {
-            flashAlert("Video has to be atleast 10 seconds");
+          if (result.duration < 5000) {
+            flashAlert("Video has to be atleast 5 seconds");
           } else if (result.duration > 20000) {
             flashAlert("Video has to be shorter than 20 seconds");
           } else {
