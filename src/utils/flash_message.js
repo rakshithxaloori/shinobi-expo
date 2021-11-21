@@ -10,6 +10,7 @@ export const flashAlert = (
   showMessage({
     message: message,
     duration: duration,
+    description: description,
     type: "info",
     icon: "auto",
     position: "bottom",

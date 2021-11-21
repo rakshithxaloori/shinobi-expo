@@ -10,6 +10,7 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 import { Ionicons } from "@expo/vector-icons";
+import { Input } from "react-native-elements";
 import axios from "axios";
 import { Video } from "expo-av";
 
@@ -24,7 +25,7 @@ const iconSize = 25;
 class UploadScreen extends Component {
   state = {
     is_uploading: undefined,
-    title: "HELLO",
+    title: "",
     videoQuota: 0,
     videoUri: null,
     status: {},
@@ -57,7 +58,7 @@ class UploadScreen extends Component {
     const beforeRemove = (e) => {
       if (this.state.is_uploading) {
         e.preventDefault();
-        flashAlert("Uploading clip...");
+        flashAlert("Uploading clip...", "Don't close the app", undefined, 5000);
       }
     };
 
@@ -104,6 +105,10 @@ class UploadScreen extends Component {
 
   uploadVideo = async () => {
     if (this.state.videoUri === null) return;
+    if (this.state.title == "") {
+      flashAlert("Clip title can't be empty", undefined, undefined, 5000);
+      return;
+    }
     this.setState({ disable: true, is_uploading: true });
 
     const splitList = this.state.videoUri.split(".");
@@ -151,7 +156,7 @@ class UploadScreen extends Component {
         const url_payload = get_s3_url_response.data.payload;
 
         this.setState({ file_key: url_payload.fields.key });
-        flashAlert("Uploading clip...", undefined, undefined, 5000);
+        flashAlert("Uploading clip...", "Don't close the app", undefined, 5000);
         uploadFileToS3(url_payload.url, this.state.videoUri, url_payload.fields)
           .then(uploadSuccess)
           .catch(uploadFailure);
@@ -169,28 +174,51 @@ class UploadScreen extends Component {
           {this.state.videoQuota === 1 ? "clip" : "clips"} today
         </Text>
         {this.state.videoUri && (
-          <Video
-            ref={this.video}
-            style={styles.video}
-            source={{
-              uri: this.state.videoUri,
-            }}
-            useNativeControls
-            resizeMode="contain"
-            shouldPlay={false}
-            isLooping={false}
-            onPlaybackStatusUpdate={(status) => {
-              if (status.error) {
-                flashAlert("Upload failed");
-              } else {
-                this.setState(status);
-              }
-            }}
-          />
+          <View style={styles.videoView}>
+            <Video
+              ref={this.video}
+              style={styles.video}
+              source={{
+                uri: this.state.videoUri,
+              }}
+              useNativeControls
+              resizeMode="contain"
+              shouldPlay={false}
+              isLooping={false}
+              onPlaybackStatusUpdate={(status) => {
+                if (status.error) {
+                  flashAlert("Upload failed");
+                } else {
+                  this.setState(status);
+                }
+              }}
+            />
+            <Input
+              editable={!this.state.disable}
+              autoCapitalize="none"
+              autoCorrect={false}
+              placeholder="One tap headshots y'all!"
+              label="Clip title"
+              inputStyle={{ color: darkTheme.on_background, fontSize: 15 }}
+              leftIcon={() => (
+                <Ionicons
+                  name="film-outline"
+                  size={20}
+                  color={darkTheme.primary}
+                />
+              )}
+              onChangeText={(value) => {
+                this.setState({
+                  title: value.trim(),
+                });
+              }}
+              style={styles.clipLabel}
+            />
+          </View>
         )}
         <View style={styles.buttonsView}>
           {this.state.is_uploading ? (
-            <Text style={styles.uploadingText}>Uploading a clip...</Text>
+            <Text style={styles.uploadingText}>Uploading clip...</Text>
           ) : this.state.videoUri ? (
             <View style={styles.buttonsView}>
               <TouchableOpacity
@@ -249,7 +277,11 @@ class UploadScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", alignItems: "center" },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   title: {
     color: darkTheme.on_background,
     fontWeight: "bold",
@@ -265,10 +297,22 @@ const styles = StyleSheet.create({
     padding: 15,
     margin: 20,
   },
-  video: { width: width - 40, height: height / 3 },
-  buttonsView: { margin: 10, flexDirection: "row" },
+  videoView: {
+    width: width - 40,
+    height: height / 2,
+    marginBottom: 20,
+  },
+  clipLabel: {
+    width: "100%",
+    height: "20%",
+  },
+  video: { width: "100%", height: "80%", marginBottom: 10 },
+  buttonsView: {
+    margin: 10,
+    flexDirection: "row",
+  },
   icon: { marginRight: 8 },
-  button: { borderRadius: 30, padding: 15, margin: 20, flexDirection: "row" },
+  button: { borderRadius: 30, padding: 15, margin: 10, flexDirection: "row" },
   buttonText: { fontSize: 18, fontWeight: "bold" },
   selectText: { color: darkTheme.on_background },
   uploadText: { color: darkTheme.primary },
