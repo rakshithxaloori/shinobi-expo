@@ -78,7 +78,7 @@ class UploadScreen extends Component {
           // Check atleast 10 secs, atmost 5 mins
           if (result.duration < 5000) {
             flashAlert("Video has to be atleast 5 seconds");
-          } else if (result.duration > 20000) {
+          } else if (result.duration > 21000) {
             flashAlert("Video has to be shorter than 20 seconds");
           } else {
             const videoInfo = await FileSystem.getInfoAsync(result.uri);
@@ -96,7 +96,7 @@ class UploadScreen extends Component {
 
   uploadVideo = async () => {
     if (this.state.videoUri === null) return;
-    this.setState({ disable: true });
+    this.setState({ disable: true, uploading: true });
 
     const splitList = this.state.videoUri.split(".");
     const videoInfo = await FileSystem.getInfoAsync(this.state.videoUri);
@@ -120,21 +120,8 @@ class UploadScreen extends Component {
             flashAlert(handleAPIError(e));
           });
       };
-      const uploadFailure = async (error) => {
-        const APIKit = await createAPIKit();
-        const onSuccess = () => {
-          flashAlert("Failed to upload the clip!");
-          this.props.navigation.navigate("Home");
-        };
-        APIKit.post(
-          "/clips/fail/",
-          { file_key: this.state.file_key },
-          { cancelToken: this.cancelTokenSource.token }
-        )
-          .then(onSuccess)
-          .catch((e) => {
-            flashAlert(handleAPIError(e));
-          });
+      const uploadFailure = (error) => {
+        flashAlert(handleAPIError(error));
       };
 
       const APIKit = await createAPIKit();
@@ -169,25 +156,29 @@ class UploadScreen extends Component {
           You can upload {this.state.videoQuota} more{" "}
           {this.state.videoQuota === 1 ? "clip" : "clips"} today
         </Text>
-        {this.state.videoUri && (
-          <Video
-            ref={this.video}
-            style={styles.video}
-            source={{
-              uri: this.state.videoUri,
-            }}
-            useNativeControls
-            resizeMode="contain"
-            shouldPlay={false}
-            isLooping={false}
-            onPlaybackStatusUpdate={(status) => {
-              if (status.error) {
-                flashAlert("Upload failed");
-              } else {
-                this.setState(status);
-              }
-            }}
-          />
+        {this.state.is_uploading ? (
+          <Text style={styles.uploadingText}>Uploading a clip</Text>
+        ) : (
+          this.state.videoUri && (
+            <Video
+              ref={this.video}
+              style={styles.video}
+              source={{
+                uri: this.state.videoUri,
+              }}
+              useNativeControls
+              resizeMode="contain"
+              shouldPlay={false}
+              isLooping={false}
+              onPlaybackStatusUpdate={(status) => {
+                if (status.error) {
+                  flashAlert("Upload failed");
+                } else {
+                  this.setState(status);
+                }
+              }}
+            />
+          )
         )}
         <View style={styles.buttonsView}>
           {this.state.videoUri ? (
@@ -254,6 +245,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 20,
     padding: 20,
+  },
+  uploadingText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    backgroundColor: darkTheme.primary,
+    color: darkTheme.on_background,
+    borderRadius: 30,
+    padding: 15,
+    margin: 20,
   },
   video: { width: width - 40, height: height / 3 },
   buttonsView: { margin: 10, flexDirection: "row" },
