@@ -104,7 +104,7 @@ class UploadScreen extends Component {
 
   uploadVideo = async () => {
     if (this.state.videoUri === null) return;
-    this.setState({ disable: true, uploading: true });
+    this.setState({ disable: true, is_uploading: true });
 
     const splitList = this.state.videoUri.split(".");
     const videoInfo = await FileSystem.getInfoAsync(this.state.videoUri);
@@ -115,9 +115,11 @@ class UploadScreen extends Component {
         // Send that upload is successful
         const APIKit = await createAPIKit();
         const onSuccess = () => {
-          this.setState({ is_uploading: false });
-          flashAlert("Clip uploaded!", undefined, undefined, 5000);
-          this.props.navigation.navigate("Home");
+          const callback = () => {
+            flashAlert("Clip uploaded!", undefined, undefined, 5000);
+            this.props.navigation.navigate("Home");
+          };
+          this.setState({ is_uploading: false }, callback);
         };
         APIKit.post(
           "/clips/success/",
@@ -166,32 +168,30 @@ class UploadScreen extends Component {
           You can upload {this.state.videoQuota} more{" "}
           {this.state.videoQuota === 1 ? "clip" : "clips"} today
         </Text>
-        {this.state.is_uploading ? (
-          <Text style={styles.uploadingText}>Uploading a clip</Text>
-        ) : (
-          this.state.videoUri && (
-            <Video
-              ref={this.video}
-              style={styles.video}
-              source={{
-                uri: this.state.videoUri,
-              }}
-              useNativeControls
-              resizeMode="contain"
-              shouldPlay={false}
-              isLooping={false}
-              onPlaybackStatusUpdate={(status) => {
-                if (status.error) {
-                  flashAlert("Upload failed");
-                } else {
-                  this.setState(status);
-                }
-              }}
-            />
-          )
+        {this.state.videoUri && (
+          <Video
+            ref={this.video}
+            style={styles.video}
+            source={{
+              uri: this.state.videoUri,
+            }}
+            useNativeControls
+            resizeMode="contain"
+            shouldPlay={false}
+            isLooping={false}
+            onPlaybackStatusUpdate={(status) => {
+              if (status.error) {
+                flashAlert("Upload failed");
+              } else {
+                this.setState(status);
+              }
+            }}
+          />
         )}
         <View style={styles.buttonsView}>
-          {this.state.videoUri ? (
+          {this.state.is_uploading ? (
+            <Text style={styles.uploadingText}>Uploading a clip...</Text>
+          ) : this.state.videoUri ? (
             <View style={styles.buttonsView}>
               <TouchableOpacity
                 disabled={this.state.disable}
