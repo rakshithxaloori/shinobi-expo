@@ -12,13 +12,16 @@ class FeedClip extends React.PureComponent {
     this.props.navigateProfile(this.props.clip.uploader.username);
   };
   render = () => {
-    const { clip, HEIGHT, MARGIN, dateDiff } = this.props;
+    const { clip, TITLE_HEIGHT, VIDEO_HEIGHT, MARGIN, dateDiff } = this.props;
     return (
       <View
-        style={[styles.container, { height: HEIGHT, marginVertical: MARGIN }]}
+        style={[
+          styles.container,
+          { height: VIDEO_HEIGHT + TITLE_HEIGHT, marginVertical: MARGIN },
+        ]}
       >
         <TouchableOpacity
-          style={styles.touchable}
+          style={[styles.touchable, { height: TITLE_HEIGHT }]}
           onPress={this.navigateProfile}
         >
           <Avatar
@@ -41,12 +44,10 @@ class FeedClip extends React.PureComponent {
           </View>
         </TouchableOpacity>
         <Video
-          style={styles.video}
-          source={{
-            uri: clip.url,
-          }}
-          useNativeControls
-          resizeMode="cover"
+          style={[styles.video, { height: VIDEO_HEIGHT }]}
+          source={{ uri: clip.url }}
+          // useNativeControls
+          resizeMode="contain"
           shouldPlay={false}
           isLooping={true}
         />
@@ -59,16 +60,14 @@ const styles = StyleSheet.create({
   username: { color: darkTheme.on_primary, fontWeight: "bold" },
   game_name: { paddingLeft: 5, color: darkTheme.on_primary },
   touchable: {
-    flex: 1,
     flexDirection: "row",
-    paddingTop: 10,
+    alignItems: "center",
     paddingHorizontal: 10,
     backgroundColor: darkTheme.primary,
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
   },
   video: {
-    flex: 4,
     width: "100%",
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,

@@ -8,6 +8,7 @@ import {
   Platform,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import * as ImageManipulator from "expo-image-manipulator";
 import * as FileSystem from "expo-file-system";
 import { Ionicons } from "@expo/vector-icons";
 import { Input } from "react-native-elements";
@@ -28,7 +29,7 @@ class UploadScreen extends Component {
     title: "",
     videoQuota: 0,
     videoUri: null,
-    status: {},
+    videoHeightToWidthRatio: null,
     selectText: "Select",
     file_key: null,
     disable: true,
@@ -82,7 +83,8 @@ class UploadScreen extends Component {
         });
 
         if (!result.cancelled) {
-          // Check atleast 10 secs, atmost 5 mins
+          // Check atleast 10 secs, atmost 20 secs
+          console.log(result);
           if (result.duration < 5000) {
             flashAlert("Video has to be atleast 5 seconds");
           } else if (result.duration > 21000) {
@@ -91,7 +93,17 @@ class UploadScreen extends Component {
             const videoInfo = await FileSystem.getInfoAsync(result.uri);
             if (videoInfo.size > 50000000) {
               flashAlert("Video should be smaller than 50 MB");
-            } else this.setState({ videoUri: result.uri });
+            } else {
+              let videoHeightToWidthRatio = null;
+              if (result.rotation)
+                videoHeightToWidthRatio = (result.width * 1.0) / result.height;
+              else
+                videoHeightToWidthRatio = (result.height * 1.0) / result.width;
+              this.setState({
+                videoUri: result.uri,
+                videoHeightToWidthRatio: videoHeightToWidthRatio,
+              });
+            }
           }
         }
       } else {
@@ -146,6 +158,7 @@ class UploadScreen extends Component {
           clip_type: splitList[splitList.length - 1],
           game_code: "30035",
           title: this.state.title,
+          clip_height_to_width_ratio: this.state.videoHeightToWidthRatio,
         },
         { cancelToken: this.cancelTokenSource.token }
       );
@@ -182,13 +195,6 @@ class UploadScreen extends Component {
               resizeMode="contain"
               shouldPlay={true}
               isLooping={false}
-              onPlaybackStatusUpdate={(status) => {
-                if (status.error) {
-                  flashAlert("Upload failed");
-                } else {
-                  this.setState(status);
-                }
-              }}
             />
             <Input
               editable={!this.state.disable}

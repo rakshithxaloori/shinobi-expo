@@ -21,7 +21,8 @@ import FeedClip from "./feedClip";
 
 const screenWidth = Dimensions.get("window").width;
 
-const ITEM_HEIGHT = 250;
+const VIDEO_WIDTH = screenWidth - 20;
+const TITLE_HEIGHT = 60;
 const ITEM_MARGIN = 10;
 
 const REFRESH_TEXT_SIZE = 15;
@@ -53,7 +54,7 @@ class ClipsFeed extends Component {
     <View style={{ marginBottom: 20, alignItems: "center" }}>
       <ShimmerPlaceHolder
         width={screenWidth - 20}
-        height={ITEM_HEIGHT}
+        height={250}
         shimmerStyle={{
           borderRadius: 10,
         }}
@@ -120,10 +121,12 @@ class ClipsFeed extends Component {
   renderClip = ({ item }) => {
     const dateThen = new Date(item.created_datetime);
     const dateDiff = dateTimeDiff(dateThen);
+    const video_height = VIDEO_WIDTH * item.height_to_width_ratio;
     return (
       <FeedClip
         clip={item}
-        HEIGHT={ITEM_HEIGHT}
+        TITLE_HEIGHT={TITLE_HEIGHT}
+        VIDEO_HEIGHT={video_height}
         MARGIN={ITEM_MARGIN}
         dateDiff={dateDiff}
         navigateProfile={this.navigateProfile}
@@ -135,11 +138,14 @@ class ClipsFeed extends Component {
     return clip.id;
   };
 
-  getItemLayout = (data, index) => ({
-    length: ITEM_HEIGHT,
-    offset: (ITEM_HEIGHT + ITEM_MARGIN) * index,
-    index,
-  });
+  getItemLayout = (data, index) => {
+    const item_height = VIDEO_WIDTH * data.height_to_width_ratio + TITLE_HEIGHT;
+    return {
+      length: item_height,
+      offset: (item_height + ITEM_MARGIN) * index,
+      index,
+    };
+  };
 
   navigateProfile = (username) => {
     this.props.navigation.navigate("Profile", { username });
