@@ -8,7 +8,6 @@ import {
   Platform,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import * as ImageManipulator from "expo-image-manipulator";
 import * as FileSystem from "expo-file-system";
 import { Ionicons } from "@expo/vector-icons";
 import { Input } from "react-native-elements";
@@ -85,13 +84,13 @@ class UploadScreen extends Component {
         if (!result.cancelled) {
           // Check atleast 10 secs, atmost 20 secs
           console.log(result);
-          if (result.duration < 5000) {
+          if (result.duration < 5 * 1000) {
             flashAlert("Video has to be atleast 5 seconds");
-          } else if (result.duration > 21000) {
+          } else if (result.duration > 21 * 1000) {
             flashAlert("Video has to be shorter than 20 seconds");
           } else {
             const videoInfo = await FileSystem.getInfoAsync(result.uri);
-            if (videoInfo.size > 50000000) {
+            if (videoInfo.size > 50 * 1000 * 1000) {
               flashAlert("Video should be smaller than 50 MB");
             } else {
               let videoHeightToWidthRatio = null;
