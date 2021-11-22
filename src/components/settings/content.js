@@ -48,9 +48,6 @@ const Content = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={{ color: "white" }}>
-        The connect features are not working. We are working to fix it.
-      </Text>
       <SocialsSettings setSocialsLoaded={setSocialsLoaded} />
       {socialsLoaded ? <LogOut /> : placeholder()}
       <View

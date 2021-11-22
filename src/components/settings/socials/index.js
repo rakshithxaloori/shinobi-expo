@@ -11,7 +11,6 @@ import { createAPIKit } from "../../../utils/APIKit";
 import Twitch from "./twitch";
 import YouTube from "./youtube";
 import Instagram from "./instagram";
-import { darkTheme } from "../../../utils/theme";
 
 class SocialsSettings extends Component {
   state = {
@@ -65,7 +64,7 @@ class SocialsSettings extends Component {
 
   render = () => (
     <>
-      {this.state.instagram !== undefined ? (
+      {/* {this.state.instagram !== undefined ? (
         <Instagram
           connectedBool={this.state.instagram}
           setError={this.setError}
@@ -77,7 +76,7 @@ class SocialsSettings extends Component {
         <Twitch connectedBool={this.state.twitch} setError={this.setError} />
       ) : (
         this.placeholder()
-      )}
+      )} */}
       {this.state.youtube !== undefined ? (
         <YouTube connectedBool={this.state.youtube} setError={this.setError} />
       ) : (
