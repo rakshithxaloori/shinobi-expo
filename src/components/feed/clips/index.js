@@ -1,6 +1,17 @@
 import React, { Component } from "react";
-import { View, FlatList, StyleSheet, ActivityIndicator } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  FlatList,
+  StyleSheet,
+  ActivityIndicator,
+  Dimensions,
+} from "react-native";
 import axios from "axios";
+import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
+import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 
 import { createAPIKit } from "../../../utils/APIKit";
 import { flashAlert } from "../../../utils/flash_message";
@@ -8,20 +19,48 @@ import { dateTimeDiff, handleAPIError } from "../../../utils";
 import { darkTheme } from "../../../utils/theme";
 import FeedClip from "./feedClip";
 
+const screenWidth = Dimensions.get("window").width;
+
 const ITEM_HEIGHT = 250;
 const ITEM_MARGIN = 10;
+
+const REFRESH_TEXT_SIZE = 15;
+const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
 class ClipsFeed extends Component {
   state = {
     clips: [],
     initLoaded: false,
     isLoading: true,
+    refresh: false,
     isRefreshing: false,
     endReached: false,
   };
 
   fetchCount = 2;
   cancelTokenSource = axios.CancelToken.source();
+  stickyHeader = (
+    <TouchableOpacity style={styles.refresh} onPress={this.refresh}>
+      <Ionicons
+        name="planet-outline"
+        color={darkTheme.on_secondary}
+        size={REFRESH_TEXT_SIZE}
+      />
+      <Text style={styles.refreshText}>New Clips</Text>
+    </TouchableOpacity>
+  );
+  placeholder = (
+    <View style={{ marginBottom: 20, alignItems: "center" }}>
+      <ShimmerPlaceHolder
+        width={screenWidth - 20}
+        height={ITEM_HEIGHT}
+        shimmerStyle={{
+          borderRadius: 10,
+        }}
+        shimmerColors={[darkTheme.surface, "#c5c5c5", darkTheme.surface]}
+      />
+    </View>
+  );
 
   componentDidMount = async () => {
     await this.fetchClips();
@@ -32,34 +71,50 @@ class ClipsFeed extends Component {
   };
 
   fetchClips = async () => {
-    console.log("FETCH CLIPS");
     if (this.state.endReached) return;
     const onSuccess = (response) => {
-      const { clips } = response.data.payload;
-      console.log(clips.length !== this.fetchCount);
+      const { clips, refresh } = response.data.payload;
       this.setState((prevState) => ({
         initLoaded: true,
         isLoading: false,
+        refresh: refresh,
         clips: [...prevState.clips, ...clips],
         endReached: clips.length !== this.fetchCount,
       }));
     };
 
     const APIKit = await createAPIKit();
-    let datetime = undefined;
-    if (this.state.clips.length === 0) datetime = new Date();
-    else
-      datetime = this.state.clips[this.state.clips.length - 1].created_datetime;
+    let id = 0;
+    if (this.state.clips.length !== 0)
+      id = this.state.clips[this.state.clips.length - 1].id;
 
     APIKit.post(
       `/clips/clips/`,
-      { datetime: datetime },
+      { id: id, id_top: this.state.clips[0]?.id || 0 },
       { cancelToken: this.cancelTokenSource.token }
     )
       .then(onSuccess)
       .catch((e) => {
         flashAlert(handleAPIError(e));
       });
+  };
+
+  refresh = async () => {
+    const callback = async () => {
+      await this.fetchClips();
+    };
+
+    this.setState(
+      {
+        clips: [],
+        initLoaded: false,
+        isLoading: true,
+        refresh: false,
+        isRefreshing: true,
+        endReached: false,
+      },
+      callback
+    );
   };
 
   renderClip = ({ item }) => {
@@ -92,9 +147,9 @@ class ClipsFeed extends Component {
 
   render = () =>
     this.state.initLoaded ? (
-      <View>
+      <View style={styles.container}>
         <FlatList
-          contentContainerStyle={styles.container}
+          contentContainerStyle={styles.list}
           data={this.state.clips}
           onEndReached={this.fetchClips}
           onEndReachedThreshold={1}
@@ -113,12 +168,38 @@ class ClipsFeed extends Component {
         />
       </View>
     ) : (
-      <View>{/*PLACEHOLDERS*/}</View>
+      <View style={styles.container}>
+        {this.placeholder}
+        {this.placeholder}
+      </View>
     );
 }
 
 const styles = StyleSheet.create({
-  container: { marginTop: 10, paddingHorizontal: 5 },
+  refreshText: {
+    paddingLeft: 5,
+    fontSize: REFRESH_TEXT_SIZE,
+    fontWeight: "bold",
+  },
+  refresh: {
+    flexDirection: "row",
+    height: 40,
+    width: 110,
+    borderRadius: 20,
+    backgroundColor: darkTheme.secondary,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "white",
+  },
+  list: {
+    // zIndex: 0,
+    // elevation: 0,
+  },
+  container: {
+    marginTop: 10,
+    paddingHorizontal: 5,
+  },
 });
 
 export default ClipsFeed;
