@@ -25,7 +25,6 @@ const iconSize = 25;
 class UploadScreen extends Component {
   state = {
     is_uploading: undefined,
-    title: "",
     videoQuota: 0,
     videoUri: null,
     videoHeightToWidthRatio: null,
@@ -112,10 +111,6 @@ class UploadScreen extends Component {
 
   uploadVideo = async () => {
     if (this.state.videoUri === null) return;
-    if (this.state.title == "") {
-      flashAlert("Clip title can't be empty", undefined, undefined, 5000);
-      return;
-    }
     this.setState({ disable: true, is_uploading: true });
 
     const splitList = this.state.videoUri.split(".");
@@ -135,7 +130,7 @@ class UploadScreen extends Component {
         };
         APIKit.post(
           "/clips/success/",
-          { file_key: this.state.file_key, title: this.state.title },
+          { file_key: this.state.file_key },
           { cancelToken: this.cancelTokenSource.token }
         )
           .then(onSuccess)
@@ -155,7 +150,6 @@ class UploadScreen extends Component {
           clip_size: videoInfo.size,
           clip_type: splitList[splitList.length - 1],
           game_code: "30035",
-          title: this.state.title,
           clip_height_to_width_ratio: this.state.videoHeightToWidthRatio,
         },
         { cancelToken: this.cancelTokenSource.token }
@@ -188,28 +182,6 @@ class UploadScreen extends Component {
             <VideoPlayer
               videoUri={this.state.videoUri}
               videoStyle={styles.video}
-            />
-            <Input
-              editable={!this.state.disable}
-              autoCapitalize="none"
-              autoCorrect={false}
-              maxLength={30}
-              placeholder="One tap headshots y'all!"
-              label="Clip title"
-              inputStyle={{ color: darkTheme.on_background, fontSize: 15 }}
-              leftIcon={() => (
-                <Ionicons
-                  name="film-outline"
-                  size={20}
-                  color={darkTheme.primary}
-                />
-              )}
-              onChangeText={(value) => {
-                this.setState({
-                  title: value.trim(),
-                });
-              }}
-              style={styles.clipLabel}
             />
           </View>
         )}
@@ -300,10 +272,6 @@ const styles = StyleSheet.create({
     width: width - 40,
     height: height / 2,
     marginBottom: 20,
-  },
-  clipLabel: {
-    width: "100%",
-    height: "20%",
   },
   video: { height: "80%" },
   buttonsView: {

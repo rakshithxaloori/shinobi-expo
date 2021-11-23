@@ -5,12 +5,21 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { darkTheme } from "./theme";
 
-const iconSize = 20;
+const videoIconSize = 20;
+const statsIconSize = 20;
 
-const VideoPlayer = ({ videoUri, VIDEO_HEIGHT = null, videoStyle = {} }) => {
+const VideoPlayer = ({
+  videoUri,
+  VIDEO_HEIGHT = null,
+  videoStyle = {},
+  stats = null,
+}) => {
   const [mute, setMute] = React.useState(true);
   const [play, setPlay] = React.useState(false);
   const videoRef = React.useRef(null);
+
+  const toggleLike = () => {};
+  const shareClip = () => {};
 
   React.useEffect(() => {
     videoRef.current.loadAsync(
@@ -57,20 +66,6 @@ const VideoPlayer = ({ videoUri, VIDEO_HEIGHT = null, videoStyle = {} }) => {
         },
       ]}
     >
-      <Ionicons
-        name={mute ? "volume-mute" : "volume-high"}
-        size={iconSize}
-        style={[styles.icon, styles.mute]}
-        color={darkTheme.on_surface_title}
-        onPress={toggleMute}
-      />
-      <Ionicons
-        name={play ? "pause" : "play"}
-        size={iconSize}
-        style={[styles.icon, styles.play]}
-        color={darkTheme.on_surface_title}
-        onPress={togglePlay}
-      />
       <Video
         ref={videoRef}
         style={[
@@ -89,6 +84,26 @@ const VideoPlayer = ({ videoUri, VIDEO_HEIGHT = null, videoStyle = {} }) => {
           }
         }}
       />
+      <Ionicons
+        name={mute ? "volume-mute" : "volume-high"}
+        size={videoIconSize}
+        style={[styles.icon, styles.mute]}
+        color={darkTheme.on_surface_title}
+        onPress={toggleMute}
+      />
+      <Ionicons
+        name={play ? "pause" : "play"}
+        size={videoIconSize}
+        style={[styles.icon, styles.play]}
+        color={darkTheme.on_surface_title}
+        onPress={togglePlay}
+      />
+      {stats && (
+        <View>
+          <Ionicons name={"heart"} onPress={toggleLike} />
+          <Ionicons name={"share-social"} onPress={shareClip} />
+        </View>
+      )}
     </View>
   );
 };
@@ -99,8 +114,9 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
   },
+  stats: {},
   icon: {
-    borderRadius: iconSize / 2,
+    borderRadius: videoIconSize / 2,
     backgroundColor: darkTheme.surface,
     zIndex: 1,
     padding: 5,
