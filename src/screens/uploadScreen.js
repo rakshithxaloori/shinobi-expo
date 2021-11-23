@@ -212,60 +212,62 @@ class UploadScreen extends Component {
             />
           </View>
         )}
-        <View style={styles.buttonsView}>
-          {this.state.is_uploading ? (
-            <Text style={styles.uploadingText}>Uploading clip...</Text>
-          ) : this.state.videoUri ? (
-            <View style={styles.buttonsView}>
+        {this.state.videoQuota > 0 && (
+          <View style={styles.buttonsView}>
+            {this.state.is_uploading ? (
+              <Text style={styles.uploadingText}>Uploading clip...</Text>
+            ) : this.state.videoUri ? (
+              <View style={styles.buttonsView}>
+                <TouchableOpacity
+                  disabled={this.state.disable}
+                  onPress={() => this.setState({ videoUri: null })}
+                  style={[styles.button, styles.selectButton]}
+                >
+                  <Ionicons
+                    style={styles.icon}
+                    name="trash-bin-outline"
+                    size={iconSize}
+                    color={darkTheme.on_background}
+                  />
+                  <Text style={[styles.buttonText, styles.selectText]}>
+                    Clear Video
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  disabled={this.state.disable}
+                  onPress={this.uploadVideo}
+                  style={[styles.button, styles.uploadButton]}
+                >
+                  <Ionicons
+                    style={styles.icon}
+                    name="cloud-upload"
+                    size={iconSize}
+                    color={darkTheme.primary}
+                  />
+                  <Text style={[styles.buttonText, styles.uploadText]}>
+                    Upload Video
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
               <TouchableOpacity
                 disabled={this.state.disable}
-                onPress={() => this.setState({ videoUri: null })}
+                onPress={this.selectVideo}
                 style={[styles.button, styles.selectButton]}
               >
                 <Ionicons
                   style={styles.icon}
-                  name="trash-bin-outline"
+                  name="albums-outline"
                   size={iconSize}
                   color={darkTheme.on_background}
                 />
                 <Text style={[styles.buttonText, styles.selectText]}>
-                  Clear Video
+                  {this.state.selectText} Video
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                disabled={this.state.disable}
-                onPress={this.uploadVideo}
-                style={[styles.button, styles.uploadButton]}
-              >
-                <Ionicons
-                  style={styles.icon}
-                  name="cloud-upload"
-                  size={iconSize}
-                  color={darkTheme.primary}
-                />
-                <Text style={[styles.buttonText, styles.uploadText]}>
-                  Upload Video
-                </Text>
-              </TouchableOpacity>
-            </View>
-          ) : (
-            <TouchableOpacity
-              disabled={this.state.disable}
-              onPress={this.selectVideo}
-              style={[styles.button, styles.selectButton]}
-            >
-              <Ionicons
-                style={styles.icon}
-                name="albums-outline"
-                size={iconSize}
-                color={darkTheme.on_background}
-              />
-              <Text style={[styles.buttonText, styles.selectText]}>
-                {this.state.selectText} Video
-              </Text>
-            </TouchableOpacity>
-          )}
-        </View>
+            )}
+          </View>
+        )}
       </View>
     ) : (
       <View style={styles.container} />

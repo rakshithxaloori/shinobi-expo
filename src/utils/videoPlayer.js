@@ -39,12 +39,24 @@ const VideoPlayer = ({ videoUri, VIDEO_HEIGHT = null, videoStyle = {} }) => {
         }}
       />
       <Video
-        style={[styles.container, { height: VIDEO_HEIGHT }, videoStyle]}
+        style={[
+          {
+            height: VIDEO_HEIGHT,
+            width: "100%",
+          },
+          videoStyle,
+        ]}
         source={{ uri: videoUri }}
         resizeMode="contain"
         shouldPlay={play}
         isLooping={true}
         isMuted={mute}
+        onPlaybackStatusUpdate={(status) => {
+          if (status.error) {
+            setPlay(false);
+            console.log(status);
+          }
+        }}
       />
     </View>
   );
