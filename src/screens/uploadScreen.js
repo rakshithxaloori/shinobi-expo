@@ -145,6 +145,7 @@ class UploadScreen extends Component {
           });
       };
       const uploadFailure = (error) => {
+        this.setState({ disable: false, is_uploading: false });
         flashAlert(handleAPIError(error));
       };
 
@@ -171,6 +172,7 @@ class UploadScreen extends Component {
           .catch(uploadFailure);
       }
     } catch (e) {
+      this.setState({ disable: false, is_uploading: false });
       flashAlert(handleAPIError(e));
     }
   };
