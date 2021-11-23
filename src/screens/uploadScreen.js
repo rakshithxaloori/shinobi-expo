@@ -12,7 +12,6 @@ import * as FileSystem from "expo-file-system";
 import { Ionicons } from "@expo/vector-icons";
 import { Input } from "react-native-elements";
 import axios from "axios";
-import { Video } from "expo-av";
 
 import { flashAlert } from "../utils/flash_message";
 import { darkTheme } from "../utils/theme";
@@ -303,7 +302,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "20%",
   },
-  video: { width: "100%", height: "80%", marginBottom: 10 },
+  video: { height: "80%" },
   buttonsView: {
     margin: 10,
     flexDirection: "row",

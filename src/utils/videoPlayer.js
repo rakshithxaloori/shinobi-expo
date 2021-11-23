@@ -7,12 +7,20 @@ import { darkTheme } from "./theme";
 
 const iconSize = 18;
 
-const VideoPlayer = ({ videoUri, VIDEO_HEIGHT, videoStyle = {} }) => {
+const VideoPlayer = ({ videoUri, VIDEO_HEIGHT = null, videoStyle = {} }) => {
   const [mute, setMute] = React.useState(true);
   const [play, setPlay] = React.useState(false);
+  console.log(VIDEO_HEIGHT || videoStyle.height);
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {
+          height: VIDEO_HEIGHT || videoStyle.height,
+        },
+      ]}
+    >
       <Ionicons
         name={mute ? "volume-mute" : "volume-high"}
         size={iconSize}
