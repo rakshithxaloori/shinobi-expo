@@ -1,15 +1,12 @@
 import React, { Component } from "react";
 import {
   View,
-  TouchableOpacity,
-  Text,
   FlatList,
   StyleSheet,
   ActivityIndicator,
   Dimensions,
 } from "react-native";
 import axios from "axios";
-import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 
@@ -41,7 +38,7 @@ class ClipsFeed extends Component {
     endReached: false,
   };
 
-  fetchCount = 2;
+  fetchCount = 10;
   cancelTokenSource = axios.CancelToken.source();
 
   placeholder = (
@@ -73,7 +70,7 @@ class ClipsFeed extends Component {
         initLoaded: true,
         isLoading: false,
         clips: [...prevState.clips, ...clips],
-        endReached: clips.length !== this.fetchCount,
+        endReached: clips.length < this.fetchCount,
       }));
     };
 
@@ -167,10 +164,6 @@ class ClipsFeed extends Component {
 }
 
 const styles = StyleSheet.create({
-  list: {
-    // zIndex: 0,
-    // elevation: 0,
-  },
   container: {
     marginTop: 10,
     paddingHorizontal: 5,
