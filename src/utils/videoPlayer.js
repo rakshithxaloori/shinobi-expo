@@ -10,7 +10,6 @@ const iconSize = 18;
 const VideoPlayer = ({ videoUri, VIDEO_HEIGHT = null, videoStyle = {} }) => {
   const [mute, setMute] = React.useState(true);
   const [play, setPlay] = React.useState(false);
-  console.log(VIDEO_HEIGHT || videoStyle.height);
 
   return (
     <View

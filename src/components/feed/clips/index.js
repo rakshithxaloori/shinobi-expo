@@ -127,6 +127,7 @@ class ClipsFeed extends Component {
   renderClip = ({ item }) => {
     const dateThen = new Date(item.created_datetime);
     const dateDiff = dateTimeDiff(dateThen);
+
     const video_height = minOf(
       VIDEO_WIDTH * item.height_to_width_ratio,
       screenHeight - 200
@@ -149,9 +150,10 @@ class ClipsFeed extends Component {
 
   getItemLayout = (data, index) => {
     const video_height = minOf(
-      VIDEO_WIDTH * data.height_to_width_ratio,
+      VIDEO_WIDTH * data[index].height_to_width_ratio,
       screenHeight - 100
     );
+
     const item_height = video_height + TITLE_HEIGHT;
     return {
       length: item_height,
