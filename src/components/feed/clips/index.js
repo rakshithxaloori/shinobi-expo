@@ -20,6 +20,7 @@ import { darkTheme } from "../../../utils/theme";
 import FeedClip from "./feedClip";
 
 const screenWidth = Dimensions.get("window").width;
+const screenHeight = Dimensions.get("window").height;
 
 const VIDEO_WIDTH = screenWidth - 20;
 const TITLE_HEIGHT = 60;
@@ -27,6 +28,11 @@ const ITEM_MARGIN = 10;
 
 const REFRESH_TEXT_SIZE = 15;
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
+
+const minOf = (var1, var2) => {
+  if (var1 > var2) return var2;
+  else return var1;
+};
 
 class ClipsFeed extends Component {
   state = {
@@ -121,7 +127,10 @@ class ClipsFeed extends Component {
   renderClip = ({ item }) => {
     const dateThen = new Date(item.created_datetime);
     const dateDiff = dateTimeDiff(dateThen);
-    const video_height = VIDEO_WIDTH * item.height_to_width_ratio;
+    const video_height = minOf(
+      VIDEO_WIDTH * item.height_to_width_ratio,
+      screenHeight - 200
+    );
     return (
       <FeedClip
         clip={item}
@@ -139,7 +148,11 @@ class ClipsFeed extends Component {
   };
 
   getItemLayout = (data, index) => {
-    const item_height = VIDEO_WIDTH * data.height_to_width_ratio + TITLE_HEIGHT;
+    const video_height = minOf(
+      VIDEO_WIDTH * data.height_to_width_ratio,
+      screenHeight - 100
+    );
+    const item_height = video_height + TITLE_HEIGHT;
     return {
       length: item_height,
       offset: (item_height + ITEM_MARGIN) * index,

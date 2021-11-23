@@ -2,10 +2,10 @@ import React from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { Avatar } from "react-native-elements";
 import FastImage from "react-native-fast-image";
-import { Video } from "expo-av";
 
 import { darkTheme } from "../../../utils/theme";
 import { avatarDefaultStyling } from "../../../utils/styles";
+import VideoPlayer from "../../../utils/videoPlayer";
 
 class FeedClip extends React.PureComponent {
   navigateProfile = () => {
@@ -43,14 +43,7 @@ class FeedClip extends React.PureComponent {
             </View>
           </View>
         </TouchableOpacity>
-        <Video
-          style={[styles.video, { height: VIDEO_HEIGHT }]}
-          source={{ uri: clip.url }}
-          // useNativeControls
-          resizeMode="contain"
-          shouldPlay={false}
-          isLooping={true}
-        />
+        <VideoPlayer videoUri={clip.url} VIDEO_HEIGHT={VIDEO_HEIGHT} />
       </View>
     );
   };
@@ -66,11 +59,6 @@ const styles = StyleSheet.create({
     backgroundColor: darkTheme.primary,
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
-  },
-  video: {
-    width: "100%",
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
   },
   container: {
     backgroundColor: darkTheme.surface,

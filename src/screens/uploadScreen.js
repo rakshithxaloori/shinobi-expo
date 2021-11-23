@@ -18,6 +18,7 @@ import { flashAlert } from "../utils/flash_message";
 import { darkTheme } from "../utils/theme";
 import { createAPIKit, uploadFileToS3 } from "../utils/APIKit";
 import { handleAPIError } from "../utils";
+import VideoPlayer from "../utils/videoPlayer";
 
 const { width, height } = Dimensions.get("window");
 const iconSize = 25;
@@ -83,7 +84,6 @@ class UploadScreen extends Component {
 
         if (!result.cancelled) {
           // Check atleast 10 secs, atmost 20 secs
-          console.log(result);
           if (result.duration < 5 * 1000) {
             flashAlert("Video has to be atleast 5 seconds");
           } else if (result.duration > 21 * 1000) {
@@ -185,15 +185,9 @@ class UploadScreen extends Component {
         </Text>
         {this.state.videoUri && (
           <View style={styles.videoView}>
-            <Video
-              style={styles.video}
-              source={{
-                uri: this.state.videoUri,
-              }}
-              useNativeControls
-              resizeMode="contain"
-              shouldPlay={true}
-              isLooping={false}
+            <VideoPlayer
+              videoUri={this.state.videoUri}
+              videoStyle={styles.video}
             />
             <Input
               editable={!this.state.disable}
