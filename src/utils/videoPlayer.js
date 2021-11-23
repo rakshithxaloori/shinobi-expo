@@ -10,6 +10,43 @@ const iconSize = 20;
 const VideoPlayer = ({ videoUri, VIDEO_HEIGHT = null, videoStyle = {} }) => {
   const [mute, setMute] = React.useState(true);
   const [play, setPlay] = React.useState(false);
+  const videoRef = React.useRef(null);
+
+  React.useEffect(() => {
+    videoRef.current.loadAsync(
+      { uri: videoUri },
+      {
+        shouldPlay: play,
+        isLooping: true,
+        isMuted: mute,
+      }
+    );
+    return () => {
+      videoRef.current.unloadAsync();
+    };
+  }, []);
+
+  const togglePlay = async () => {
+    const status = await videoRef.current.getStatusAsync();
+    if (status.isPlaying) {
+      videoRef.current.pauseAsync();
+      setPlay(false);
+    } else {
+      videoRef.current.playAsync();
+      setPlay(true);
+    }
+  };
+
+  const toggleMute = async () => {
+    const status = await videoRef.current.getStatusAsync();
+    if (status.isMuted) {
+      videoRef.current.setIsMutedAsync(false);
+      setMute(false);
+    } else {
+      videoRef.current.setIsMutedAsync(true);
+      setMute(true);
+    }
+  };
 
   return (
     <View
@@ -25,20 +62,17 @@ const VideoPlayer = ({ videoUri, VIDEO_HEIGHT = null, videoStyle = {} }) => {
         size={iconSize}
         style={[styles.icon, styles.mute]}
         color={darkTheme.on_surface_title}
-        onPress={() => {
-          setMute(!mute);
-        }}
+        onPress={toggleMute}
       />
       <Ionicons
         name={play ? "pause" : "play"}
         size={iconSize}
         style={[styles.icon, styles.play]}
         color={darkTheme.on_surface_title}
-        onPress={() => {
-          setPlay(!play);
-        }}
+        onPress={togglePlay}
       />
       <Video
+        ref={videoRef}
         style={[
           {
             height: VIDEO_HEIGHT,
@@ -46,11 +80,8 @@ const VideoPlayer = ({ videoUri, VIDEO_HEIGHT = null, videoStyle = {} }) => {
           },
           videoStyle,
         ]}
-        source={{ uri: videoUri }}
         resizeMode="contain"
-        shouldPlay={play}
-        isLooping={true}
-        isMuted={mute}
+        useNativeControls={false}
         onPlaybackStatusUpdate={(status) => {
           if (status.error) {
             setPlay(false);
