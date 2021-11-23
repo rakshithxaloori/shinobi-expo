@@ -5,7 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { darkTheme } from "./theme";
 
-const iconSize = 18;
+const iconSize = 20;
 
 const VideoPlayer = ({ videoUri, VIDEO_HEIGHT = null, videoStyle = {} }) => {
   const [mute, setMute] = React.useState(true);
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     borderRadius: iconSize / 2,
     backgroundColor: darkTheme.surface,
     zIndex: 1,
-    padding: 3,
+    padding: 5,
   },
   mute: { position: "absolute", bottom: 10, right: 10 },
   play: { position: "absolute", bottom: 10, left: 10 },
