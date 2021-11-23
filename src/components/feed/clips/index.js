@@ -26,7 +26,6 @@ const VIDEO_WIDTH = screenWidth - 20;
 const TITLE_HEIGHT = 60;
 const ITEM_MARGIN = 10;
 
-const REFRESH_TEXT_SIZE = 15;
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
 const minOf = (var1, var2) => {
@@ -39,23 +38,12 @@ class ClipsFeed extends Component {
     clips: [],
     initLoaded: false,
     isLoading: true,
-    refresh: false,
-    isRefreshing: false,
     endReached: false,
   };
 
   fetchCount = 2;
   cancelTokenSource = axios.CancelToken.source();
-  stickyHeader = (
-    <TouchableOpacity style={styles.refresh} onPress={this.refresh}>
-      <Ionicons
-        name="planet-outline"
-        color={darkTheme.on_secondary}
-        size={REFRESH_TEXT_SIZE}
-      />
-      <Text style={styles.refreshText}>New Clips</Text>
-    </TouchableOpacity>
-  );
+
   placeholder = (
     <View style={{ marginBottom: 20, alignItems: "center" }}>
       <ShimmerPlaceHolder
@@ -80,48 +68,30 @@ class ClipsFeed extends Component {
   fetchClips = async () => {
     if (this.state.endReached) return;
     const onSuccess = (response) => {
-      const { clips, refresh } = response.data.payload;
+      const { clips } = response.data.payload;
       this.setState((prevState) => ({
         initLoaded: true,
         isLoading: false,
-        refresh: refresh,
         clips: [...prevState.clips, ...clips],
         endReached: clips.length !== this.fetchCount,
       }));
     };
 
     const APIKit = await createAPIKit();
-    let id = 0;
-    if (this.state.clips.length !== 0)
-      id = this.state.clips[this.state.clips.length - 1].id;
-
+    const dateNow = new Date();
     APIKit.post(
       `/clips/clips/`,
-      { id: id, id_top: this.state.clips[0]?.id || 0 },
+      {
+        datetime:
+          this.state.clips[this.state.clips.length - 1]?.created_datetime ||
+          dateNow,
+      },
       { cancelToken: this.cancelTokenSource.token }
     )
       .then(onSuccess)
       .catch((e) => {
         flashAlert(handleAPIError(e));
       });
-  };
-
-  refresh = async () => {
-    const callback = async () => {
-      await this.fetchClips();
-    };
-
-    this.setState(
-      {
-        clips: [],
-        initLoaded: false,
-        isLoading: true,
-        refresh: false,
-        isRefreshing: true,
-        endReached: false,
-      },
-      callback
-    );
   };
 
   renderClip = ({ item }) => {
@@ -197,22 +167,6 @@ class ClipsFeed extends Component {
 }
 
 const styles = StyleSheet.create({
-  refreshText: {
-    paddingLeft: 5,
-    fontSize: REFRESH_TEXT_SIZE,
-    fontWeight: "bold",
-  },
-  refresh: {
-    flexDirection: "row",
-    height: 40,
-    width: 110,
-    borderRadius: 20,
-    backgroundColor: darkTheme.secondary,
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "white",
-  },
   list: {
     // zIndex: 0,
     // elevation: 0,
