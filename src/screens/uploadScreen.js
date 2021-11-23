@@ -39,9 +39,8 @@ class UploadScreen extends Component {
   componentDidMount = async () => {
     const APIKit = await createAPIKit();
     const onSuccess = (response) => {
-      const { is_uploading, quota } = response.data?.payload;
+      const { quota } = response.data?.payload;
       this.setState({
-        is_uploading: is_uploading,
         videoQuota: quota,
         disable: false,
         loaded: true,
