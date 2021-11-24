@@ -1,23 +1,50 @@
 import React from "react";
-import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Avatar } from "react-native-elements";
 import FastImage from "react-native-fast-image";
+import { Ionicons } from "@expo/vector-icons";
 
 import { darkTheme } from "../../../utils/theme";
 import { avatarDefaultStyling } from "../../../utils/styles";
-import VideoPlayer from "../../../utils/videoPlayer";
+import VideoPlayer from "../../../utils/feedPlayer";
+import { shareClip } from "../../../utils/share";
+
+const footerIconSize = 28;
+const iconColor = darkTheme.primary;
 
 class FeedClip extends React.PureComponent {
   navigateProfile = () => {
     this.props.navigateProfile(this.props.clip.uploader.username);
   };
+
+  onSharePress = () => {
+    const { clip } = this.props;
+    shareClip(clip.id, clip.uploader.username, clip.game.name);
+  };
+
+  report = () => {
+    this.props.reportClip(this.props.clip.id);
+  };
+
   render = () => {
-    const { clip, TITLE_HEIGHT, VIDEO_HEIGHT, MARGIN, dateDiff } = this.props;
+    const {
+      clip,
+      TITLE_HEIGHT,
+      VIDEO_HEIGHT,
+      FOOTER_HEIGHT,
+      MARGIN,
+      dateDiff,
+      mute,
+      toggleMute,
+    } = this.props;
     return (
       <View
         style={[
           styles.container,
-          { height: VIDEO_HEIGHT + TITLE_HEIGHT, marginVertical: MARGIN },
+          {
+            height: VIDEO_HEIGHT + TITLE_HEIGHT + FOOTER_HEIGHT,
+            marginVertical: MARGIN,
+          },
         ]}
       >
         <TouchableOpacity
@@ -43,7 +70,46 @@ class FeedClip extends React.PureComponent {
             </View>
           </View>
         </TouchableOpacity>
-        <VideoPlayer videoUri={clip.url} VIDEO_HEIGHT={VIDEO_HEIGHT} />
+        <VideoPlayer
+          videoUri={clip.url}
+          videoRef={clip.videoRef}
+          VIDEO_HEIGHT={VIDEO_HEIGHT}
+          globalMute={mute}
+          globalToggleMute={toggleMute}
+        />
+        <View style={[styles.footer, { height: FOOTER_HEIGHT }]}>
+          <Text style={styles.clipTitle}>{clip.title}</Text>
+          <View style={styles.clipIconSection}>
+            <View style={styles.likes}>
+              <Ionicons
+                name={"heart"}
+                size={footerIconSize}
+                color={iconColor}
+                onPress={this.props.toggleLike}
+              />
+              <Text style={styles.likeCount}>
+                {clip.likes} {clip.likes === 1 ? "like" : "likes"}
+              </Text>
+            </View>
+            <View
+              style={{ flexDirection: "row", position: "absolute", right: 10 }}
+            >
+              <Ionicons
+                name={"share-social"}
+                size={footerIconSize}
+                color={iconColor}
+                onPress={this.onSharePress}
+                style={{ marginRight: 10 }}
+              />
+              <Ionicons
+                name={"bug-outline"}
+                size={footerIconSize}
+                color={iconColor}
+                onPress={this.report}
+              />
+            </View>
+          </View>
+        </View>
       </View>
     );
   };
@@ -52,6 +118,32 @@ class FeedClip extends React.PureComponent {
 const styles = StyleSheet.create({
   username: { color: darkTheme.on_primary, fontWeight: "bold" },
   game_name: { paddingLeft: 5, color: darkTheme.on_primary },
+  footer: {
+    width: "100%",
+    justifyContent: "center",
+    marginTop: 5,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+  },
+  clipTitle: {
+    flex: 1,
+    marginLeft: 10,
+    fontSize: 15,
+    color: darkTheme.on_surface_title,
+  },
+  clipIconSection: {
+    flex: 2,
+    flexDirection: "row",
+    width: "100%",
+    alignItems: "center",
+  },
+  likes: {
+    flexDirection: "row",
+    alignItems: "center",
+    position: "absolute",
+    left: 10,
+  },
+  likeCount: { fontSize: 20, paddingLeft: 5, color: iconColor },
   touchable: {
     flexDirection: "row",
     alignItems: "center",

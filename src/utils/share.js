@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { flashAlert } from "./flash_message";
 import { darkTheme } from "./theme";
+import { createAPIKit } from "./APIKit";
 
 export const ShareIcon = ({ onPress }) => (
   <Ionicons
@@ -47,6 +48,17 @@ export const shareLolMatch = async (match_id) => {
 };
 
 export const shareApp = async () => {
-  const message = `Track your League matches and champion masteries https://play.google.com/store/apps/details?id=cc.shinobi.android`;
+  const message = `Shinobi app on Play Store https://play.google.com/store/apps/details?id=cc.shinobi.android`;
+  await _handleShare(message);
+};
+
+export const shareClip = async (clip_id, username, game_name) => {
+  const APIKit = await createAPIKit();
+  try {
+    await APIKit.post("/clips/share/", { clip_id });
+  } catch (e) {
+    console.log(e);
+  }
+  const message = `${game_name} clip by ${username} https://www.shinobi.cc/c?clip_id=${clip_id}`;
   await _handleShare(message);
 };

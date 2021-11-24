@@ -15,27 +15,31 @@ import { flashAlert } from "../../../utils/flash_message";
 import { dateTimeDiff, handleAPIError } from "../../../utils";
 import { darkTheme } from "../../../utils/theme";
 import FeedClip from "./feedClip";
+import ReportOverlay from "./overlay";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
 
 const VIDEO_WIDTH = screenWidth - 20;
 const TITLE_HEIGHT = 60;
+const FOOTER_HEIGHT = 80;
 const ITEM_MARGIN = 10;
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
-const minOf = (var1, var2) => {
-  if (var1 > var2) return var2;
-  else return var1;
+const getVideoHeight = (video_height) => {
+  const min_height = Math.min(VIDEO_WIDTH * video_height, screenHeight - 300);
+  return min_height;
 };
 
 class ClipsFeed extends Component {
   state = {
     clips: [],
+    mute: true,
     initLoaded: false,
     isLoading: true,
     endReached: false,
+    reportClipId: undefined,
   };
 
   fetchCount = 10;
@@ -66,10 +70,15 @@ class ClipsFeed extends Component {
     if (this.state.endReached) return;
     const onSuccess = (response) => {
       const { clips } = response.data.payload;
+      const clipsWithRef = clips.map((clip) => ({
+        ...clip,
+        videoRef: React.createRef(),
+      }));
+
       this.setState((prevState) => ({
         initLoaded: true,
         isLoading: false,
-        clips: [...prevState.clips, ...clips],
+        clips: [...prevState.clips, ...clipsWithRef],
         endReached: clips.length < this.fetchCount,
       }));
     };
@@ -77,7 +86,7 @@ class ClipsFeed extends Component {
     const APIKit = await createAPIKit();
     const dateNow = new Date();
     APIKit.post(
-      `/clips/clips/`,
+      `/clips/clips/all/`,
       {
         datetime:
           this.state.clips[this.state.clips.length - 1]?.created_datetime ||
@@ -91,22 +100,33 @@ class ClipsFeed extends Component {
       });
   };
 
+  reportClip = (clip_id) => {
+    this.setState({ reportClipId: clip_id });
+  };
+
+  clearReport = () => {
+    this.setState({ reportClipId: undefined });
+  };
+
   renderClip = ({ item }) => {
     const dateThen = new Date(item.created_datetime);
     const dateDiff = dateTimeDiff(dateThen);
 
-    const video_height = minOf(
-      VIDEO_WIDTH * item.height_to_width_ratio,
-      screenHeight - 200
-    );
+    const video_height = getVideoHeight(item.height_to_width_ratio);
+
     return (
       <FeedClip
         clip={item}
         TITLE_HEIGHT={TITLE_HEIGHT}
         VIDEO_HEIGHT={video_height}
+        FOOTER_HEIGHT={FOOTER_HEIGHT}
         MARGIN={ITEM_MARGIN}
         dateDiff={dateDiff}
         navigateProfile={this.navigateProfile}
+        reportClip={this.reportClip}
+        mute={this.state.mute}
+        toggleMute={this.toggleMute}
+        // TODO toggleLike={}
       />
     );
   };
@@ -116,12 +136,9 @@ class ClipsFeed extends Component {
   };
 
   getItemLayout = (data, index) => {
-    const video_height = minOf(
-      VIDEO_WIDTH * data[index].height_to_width_ratio,
-      screenHeight - 100
-    );
+    const video_height = getVideoHeight(data[index].height_to_width_ratio);
 
-    const item_height = video_height + TITLE_HEIGHT;
+    const item_height = video_height + TITLE_HEIGHT + FOOTER_HEIGHT;
     return {
       length: item_height,
       offset: (item_height + ITEM_MARGIN) * index,
@@ -131,6 +148,30 @@ class ClipsFeed extends Component {
 
   navigateProfile = (username) => {
     this.props.navigation.navigate("Profile", { username });
+  };
+
+  toggleMute = () => {
+    this.setState((prevState) => ({ mute: !prevState.mute }));
+  };
+
+  onViewableItemsChanged = async ({ viewableItems, changed }) => {
+    for (const viewable of changed) {
+      if (viewable.isViewable) {
+        // TODO only load the last viewable video
+        // rest unload.
+        console.log("Loading", viewable.index);
+        const { item } = viewable;
+
+        await item.videoRef.current.loadAsync(
+          { uri: item.url },
+          { shouldPlay: true, isLooping: true, isMuted: this.state.mute }
+        );
+      } else {
+        console.log("Unloading", viewable.index);
+        const { item } = viewable;
+        await item.videoRef.current.unloadAsync();
+      }
+    }
   };
 
   render = () =>
@@ -153,7 +194,17 @@ class ClipsFeed extends Component {
           // Optimizations
           maxToRenderPerBatch={10}
           getItemLayout={this.getItemLayout}
+          onViewableItemsChanged={this.onViewableItemsChanged}
+          viewabilityConfig={{
+            itemVisiblePercentThreshold: 50,
+          }}
         />
+        {this.state.reportClipId && (
+          <ReportOverlay
+            clip_id={this.state.reportClipId}
+            clearReport={this.clearReport}
+          />
+        )}
       </View>
     ) : (
       <View style={styles.container}>
