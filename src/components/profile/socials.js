@@ -78,15 +78,16 @@ const Socials = ({
 
 const styles = StyleSheet.create({
   socialIcon: {
-    marginRight: 10,
+    // marginRight: 10,
   },
   container: {
     position: "absolute",
     top: 100,
     left: 10,
+    width: 80,
     flexDirection: "row",
-    paddingTop: 5,
     alignItems: "center",
+    justifyContent: "center",
   },
 });
 

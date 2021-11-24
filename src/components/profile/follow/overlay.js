@@ -1,5 +1,11 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+} from "react-native";
 import { Overlay } from "react-native-elements";
 import axios from "axios";
 
@@ -7,6 +13,8 @@ import { createAPIKit } from "../../../utils/APIKit";
 import { handleAPIError } from "../../../utils";
 import { darkTheme } from "../../../utils/theme";
 import { flashAlert } from "../../../utils/flash_message";
+
+const screenDimensions = Dimensions.get("screen");
 
 const UnfollowOverlay = ({
   username,
@@ -89,7 +97,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   cancel: {
-    backgroundColor: "white",
+    backgroundColor: darkTheme.surface,
     borderColor: darkTheme.primary,
     width: "100%",
     borderWidth: 2,
@@ -116,10 +124,13 @@ const styles = StyleSheet.create({
   },
   overlay: {
     height: 280,
-    width: 300,
+    width: Math.min(300, screenDimensions.width - 100),
+    backgroundColor: darkTheme.background,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
+    borderWidth: 1,
+    borderColor: darkTheme.on_background,
   },
 });
 
