@@ -15,6 +15,7 @@ import FollowButton from "../components/profile/follow/button";
 import BioText from "../components/profile/bio";
 import EditProfileButton from "../components/profile/editProfile/button";
 import Games from "../components/games";
+import Clips from "../components/profile/clips";
 
 import { createAPIKit } from "../utils/APIKit";
 import AuthContext from "../authContext";
@@ -185,10 +186,17 @@ class Profile extends Component {
         </View>
 
         {this.state.user !== undefined && (
-          <Games
-            username={this.state.user?.username}
-            reload={this.props.route?.params?.reload}
-          />
+          // <Games
+          //   username={this.state.user?.username}
+          //   reload={this.props.route?.params?.reload}
+          // />
+          <View>
+            {/* Plays games */}
+            <View />
+            {/* My Clips */}
+            <Clips username={this.state.user?.username} />
+            <View />
+          </View>
         )}
       </VirtualizedList>
     );
