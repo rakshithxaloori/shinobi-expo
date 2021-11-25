@@ -66,10 +66,14 @@ class ClipsFeed extends Component {
     await this.fetchClips();
   };
 
-  componentWillUnmount = async () => {
+  unmountAllVideos = async () => {
     for (const videoRef of this.state.viewable) {
       videoRef.current && (await videoRef.current.unloadAsync());
     }
+  };
+
+  componentWillUnmount = async () => {
+    await this.unmountAllVideos();
     this.cancelTokenSource.cancel();
   };
 

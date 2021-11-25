@@ -63,10 +63,21 @@ class ClipsFeed extends Component {
     await this.fetchClips();
   };
 
-  componentWillUnmount = async () => {
+  unmountAllVideos = async () => {
     for (const videoRef of this.state.viewable) {
       videoRef.current && (await videoRef.current.unloadAsync());
     }
+    this.setState({ viewable: [] });
+  };
+
+  pauseAllVideos = async () => {
+    for (const videoRef of this.state.viewable) {
+      videoRef.current && (await videoRef.current.pauseAsync());
+    }
+  };
+
+  componentWillUnmount = async () => {
+    await this.unmountAllVideos();
     this.cancelTokenSource.cancel();
   };
 
@@ -150,7 +161,8 @@ class ClipsFeed extends Component {
     };
   };
 
-  navigateProfile = (username) => {
+  navigateProfile = async (username) => {
+    await this.pauseAllVideos();
     this.props.navigation.navigate("Profile", { username });
   };
 
@@ -159,7 +171,6 @@ class ClipsFeed extends Component {
   };
 
   toggleLike = async (clip) => {
-    console.log("toggleLike", clip.id);
     const onSuccess = () => {
       let newClip = {
         ...clip,
