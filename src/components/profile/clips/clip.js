@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { Avatar } from "react-native-elements";
 import FastImage from "react-native-fast-image";
 import { Ionicons } from "@expo/vector-icons";
@@ -43,10 +43,7 @@ class Clip extends React.PureComponent {
           },
         ]}
       >
-        <TouchableOpacity
-          style={[styles.touchable, { height: TITLE_HEIGHT }]}
-          onPress={this.navigateProfile}
-        >
+        <View style={[styles.touchable, { height: TITLE_HEIGHT }]}>
           <Avatar
             rounded
             source={{ uri: clip.uploader.picture }}
@@ -65,7 +62,7 @@ class Clip extends React.PureComponent {
               <Text style={styles.game_name}>{clip.game.name}</Text>
             </View>
           </View>
-        </TouchableOpacity>
+        </View>
         <VideoPlayer
           videoUri={clip.url}
           videoRef={clip.videoRef}
