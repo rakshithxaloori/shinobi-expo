@@ -7,6 +7,7 @@ import {
   Dimensions,
 } from "react-native";
 import axios from "axios";
+import { CommonActions } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 
@@ -70,11 +71,11 @@ class ClipsFeed extends Component {
     this.setState({ viewable: [] });
   };
 
-  pauseAllVideos = async () => {
-    for (const videoRef of this.state.viewable) {
-      videoRef.current && (await videoRef.current.pauseAsync());
-    }
-  };
+  // pauseAllVideos = async () => {
+  //   for (const videoRef of this.state.viewable) {
+  //     videoRef.current && (await videoRef.current.pauseAsync());
+  //   }
+  // };
 
   componentWillUnmount = async () => {
     await this.unmountAllVideos();
@@ -162,8 +163,19 @@ class ClipsFeed extends Component {
   };
 
   navigateProfile = async (username) => {
-    await this.pauseAllVideos();
-    this.props.navigation.navigate("Profile", { username });
+    await this.unmountAllVideos();
+    const resetAction = CommonActions.reset({
+      index: 1,
+      routes: [
+        { name: "Home" },
+        {
+          name: "Profile",
+          params: { username },
+        },
+      ],
+    });
+
+    this.props.navigation.dispatch(resetAction);
   };
 
   toggleMute = () => {
