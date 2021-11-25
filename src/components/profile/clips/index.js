@@ -37,6 +37,7 @@ class ClipsFeed extends Component {
   static contextType = AuthContext;
   state = {
     clips: [],
+    viewable: [],
     mute: true,
     initLoaded: false,
     isLoading: true,
@@ -65,7 +66,10 @@ class ClipsFeed extends Component {
     await this.fetchClips();
   };
 
-  componentWillUnmount = () => {
+  componentWillUnmount = async () => {
+    for (const videoRef of this.state.viewable) {
+      videoRef.current && (await videoRef.current.unloadAsync());
+    }
     this.cancelTokenSource.cancel();
   };
 
@@ -164,6 +168,7 @@ class ClipsFeed extends Component {
   };
 
   onViewableItemsChanged = async ({ viewableItems, changed }) => {
+    this.setState({ viewable: [] });
     for (const viewable of changed) {
       if (viewable.isViewable) {
         // TODO only load the last viewable video
@@ -175,6 +180,9 @@ class ClipsFeed extends Component {
           { uri: item.url },
           { shouldPlay: true, isLooping: true, isMuted: this.state.mute }
         );
+        this.setState((prevState) => ({
+          viewable: [...prevState.viewable, item.videoRef],
+        }));
       } else {
         console.log("Unloading", viewable.index);
         const { item } = viewable;
@@ -205,7 +213,7 @@ class ClipsFeed extends Component {
           getItemLayout={this.getItemLayout}
           onViewableItemsChanged={this.onViewableItemsChanged}
           viewabilityConfig={{
-            itemVisiblePercentThreshold: 50,
+            itemVisiblePercentThreshold: 80,
           }}
         />
         {this.state.showDeleteOverlay && (
