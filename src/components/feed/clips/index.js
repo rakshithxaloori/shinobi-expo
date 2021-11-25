@@ -90,7 +90,7 @@ class ClipsFeed extends Component {
     const APIKit = await createAPIKit();
     const dateNow = new Date();
     APIKit.post(
-      `/clips/clips/all/`,
+      "feed/",
       {
         datetime:
           this.state.clips[this.state.clips.length - 1]?.created_datetime ||
