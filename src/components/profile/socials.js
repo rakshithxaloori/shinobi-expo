@@ -68,7 +68,7 @@ const Socials = ({
       ) : (
         <ShimmerPlaceHolder
           height={iconSize}
-          width={130}
+          width={80}
           shimmerStyle={{ borderRadius: 10 }}
         />
       )}
