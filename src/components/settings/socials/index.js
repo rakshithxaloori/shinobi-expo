@@ -11,6 +11,7 @@ import { createAPIKit } from "../../../utils/APIKit";
 import Twitch from "./twitch";
 import YouTube from "./youtube";
 import Instagram from "./instagram";
+import { shimmerColors } from "../../../utils/styles";
 
 class SocialsSettings extends Component {
   state = {
@@ -53,11 +54,13 @@ class SocialsSettings extends Component {
         height={20}
         width={250}
         shimmerStyle={styles.placeholder}
+        shimmerColors={shimmerColors}
       />
       <ShimmerPlaceHolder
         height={10}
         width={100}
         shimmerStyle={styles.placeholder}
+        shimmerColors={shimmerColors}
       />
     </>
   );

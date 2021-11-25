@@ -17,6 +17,7 @@ import { darkTheme } from "../../../utils/theme";
 import Clip from "./clip";
 import DeleteOverlay from "./overlay";
 import AuthContext from "../../../authContext";
+import { shimmerColors } from "../../../utils/styles";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -52,12 +53,12 @@ class ClipsFeed extends Component {
   placeholder = (
     <View style={{ marginBottom: 20, alignItems: "center" }}>
       <ShimmerPlaceHolder
-        width={screenWidth - 20}
+        width={screenWidth - 40}
         height={250}
         shimmerStyle={{
           borderRadius: 10,
         }}
-        shimmerColors={[darkTheme.surface, "#c5c5c5", darkTheme.surface]}
+        shimmerColors={shimmerColors}
       />
     </View>
   );

@@ -16,7 +16,7 @@ const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 import AuthContext from "../../authContext";
 import { createWSKit } from "./WSKit";
 import { dateTimeDiff } from "../../utils";
-import { avatarDefaultStyling } from "../../utils/styles";
+import { avatarDefaultStyling, shimmerColors } from "../../utils/styles";
 import { darkTheme } from "../../utils/theme";
 import { flashAlert } from "../../utils/flash_message";
 
@@ -153,10 +153,12 @@ class ChatPreview extends Component {
             width={this.props.avatarSize}
             height={this.props.avatarSize}
             shimmerStyle={{ borderRadius: this.props.avatarSize / 2 }}
+            shimmerColors={shimmerColors}
           />
           <ShimmerPlaceHolder
             width={80}
             shimmerStyle={{ marginLeft: 10, borderRadius: 10 }}
+            shimmerColors={shimmerColors}
           />
         </View>
       );

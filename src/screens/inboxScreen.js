@@ -20,6 +20,7 @@ import ChatPreview from "../components/chat/chatPreview";
 import { createAPIKit } from "../utils/APIKit";
 import { handleAPIError } from "../utils";
 import { darkTheme } from "../utils/theme";
+import { shimmerColors } from "../utils/styles";
 
 const screenWidth = Dimensions.get("screen").width;
 
@@ -90,10 +91,12 @@ class AllChats extends Component {
             width={this.avatarSize}
             height={this.avatarSize}
             shimmerStyle={{ borderRadius: this.avatarSize / 2 }}
+            shimmerColors={shimmerColors}
           />
           <ShimmerPlaceHolder
             width={80}
             shimmerStyle={{ marginLeft: 10, borderRadius: 10 }}
+            shimmerColors={shimmerColors}
           />
         </View>
       );

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import { darkTheme } from "../../utils/theme";
+import { shimmerColors } from "../../utils/styles";
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -13,7 +14,11 @@ const Username = ({ profile_loaded, username }) => (
     {profile_loaded ? (
       <Text style={styles.usernameText}>{username}</Text>
     ) : (
-      <ShimmerPlaceHolder height={height} shimmerStyle={{ borderRadius: 10 }} />
+      <ShimmerPlaceHolder
+        height={height}
+        shimmerStyle={{ borderRadius: 10 }}
+        shimmerColors={shimmerColors}
+      />
     )}
   </View>
 );

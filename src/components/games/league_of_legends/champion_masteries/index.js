@@ -18,6 +18,7 @@ import { createAPIKit } from "../../../../utils/APIKit";
 
 import ChampionMastery from "./mastery";
 import { darkTheme } from "../../../../utils/theme";
+import { shimmerColors } from "../../../../utils/styles";
 
 const numColumns = 4;
 
@@ -111,7 +112,7 @@ class ChampionMasteriesByLevel extends Component {
       width={this.avatarSize}
       height={this.avatarSize}
       shimmerStyle={[styles.placeholder, { borderRadius: this.avatarSize / 2 }]}
-      // shimmerStyle={[styles.placeholder, { borderRadius: 10 }]}
+      shimmerColors={shimmerColors}
     />
   );
 

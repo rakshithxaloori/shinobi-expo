@@ -11,7 +11,7 @@ const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 import { handleAPIError } from "../../../../utils";
 
 import { createAPIKit } from "../../../../utils/APIKit";
-import { avatarDefaultStyling } from "../../../../utils/styles";
+import { avatarDefaultStyling, shimmerColors } from "../../../../utils/styles";
 import { darkTheme } from "../../../../utils/theme";
 
 class ChampionOverlay extends Component {
@@ -83,6 +83,7 @@ class ChampionOverlay extends Component {
                 width={iconSize}
                 height={iconSize}
                 shimmerStyle={[styles.avatar, { borderRadius: iconSize / 2 }]}
+                shimmerColors={shimmerColors}
               />
             )}
             {this.state.champion ? (
@@ -94,6 +95,7 @@ class ChampionOverlay extends Component {
                   styles.shimmerLine,
                   { borderRadius: 10, marginLeft: 10 },
                 ]}
+                shimmerColors={shimmerColors}
               />
             )}
           </View>
@@ -142,10 +144,12 @@ class ChampionOverlay extends Component {
               <ShimmerPlaceHolder
                 width={160}
                 shimmerStyle={[styles.shimmerLine, { borderRadius: 10 }]}
+                shimmerColors={shimmerColors}
               />
               <ShimmerPlaceHolder
                 width={100}
                 shimmerStyle={[styles.shimmerLine, { borderRadius: 10 }]}
+                shimmerColors={shimmerColors}
               />
             </View>
           )}

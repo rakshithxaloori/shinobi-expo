@@ -13,7 +13,7 @@ import ChampionMasteries from "./champion_masteries";
 
 import { createAPIKit } from "../../../utils/APIKit";
 import { handleAPIError } from "../../../utils";
-import { avatarDefaultStyling } from "../../../utils/styles";
+import { avatarDefaultStyling, shimmerColors } from "../../../utils/styles";
 import CustomSwitch from "./switch";
 import AuthContext from "../../../authContext";
 
@@ -138,6 +138,7 @@ class LeagueOfLegendsProfile extends Component {
               width={avatarSize}
               height={avatarSize}
               shimmerStyle={styles.avatar}
+              shimmerColors={shimmerColors}
             />
             <ShimmerPlaceHolder
               width={99}
@@ -146,6 +147,7 @@ class LeagueOfLegendsProfile extends Component {
                 alignSelf: "center",
                 borderRadius: 10,
               }}
+              shimmerColors={shimmerColors}
             />
           </View>
         ) : this.context.user.username === this.props.username ? (

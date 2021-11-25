@@ -11,6 +11,7 @@ import SocialsSettings from "./socials";
 import LogOut from "./logout";
 import { darkTheme } from "../../utils/theme";
 import { shareApp } from "../../utils/share";
+import { shimmerColors } from "../../utils/styles";
 
 const Content = () => {
   const linkURL = async (URL) => {
@@ -29,6 +30,7 @@ const Content = () => {
         height={20}
         width={250}
         shimmerStyle={styles.placeholder}
+        shimmerColors={shimmerColors}
       />
       <ShimmerPlaceHolder
         height={10}

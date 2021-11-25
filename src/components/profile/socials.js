@@ -6,6 +6,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import { darkTheme } from "../../utils/theme";
 import { flashAlert } from "../../utils/flash_message";
+import { shimmerColors } from "../../utils/styles";
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -70,6 +71,7 @@ const Socials = ({
           height={iconSize}
           width={80}
           shimmerStyle={{ borderRadius: 10 }}
+          shimmerColors={shimmerColors}
         />
       )}
     </View>

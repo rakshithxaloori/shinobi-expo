@@ -17,6 +17,7 @@ import { dateTimeDiff, handleAPIError } from "../../../utils";
 import { darkTheme } from "../../../utils/theme";
 import FeedClip from "./feedClip";
 import ReportOverlay from "./overlay";
+import { shimmerColors } from "../../../utils/styles";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -55,7 +56,7 @@ class ClipsFeed extends Component {
         shimmerStyle={{
           borderRadius: 10,
         }}
-        shimmerColors={[darkTheme.surface, "#c5c5c5", darkTheme.surface]}
+        shimmerColors={shimmerColors}
       />
     </View>
   );

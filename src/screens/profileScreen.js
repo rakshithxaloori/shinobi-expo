@@ -20,7 +20,7 @@ import Clips from "../components/profile/clips";
 import { createAPIKit } from "../utils/APIKit";
 import AuthContext from "../authContext";
 import { handleAPIError } from "../utils";
-import { avatarDefaultStyling } from "../utils/styles";
+import { avatarDefaultStyling, shimmerColors } from "../utils/styles";
 import { darkTheme } from "../utils/theme";
 import VirtualizedList from "../utils/virtualizedList";
 
@@ -125,6 +125,7 @@ class Profile extends Component {
                 width={profileIconSize}
                 height={profileIconSize}
                 shimmerStyle={{ borderRadius: profileIconSize / 2 }}
+                shimmerColors={shimmerColors}
               />
             )}
           </View>

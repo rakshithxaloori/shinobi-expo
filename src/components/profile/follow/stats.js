@@ -5,6 +5,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 
 import { darkTheme } from "../../../utils/theme";
+import { shimmerColors } from "../../../utils/styles";
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -40,6 +41,7 @@ const Follow = (props) => {
             height={sectionHeight}
             width={sectionWidth}
             shimmerStyle={{ borderRadius: 10 }}
+            shimmerColors={shimmerColors}
           />
         )}
       </View>
@@ -59,6 +61,7 @@ const Follow = (props) => {
             height={sectionHeight}
             width={sectionWidth}
             shimmerStyle={{ borderRadius: 10 }}
+            shimmerColors={shimmerColors}
           />
         )}
       </View>
