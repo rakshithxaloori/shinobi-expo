@@ -38,7 +38,7 @@ class ClipsFeed extends Component {
   static contextType = AuthContext;
   state = {
     clips: [],
-    viewable: [],
+    viewable: null,
     mute: true,
     initLoaded: false,
     isLoading: true,
@@ -68,9 +68,8 @@ class ClipsFeed extends Component {
   };
 
   unmountAllVideos = async () => {
-    for (const videoRef of this.state.viewable) {
-      videoRef.current && (await videoRef.current.unloadAsync());
-    }
+    this.state.viewable.current &&
+      (await this.state.viewable.current.unloadAsync());
   };
 
   componentWillUnmount = async () => {
@@ -173,25 +172,33 @@ class ClipsFeed extends Component {
   };
 
   onViewableItemsChanged = async ({ viewableItems, changed }) => {
-    this.setState({ viewable: [] });
-    for (const viewable of changed) {
-      if (viewable.isViewable) {
-        // TODO only load the last viewable video
-        // rest unload.
-        console.log("Loading", viewable.index);
-        const { item } = viewable;
-
-        await item.videoRef.current.loadAsync(
-          { uri: item.url },
-          { shouldPlay: true, isLooping: true, isMuted: this.state.mute }
-        );
-        this.setState((prevState) => ({
-          viewable: [...prevState.viewable, item.videoRef],
-        }));
-      } else {
-        console.log("Unloading", viewable.index);
-        const { item } = viewable;
+    // Unload changed but not viewable
+    for (const changedItem of changed) {
+      if (!changedItem.isViewable) {
+        console.log("Unloading", changedItem.index);
+        const { item } = changedItem;
         await item.videoRef.current.unloadAsync();
+      }
+    }
+
+    // Load the first viewable
+    const loadCurrentViewable = async (currentViewable) => {
+      console.log("Loading", currentViewable.index);
+      await currentViewable.item.videoRef.current.loadAsync(
+        { uri: currentViewable.item.url },
+        { shouldPlay: true, isLooping: true, isMuted: this.state.mute }
+      );
+      this.setState({ viewable: currentViewable.item });
+    };
+
+    if (viewableItems.length > 0) {
+      const viewable = viewableItems[0];
+
+      if (this.state.viewable === null) {
+        await loadCurrentViewable(viewable);
+      } else if (viewable != this.state.viewable) {
+        await this.state.viewable.videoRef.current.unloadAsync();
+        await loadCurrentViewable(viewable);
       }
     }
   };
