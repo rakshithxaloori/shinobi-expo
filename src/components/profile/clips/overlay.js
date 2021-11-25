@@ -63,7 +63,7 @@ const DeleteOverlay = ({
     >
       <Text style={styles.overlayTitle}>Delete the clip?</Text>
       <Text style={styles.overlaySubtitle}>
-        Deleting a clip, like a true breakup, is permanent and can't be undone
+        Deleting a clip, like time, is irreversible and can't be undone
       </Text>
 
       <View style={{ width: 200, height: 150 }}>
