@@ -24,29 +24,23 @@ const VideoPlayer = ({ videoUri, videoHeight }) => {
         }
       );
     };
-    console.log("LOADING VIDEO");
     loadVideo();
 
-    return async () => {
-      try {
-        if (videoRef.current !== null) {
-          await videoRef.current.unloadAsync();
-          console.log("UNLOADING VIDEO");
-        }
-      } catch (e) {}
+    return () => {
+      videoRef.current && videoRef.current.unloadAsync();
     };
-  }, []);
+  }, [videoRef.current]);
 
   const toggleMute = async () => {
-    const status = await videoRef.getStatusAsync();
+    const status = await videoRef.current.getStatusAsync();
     await videoRef.current.setIsMutedAsync(!status.isMuted);
     setMute(!status.isMuted);
   };
 
   const togglePlay = async () => {
-    const status = await videoRef.getStatusAsync();
-    if (status.isPlaying) await videoRef.current.playAsync();
-    else await videoRef.current.pauseAsync();
+    const status = await videoRef.current.getStatusAsync();
+    if (status.isPlaying) await videoRef.current.pauseAsync();
+    else await videoRef.current.playAsync();
     setPlay(!status.isPlaying);
   };
 
