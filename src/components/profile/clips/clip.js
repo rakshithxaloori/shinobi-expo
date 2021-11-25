@@ -74,12 +74,6 @@ class Clip extends React.PureComponent {
           <Text style={styles.clipTitle}>{clip.title}</Text>
           <View style={styles.clipIconSection}>
             <View style={styles.likes}>
-              <Ionicons
-                name={"heart"}
-                size={footerIconSize}
-                color={iconColor}
-                onPress={this.props.toggleLike}
-              />
               <Text style={styles.likeCount}>
                 {clip.likes} {clip.likes === 1 ? "like" : "likes"}
               </Text>

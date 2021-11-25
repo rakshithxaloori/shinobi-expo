@@ -130,7 +130,7 @@ class ClipsFeed extends Component {
         reportClip={this.reportClip}
         mute={this.state.mute}
         toggleMute={this.toggleMute}
-        // TODO toggleLike={}
+        toggleLike={this.toggleLike}
       />
     );
   };
@@ -156,6 +156,38 @@ class ClipsFeed extends Component {
 
   toggleMute = () => {
     this.setState((prevState) => ({ mute: !prevState.mute }));
+  };
+
+  toggleLike = async (clip) => {
+    console.log("toggleLike", clip.id);
+    const onSuccess = () => {
+      let newClip = {
+        ...clip,
+        me_like: !clip.me_like,
+        likes: clip.me_like ? clip.likes - 1 : clip.likes + 1,
+      };
+      this.setState((prevState) => {
+        return {
+          clips: prevState.clips.map((item) =>
+            item.id === newClip.id ? newClip : item
+          ),
+        };
+      });
+    };
+
+    const APIKit = await createAPIKit();
+    let url = null;
+    if (clip.me_like) url = "clips/unlike/";
+    else url = "clips/like/";
+    APIKit.post(
+      url,
+      { clip_id: clip.id },
+      { cancelToken: this.cancelTokenSource.token }
+    )
+      .then(onSuccess)
+      .catch((e) => {
+        flashAlert(handleAPIError(e));
+      });
   };
 
   onViewableItemsChanged = async ({ viewableItems, changed }) => {

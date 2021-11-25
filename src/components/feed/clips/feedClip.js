@@ -12,17 +12,30 @@ import { shareClip } from "../../../utils/share";
 const footerIconSize = 28;
 const iconColor = darkTheme.primary;
 
-class FeedClip extends React.PureComponent {
+class FeedClip extends React.Component {
+  shouldComponentUpdate = (nextProps) => {
+    const { me_like, likes } = nextProps.clip;
+    const { me_like: prevMe_like, likes: prevLikes } = this.props.clip;
+
+    // If "me_like" or "likes" is different, then update
+    return me_like !== prevMe_like || likes !== prevLikes;
+  };
+
   navigateProfile = () => {
     this.props.navigateProfile(this.props.clip.uploader.username);
   };
 
-  onSharePress = () => {
+  onPressLike = () => {
+    const { clip, toggleLike } = this.props;
+    toggleLike(clip);
+  };
+
+  onPressShare = () => {
     const { clip } = this.props;
     shareClip(clip.id, clip.uploader.username, clip.game.name);
   };
 
-  report = () => {
+  onPressReport = () => {
     this.props.reportClip(this.props.clip.id);
   };
 
@@ -82,10 +95,10 @@ class FeedClip extends React.PureComponent {
           <View style={styles.clipIconSection}>
             <View style={styles.likes}>
               <Ionicons
-                name={"heart"}
+                name={clip.me_like ? "heart" : "heart-outline"}
                 size={footerIconSize}
                 color={iconColor}
-                onPress={this.props.toggleLike}
+                onPress={this.onPressLike}
               />
               <Text style={styles.likeCount}>
                 {clip.likes} {clip.likes === 1 ? "like" : "likes"}
@@ -98,14 +111,14 @@ class FeedClip extends React.PureComponent {
                 name={"share-social"}
                 size={footerIconSize}
                 color={iconColor}
-                onPress={this.onSharePress}
+                onPress={this.onPressShare}
                 style={{ marginRight: 10 }}
               />
               <Ionicons
                 name={"bug-outline"}
                 size={footerIconSize}
                 color={iconColor}
-                onPress={this.report}
+                onPress={this.onPressReport}
               />
             </View>
           </View>
