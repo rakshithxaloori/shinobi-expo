@@ -9,20 +9,22 @@ import { avatarDefaultStyling } from "../../../utils/styles";
 import VideoPlayer from "../../../utils/feedPlayer";
 import { shareClip } from "../../../utils/share";
 
-const footerIconSize = 28;
+const footerIconSize = 20;
 const iconColor = darkTheme.primary;
 
 class FeedClip extends React.Component {
   shouldComponentUpdate = (nextProps) => {
     const { me_like, likes } = nextProps.clip;
+    const { mute } = nextProps;
     const { me_like: prevMe_like, likes: prevLikes } = this.props.clip;
+    const { mute: prevMute } = this.props;
 
     // If "me_like" or "likes" is different, then update
-    return me_like !== prevMe_like || likes !== prevLikes;
+    return me_like !== prevMe_like || likes !== prevLikes || mute !== prevMute;
   };
 
-  navigateProfile = () => {
-    this.props.navigateProfile(this.props.clip.uploader.username);
+  navigateProfile = async () => {
+    await this.props.navigateProfile(this.props.clip.uploader.username);
   };
 
   onPressLike = () => {
@@ -93,34 +95,42 @@ class FeedClip extends React.Component {
         <View style={[styles.footer, { height: FOOTER_HEIGHT }]}>
           <Text style={styles.clipTitle}>{clip.title}</Text>
           <View style={styles.clipIconSection}>
-            <View style={styles.likes}>
+            <View style={styles.footerIconSection}>
               <Ionicons
                 name={clip.me_like ? "heart" : "heart-outline"}
                 size={footerIconSize}
                 color={iconColor}
                 onPress={this.onPressLike}
+                style={styles.icon}
               />
-              <Text style={styles.likeCount}>
+              <Text style={styles.iconText}>
                 {clip.likes} {clip.likes === 1 ? "like" : "likes"}
               </Text>
             </View>
-            <View
-              style={{ flexDirection: "row", position: "absolute", right: 10 }}
+            <TouchableOpacity
+              style={styles.footerIconSection}
+              onPress={this.onPressShare}
             >
               <Ionicons
                 name={"share-social"}
                 size={footerIconSize}
                 color={iconColor}
-                onPress={this.onPressShare}
-                style={{ marginRight: 10 }}
+                style={styles.icon}
               />
+              <Text style={styles.iconText}>Share</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.footerIconSection}
+              onPress={this.onPressReport}
+            >
               <Ionicons
                 name={"bug-outline"}
                 size={footerIconSize}
                 color={iconColor}
-                onPress={this.onPressReport}
+                style={styles.icon}
               />
-            </View>
+              <Text style={styles.iconText}>Report</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -140,7 +150,7 @@ const styles = StyleSheet.create({
   },
   clipTitle: {
     flex: 1,
-    marginLeft: 10,
+    marginHorizontal: 20,
     fontSize: 15,
     color: darkTheme.on_surface_title,
   },
@@ -149,14 +159,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
     alignItems: "center",
+    justifyContent: "center",
   },
-  likes: {
+  footerIconSection: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    position: "absolute",
-    left: 10,
+    justifyContent: "center",
   },
-  likeCount: { fontSize: 20, paddingLeft: 5, color: iconColor },
+  icon: { marginRight: 5 },
+  iconText: { fontSize: footerIconSize - 5, color: iconColor },
   touchable: {
     flexDirection: "row",
     alignItems: "center",

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Avatar } from "react-native-elements";
 import FastImage from "react-native-fast-image";
 import { Ionicons } from "@expo/vector-icons";
@@ -9,7 +9,7 @@ import { avatarDefaultStyling } from "../../../utils/styles";
 import VideoPlayer from "../../../utils/feedPlayer";
 import { shareClip } from "../../../utils/share";
 
-const footerIconSize = 28;
+const footerIconSize = 20;
 const iconColor = darkTheme.primary;
 
 class Clip extends React.PureComponent {
@@ -73,30 +73,43 @@ class Clip extends React.PureComponent {
         <View style={[styles.footer, { height: FOOTER_HEIGHT }]}>
           <Text style={styles.clipTitle}>{clip.title}</Text>
           <View style={styles.clipIconSection}>
-            <View style={styles.likes}>
-              <Text style={styles.likeCount}>
+            <View style={styles.footerIconComponent}>
+              <Ionicons
+                name={"heart"}
+                size={footerIconSize}
+                color={iconColor}
+                style={styles.icon}
+              />
+              <Text style={styles.iconText}>
                 {clip.likes} {clip.likes === 1 ? "like" : "likes"}
               </Text>
             </View>
-            <View
-              style={{ flexDirection: "row", position: "absolute", right: 10 }}
+            <TouchableOpacity
+              style={styles.footerIconComponent}
+              onPress={this.onSharePress}
             >
               <Ionicons
                 name={"share-social"}
                 size={footerIconSize}
                 color={iconColor}
-                onPress={this.onSharePress}
-                style={{ marginRight: 10 }}
+                style={styles.icon}
               />
-              {this.props.username === clip.uploader.username && (
+              <Text style={styles.iconText}>Share</Text>
+            </TouchableOpacity>
+            {this.props.username === clip.uploader.username && (
+              <TouchableOpacity
+                style={styles.footerIconComponent}
+                onPress={this.setDeleteClip}
+              >
                 <Ionicons
                   name={"trash-outline"}
                   size={footerIconSize}
                   color={iconColor}
-                  onPress={this.setDeleteClip}
+                  style={styles.icon}
                 />
-              )}
-            </View>
+                <Text style={styles.iconText}>Delete</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
       </View>
@@ -116,7 +129,7 @@ const styles = StyleSheet.create({
   },
   clipTitle: {
     flex: 1,
-    marginLeft: 10,
+    marginHorizontal: 20,
     fontSize: 15,
     color: darkTheme.on_surface_title,
   },
@@ -126,13 +139,14 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
   },
-  likes: {
+  footerIconComponent: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    position: "absolute",
-    left: 10,
+    justifyContent: "center",
   },
-  likeCount: { fontSize: 20, paddingLeft: 5, color: iconColor },
+  icon: { marginRight: 5 },
+  iconText: { fontSize: footerIconSize - 5, paddingLeft: 5, color: iconColor },
   touchable: {
     flexDirection: "row",
     alignItems: "center",
