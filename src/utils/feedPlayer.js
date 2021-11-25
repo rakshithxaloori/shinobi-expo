@@ -15,14 +15,13 @@ const VideoPlayer = ({
 }) => {
   React.useEffect(() => {
     return () => {
-      console.log("UNLOADING VIDEO");
-      try {
-        if (videoRef.current !== null) videoRef.current.unloadAsync();
-      } catch (e) {}
+      videoRef.current && videoRef.current.unloadAsync();
     };
   }, []);
 
   const toggleMute = async () => {
+    const status = await videoRef.current.getStatusAsync();
+    await videoRef.current.setIsMutedAsync(!status.isMuted);
     globalToggleMute();
   };
 
