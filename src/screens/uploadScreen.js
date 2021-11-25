@@ -20,12 +20,16 @@ import { handleAPIError } from "../utils";
 import VideoPlayer from "../utils/uploadPlayer";
 
 const { width, height } = Dimensions.get("window");
-const iconSize = 25;
+const ICON_SIZE = 25;
+const VIDEO_MIN_LENGTH = 5;
+const VIDEO_MAX_LENGTH = 21;
+const VIDEO_SIZE_IN_MB = 100;
 
 class UploadScreen extends Component {
   state = {
     is_uploading: undefined,
     videoQuota: 0,
+    timeLeft: null,
     videoUri: null,
     videoHeight: null,
     videoHeightToWidthRatio: null,
@@ -40,9 +44,10 @@ class UploadScreen extends Component {
   componentDidMount = async () => {
     const APIKit = await createAPIKit();
     const onSuccess = (response) => {
-      const { quota } = response.data?.payload;
+      const { quota, time_left } = response.data?.payload;
       this.setState({
         videoQuota: quota,
+        timeLeft: time_left,
         disable: false,
         loaded: true,
       });
@@ -83,13 +88,13 @@ class UploadScreen extends Component {
 
         if (!result.cancelled) {
           // Check atleast 10 secs, atmost 20 secs
-          if (result.duration < 5 * 1000) {
+          if (result.duration < VIDEO_MIN_LENGTH * 1000) {
             flashAlert("Video has to be atleast 5 seconds");
-          } else if (result.duration > 21 * 1000) {
+          } else if (result.duration > VIDEO_MAX_LENGTH * 1000) {
             flashAlert("Video has to be shorter than 20 seconds");
           } else {
             const videoInfo = await FileSystem.getInfoAsync(result.uri);
-            if (videoInfo.size > 100 * 1000 * 1000) {
+            if (videoInfo.size > VIDEO_SIZE_IN_MB * 1000 * 1000) {
               flashAlert("Video should be smaller than 100 MB");
             } else {
               let videoHeightToWidthRatio = null;
@@ -189,6 +194,15 @@ class UploadScreen extends Component {
           You can upload {this.state.videoQuota} more{" "}
           {this.state.videoQuota === 1 ? "clip" : "clips"} today
         </Text>
+        {this.state.videoQuota === 0 && (
+          <Text style={styles.subTitle}>
+            {this.state.timeLeft} until you can upload more clips
+          </Text>
+        )}
+        <Text style={styles.subTitle}>
+          Upload a clip that is b/w {VIDEO_MIN_LENGTH} and{" "}
+          {VIDEO_MAX_LENGTH - 1} seconds long{" "}
+        </Text>
         {this.state.videoUri && (
           <View style={styles.videoView}>
             <VideoPlayer
@@ -233,7 +247,7 @@ class UploadScreen extends Component {
                   <Ionicons
                     style={styles.icon}
                     name="trash-bin-outline"
-                    size={iconSize}
+                    size={ICON_SIZE}
                     color={darkTheme.on_background}
                   />
                   <Text style={[styles.buttonText, styles.selectText]}>
@@ -248,7 +262,7 @@ class UploadScreen extends Component {
                   <Ionicons
                     style={styles.icon}
                     name="cloud-upload"
-                    size={iconSize}
+                    size={ICON_SIZE}
                     color={darkTheme.primary}
                   />
                   <Text style={[styles.buttonText, styles.uploadText]}>
@@ -265,7 +279,7 @@ class UploadScreen extends Component {
                 <Ionicons
                   style={styles.icon}
                   name="albums-outline"
-                  size={iconSize}
+                  size={ICON_SIZE}
                   color={darkTheme.on_background}
                 />
                 <Text style={[styles.buttonText, styles.selectText]}>
@@ -286,12 +300,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    margin: 10,
   },
   title: {
     color: darkTheme.on_background,
     fontWeight: "bold",
     fontSize: 20,
     padding: 20,
+  },
+  subTitle: {
+    fontSize: 16,
+    color: darkTheme.on_surface_subtitle,
+    fontWeight: "500",
   },
   uploadingText: {
     fontSize: 18,
