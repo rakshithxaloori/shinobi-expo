@@ -1,32 +1,23 @@
 import React, { Component } from "react";
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  Dimensions,
-  Platform,
-} from "react-native";
+import { View, StyleSheet, Text, Platform } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
-import { Ionicons } from "@expo/vector-icons";
-import { Input } from "react-native-elements";
 import axios from "axios";
 
 import { flashAlert } from "../utils/flash_message";
 import { darkTheme } from "../utils/theme";
 import { createAPIKit, uploadFileToS3 } from "../utils/APIKit";
 import { handleAPIError } from "../utils";
-import VideoPlayer from "../utils/uploadPlayer";
+import SelectVideo from "../components/upload/selectVideo";
+import TitleGame from "../components/upload/titleGame";
 
-const { width, height } = Dimensions.get("window");
-const ICON_SIZE = 25;
 const VIDEO_MIN_LENGTH = 5;
 const VIDEO_MAX_LENGTH = 21;
 const VIDEO_SIZE_IN_MB = 100;
 
 class UploadScreen extends Component {
   state = {
+    screenNum: 0,
     is_uploading: undefined,
     videoQuota: 0,
     timeLeft: null,
@@ -187,6 +178,13 @@ class UploadScreen extends Component {
     }
   };
 
+  clearVideo = () =>
+    this.setState({
+      videoUri: null,
+      videoHeight: null,
+      videoHeightToWidthRatio: null,
+    });
+
   render = () =>
     this.state.loaded ? (
       <View style={styles.container}>
@@ -203,92 +201,34 @@ class UploadScreen extends Component {
           Upload a clip that is b/w {VIDEO_MIN_LENGTH} and{" "}
           {VIDEO_MAX_LENGTH - 1} seconds long{" "}
         </Text>
-        {this.state.videoUri && (
-          <View style={styles.videoView}>
-            <VideoPlayer
-              videoUri={this.state.videoUri}
-              videoHeight={this.state.videoHeight}
-            />
-            <Input
-              editable={!this.state.disable}
-              autoCapitalize="none"
-              autoCorrect={false}
-              maxLength={40}
-              placeholder="One tap headshots y'all!"
-              label="Clip title"
-              inputStyle={{ color: darkTheme.on_background, fontSize: 15 }}
-              leftIcon={() => (
-                <Ionicons
-                  name="film-outline"
-                  size={20}
-                  color={darkTheme.primary}
-                />
-              )}
-              onChangeText={(value) => {
-                this.setState({
-                  title: value.trim(),
-                });
-              }}
-              style={styles.clipLabel}
-            />
-          </View>
-        )}
-        {this.state.videoQuota > 0 && (
-          <View style={styles.buttonsView}>
-            {this.state.is_uploading ? (
-              <Text style={styles.uploadingText}>Uploading clip...</Text>
-            ) : this.state.videoUri ? (
-              <View style={styles.buttonsView}>
-                <TouchableOpacity
-                  disabled={this.state.disable}
-                  onPress={() => this.setState({ videoUri: null })}
-                  style={[styles.button, styles.selectButton]}
-                >
-                  <Ionicons
-                    style={styles.icon}
-                    name="trash-bin-outline"
-                    size={ICON_SIZE}
-                    color={darkTheme.on_background}
-                  />
-                  <Text style={[styles.buttonText, styles.selectText]}>
-                    Clear Video
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  disabled={this.state.disable}
-                  onPress={this.uploadVideo}
-                  style={[styles.button, styles.uploadButton]}
-                >
-                  <Ionicons
-                    style={styles.icon}
-                    name="cloud-upload"
-                    size={ICON_SIZE}
-                    color={darkTheme.primary}
-                  />
-                  <Text style={[styles.buttonText, styles.uploadText]}>
-                    Upload Video
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            ) : (
-              <TouchableOpacity
-                disabled={this.state.disable}
-                onPress={this.selectVideo}
-                style={[styles.button, styles.selectButton]}
-              >
-                <Ionicons
-                  style={styles.icon}
-                  name="albums-outline"
-                  size={ICON_SIZE}
-                  color={darkTheme.on_background}
-                />
-                <Text style={[styles.buttonText, styles.selectText]}>
-                  {this.state.selectText} Video
-                </Text>
-              </TouchableOpacity>
-            )}
-          </View>
-        )}
+        {this.state.screenNum === 0
+          ? this.state.videoQuota > 0 && (
+              <SelectVideo
+                videoUri={this.state.videoUri}
+                videoHeight={this.state.videoHeight}
+                disable={this.state.disable}
+                clearVideo={this.clearVideo}
+                nextScreen={() => {
+                  this.setState({ screenNum: 1 });
+                }}
+                selectVideo={this.selectVideo}
+                selectText={this.state.selectText}
+              />
+            )
+          : this.state.screenNum === 1
+          ? this.state.videoUri && (
+              <TitleGame
+                is_uploading={this.state.is_uploading}
+                disable={this.state.disable}
+                onChangeText={(value) => {
+                  this.setState({
+                    title: value.trim(),
+                  });
+                }}
+                uploadVideo={this.uploadVideo}
+              />
+            )
+          : null}
       </View>
     ) : (
       <View style={styles.container} />
@@ -313,41 +253,9 @@ const styles = StyleSheet.create({
     color: darkTheme.on_surface_subtitle,
     fontWeight: "500",
   },
-  uploadingText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    backgroundColor: darkTheme.primary,
-    color: darkTheme.on_background,
-    borderRadius: 30,
-    padding: 15,
-    margin: 20,
-  },
-  videoView: {
-    width: width - 40,
-    height: height / 2,
-    marginBottom: 20,
-  },
-  clipLabel: {
-    width: "100%",
-    height: "20%",
-  },
-  buttonsView: {
-    margin: 10,
-    flexDirection: "row",
-  },
   icon: { marginRight: 8 },
   button: { borderRadius: 30, padding: 15, margin: 10, flexDirection: "row" },
-  buttonText: { fontSize: 18, fontWeight: "bold" },
   selectText: { color: darkTheme.on_background },
-  uploadText: { color: darkTheme.primary },
-  selectButton: {
-    backgroundColor: darkTheme.primary,
-  },
-  uploadButton: {
-    borderWidth: 2,
-    borderColor: darkTheme.primary,
-    backgroundColor: darkTheme.background,
-  },
 });
 
 export default UploadScreen;

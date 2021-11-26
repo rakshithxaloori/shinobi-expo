@@ -85,7 +85,6 @@ const styles = StyleSheet.create({
     width: "100%",
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
-    marginBottom: 10,
   },
   video: { height: "100%", width: "100%" },
   icon: {
