@@ -68,7 +68,7 @@ class ClipsFeed extends Component {
   };
 
   unmountAllVideos = async () => {
-    this.state.viewable.current &&
+    this.state.viewable?.current &&
       (await this.state.viewable.current.unloadAsync());
   };
 
@@ -207,7 +207,7 @@ class ClipsFeed extends Component {
     this.state.initLoaded ? (
       <View style={styles.container}>
         <FlatList
-          contentContainerStyle={styles.list}
+          // contentContainerStyle={styles.list}
           data={this.state.clips}
           onEndReached={this.fetchClips}
           onEndReachedThreshold={1}

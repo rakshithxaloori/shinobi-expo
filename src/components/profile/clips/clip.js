@@ -158,7 +158,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: darkTheme.surface,
     borderRadius: 10,
-    marginHorizontal: 10,
   },
 });
 

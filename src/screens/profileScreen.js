@@ -191,7 +191,7 @@ class Profile extends Component {
           //   username={this.state.user?.username}
           //   reload={this.props.route?.params?.reload}
           // />
-          <View>
+          <View style={{ width: "100%" }}>
             {/* Plays games */}
             <View />
             {/* My Clips */}

@@ -30,7 +30,7 @@ const VideoPlayer = ({
       <Video
         ref={videoRef}
         style={[styles.video, { height: VIDEO_HEIGHT }]}
-        resizeMode="contain"
+        resizeMode="cover"
         useNativeControls={false}
         onPlaybackStatusUpdate={(status) => {
           if (status.error) {

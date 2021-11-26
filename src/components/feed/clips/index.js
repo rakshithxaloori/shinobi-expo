@@ -66,7 +66,7 @@ class ClipsFeed extends Component {
   };
 
   unmountAllVideos = async () => {
-    this.state.viewable.current &&
+    this.state.viewable?.current &&
       (await this.state.viewable.current.unloadAsync());
   };
 
