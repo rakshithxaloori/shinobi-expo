@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Avatar } from "react-native-elements";
+import { CommonActions } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import FastImage from "react-native-fast-image";
 
@@ -24,7 +25,11 @@ const Feed = (props) => {
           source={{ uri: user?.picture }}
           containerStyle={[styles.avatar, avatarDefaultStyling]}
           onPress={() => {
-            props.navigation.navigate("Profile");
+            const resetAction = CommonActions.reset({
+              index: 1,
+              routes: [{ name: "Home" }, { name: "Profile" }],
+            });
+            props.navigation.dispatch(resetAction);
           }}
           ImageComponent={FastImage}
         />
@@ -33,7 +38,12 @@ const Feed = (props) => {
         <View style={styles.options}>
           <TouchableOpacity
             onPress={() => {
-              props.navigation.navigate("Upload");
+              const resetAction = CommonActions.reset({
+                index: 1,
+                routes: [{ name: "Home" }, { name: "Upload" }],
+              });
+
+              props.navigation.dispatch(resetAction);
             }}
             style={{ marginRight: 10 }}
           >
@@ -45,7 +55,12 @@ const Feed = (props) => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              props.navigation.navigate("Search");
+              const resetAction = CommonActions.reset({
+                index: 1,
+                routes: [{ name: "Home" }, { name: "Search" }],
+              });
+
+              props.navigation.dispatch(resetAction);
             }}
             style={{ marginRight: 10 }}
           >
@@ -53,7 +68,12 @@ const Feed = (props) => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              props.navigation.navigate("Settings");
+              const resetAction = CommonActions.reset({
+                index: 1,
+                routes: [{ name: "Home" }, { name: "Settings" }],
+              });
+
+              props.navigation.dispatch(resetAction);
             }}
           >
             <Ionicons name="settings" size={32} color={darkTheme.primary} />

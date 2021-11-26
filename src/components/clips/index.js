@@ -204,13 +204,7 @@ class ClipsFeed extends Component {
     await this.unmountAllVideos();
     const resetAction = CommonActions.reset({
       index: 1,
-      routes: [
-        { name: "Home" },
-        {
-          name: "Profile",
-          params: { username },
-        },
-      ],
+      routes: [{ name: "Home" }, { name: "Profile", params: { username } }],
     });
 
     this.props.navigation.dispatch(resetAction);
