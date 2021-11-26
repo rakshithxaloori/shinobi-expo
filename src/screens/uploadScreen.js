@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { View, StyleSheet, Text, Platform } from "react-native";
+import { CommonActions } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 import axios from "axios";
@@ -131,7 +132,12 @@ class UploadScreen extends Component {
         const onSuccess = () => {
           const callback = () => {
             flashAlert("Clip uploaded!", undefined, undefined, 5000);
-            this.props.navigation.navigate("Home");
+
+            const resetAction = CommonActions.reset({
+              index: 0,
+              routes: [{ name: "Home" }],
+            });
+            this.props.navigation.dispatch(resetAction);
           };
           this.setState({ is_uploading: false }, callback);
         };

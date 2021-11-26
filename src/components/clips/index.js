@@ -11,13 +11,14 @@ import { CommonActions } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 
-import { createAPIKit } from "../../../utils/APIKit";
-import { flashAlert } from "../../../utils/flash_message";
-import { dateTimeDiff, handleAPIError } from "../../../utils";
-import { darkTheme } from "../../../utils/theme";
-import FeedClip from "./feedClip";
-import ReportOverlay from "./overlay";
-import { shimmerColors } from "../../../utils/styles";
+import { createAPIKit } from "../../utils/APIKit";
+import { flashAlert } from "../../utils/flash_message";
+import { dateTimeDiff, handleAPIError } from "../../utils";
+import { darkTheme } from "../../utils/theme";
+import FeedClip from "./clip";
+import ReportOverlay from "./reportOverlay";
+import DeleteOverlay from "./deleteOverlay";
+import { shimmerColors } from "../../utils/styles";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -43,6 +44,8 @@ class ClipsFeed extends Component {
     isLoading: true,
     endReached: false,
     reportClipId: undefined,
+    deleteClip: undefined,
+    showDeleteOverlay: false,
   };
 
   fetchCount = 10;
@@ -51,7 +54,7 @@ class ClipsFeed extends Component {
   placeholder = (
     <View style={{ marginBottom: 20, alignItems: "center" }}>
       <ShimmerPlaceHolder
-        width={screenWidth - 20}
+        width={screenWidth - 40}
         height={250}
         shimmerStyle={{
           borderRadius: 10,
@@ -75,6 +78,13 @@ class ClipsFeed extends Component {
     this.cancelTokenSource.cancel();
   };
 
+  deleteClipFromList = async (clip) => {
+    const clip_id = clip.id;
+    clip.videoRef.current && (await clip.videoRef.current.unloadAsync());
+    const filteredData = this.state.clips.filter((item) => item.id !== clip_id);
+    this.setState({ clips: filteredData });
+  };
+
   fetchClips = async () => {
     if (this.state.endReached) return;
     const onSuccess = (response) => {
@@ -94,15 +104,26 @@ class ClipsFeed extends Component {
 
     const APIKit = await createAPIKit();
     const dateNow = new Date();
-    APIKit.post(
-      "feed/",
-      {
+    let url = undefined;
+    let postData = undefined;
+    if (this.props.type === "Feed") {
+      url = "/feed/";
+      postData = {
         datetime:
           this.state.clips[this.state.clips.length - 1]?.created_datetime ||
           dateNow,
-      },
-      { cancelToken: this.cancelTokenSource.token }
-    )
+      };
+    } else if (this.props.type === "Profile") {
+      url = "/clips/clips/profile/";
+      postData = {
+        username: this.props.username,
+        datetime:
+          this.state.clips[this.state.clips.length - 1]?.created_datetime ||
+          dateNow,
+      };
+    }
+
+    APIKit.post(url, postData, { cancelToken: this.cancelTokenSource.token })
       .then(onSuccess)
       .catch((e) => {
         flashAlert(handleAPIError(e));
@@ -117,27 +138,51 @@ class ClipsFeed extends Component {
     this.setState({ reportClipId: undefined });
   };
 
+  setDeleteClip = (clip) => {
+    this.setState({ deleteClip: clip, showDeleteOverlay: true });
+  };
+
   renderClip = ({ item }) => {
     const dateThen = new Date(item.created_datetime);
     const dateDiff = dateTimeDiff(dateThen);
 
     const video_height = getVideoHeight(item.height_to_width_ratio);
 
-    return (
-      <FeedClip
-        clip={item}
-        TITLE_HEIGHT={TITLE_HEIGHT}
-        VIDEO_HEIGHT={video_height}
-        FOOTER_HEIGHT={FOOTER_HEIGHT}
-        MARGIN={ITEM_MARGIN}
-        dateDiff={dateDiff}
-        navigateProfile={this.navigateProfile}
-        reportClip={this.reportClip}
-        mute={this.state.mute}
-        toggleMute={this.toggleMute}
-        toggleLike={this.toggleLike}
-      />
-    );
+    if (this.props.type === "Feed") {
+      return (
+        <FeedClip
+          type={this.props.type}
+          clip={item}
+          TITLE_HEIGHT={TITLE_HEIGHT}
+          VIDEO_HEIGHT={video_height}
+          FOOTER_HEIGHT={FOOTER_HEIGHT}
+          MARGIN={ITEM_MARGIN}
+          dateDiff={dateDiff}
+          navigateProfile={this.navigateProfile}
+          reportClip={this.reportClip}
+          mute={this.state.mute}
+          toggleMute={this.toggleMute}
+          toggleLike={this.toggleLike}
+        />
+      );
+    } else if (this.props.type === "Profile") {
+      return (
+        <FeedClip
+          type={this.props.type}
+          username={this.props.username}
+          clip={item}
+          TITLE_HEIGHT={TITLE_HEIGHT}
+          VIDEO_HEIGHT={video_height}
+          FOOTER_HEIGHT={FOOTER_HEIGHT}
+          MARGIN={ITEM_MARGIN}
+          dateDiff={dateDiff}
+          setDeleteClip={this.setDeleteClip}
+          toggleOverlay={this.toggleOverlay}
+          mute={this.state.mute}
+          toggleMute={this.toggleMute}
+        />
+      );
+    }
   };
 
   keyExtractor = (clip) => {
@@ -206,13 +251,19 @@ class ClipsFeed extends Component {
       });
   };
 
+  toggleOverlay = () => {
+    this.setState((prevState) => ({
+      showDeleteOverlay: !prevState.showDeleteOverlay,
+    }));
+  };
+
   onViewableItemsChanged = async ({ viewableItems, changed }) => {
     // Unload changed but not viewable
     for (const changedItem of changed) {
       if (!changedItem.isViewable) {
         console.log("Unloading", changedItem.index);
         const { item } = changedItem;
-        await item.videoRef.current.unloadAsync();
+        item?.videoRef?.current && (await item.videoRef.current.unloadAsync());
       }
     }
 
@@ -232,7 +283,8 @@ class ClipsFeed extends Component {
       if (this.state.viewable === null) {
         await loadCurrentViewable(viewable);
       } else if (viewable != this.state.viewable) {
-        await this.state.viewable.videoRef.current.unloadAsync();
+        this.state.viewable?.videoRef?.current &&
+          (await this.state.viewable.videoRef.current.unloadAsync());
         await loadCurrentViewable(viewable);
       }
     }
@@ -269,6 +321,14 @@ class ClipsFeed extends Component {
             clearReport={this.clearReport}
           />
         )}
+        {this.state.showDeleteOverlay && (
+          <DeleteOverlay
+            clip={this.state.deleteClip}
+            showOverlay={this.state.showDeleteOverlay}
+            toggleOverlay={this.toggleOverlay}
+            deleteClipFromList={this.deleteClipFromList}
+          />
+        )}
       </View>
     ) : (
       <View style={styles.container}>
@@ -281,7 +341,6 @@ class ClipsFeed extends Component {
 const styles = StyleSheet.create({
   container: {
     marginTop: 10,
-    paddingHorizontal: 5,
   },
 });
 
