@@ -36,6 +36,7 @@ import LolConnect from "../screens/league_of_legends/connectScreen";
 import { ShareIcon, shareLolMatch, shareProfile } from "../utils/share";
 import AuthContext from "../authContext";
 import UploadScreen from "../screens/uploadScreen";
+import ClipScreen from "../screens/clipScreen";
 
 const NavigationContext = React.createContext();
 
@@ -203,6 +204,7 @@ const StackNavigatorComponent = () => {
                 }}
               />
               <Stack.Screen name="Chat" component={Chat} />
+              <Stack.Screen name="Clip" component={ClipScreen} />
               <Stack.Screen
                 name="Profile"
                 component={Profile}
@@ -304,6 +306,10 @@ const NavigatorWithContext = () => {
           });
         }
         break;
+      case "c":
+        if (queryParams.hasOwnProperty("clip")) {
+          RootNavigation.push("Clip", { clip_id: queryParams.clip });
+        }
       case "lol":
         if (queryParams.hasOwnProperty("match_id")) {
           RootNavigation.push("LolMatch", {

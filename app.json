@@ -30,6 +30,11 @@
             {
               "scheme": "https",
               "host": "*.shinobi.cc",
+              "pathPrefix": "/c"
+            },
+            {
+              "scheme": "https",
+              "host": "*.shinobi.cc",
               "pathPrefix": "/lol"
             }
           ],
