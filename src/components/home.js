@@ -96,7 +96,7 @@ const TabNavigatorComponent = () => {
             screenOptions={{
               tabBarStyle: {
                 borderTopWidth: 0,
-                backgroundColor: darkTheme.surface,
+                backgroundColor: darkTheme.background,
                 elevation: 0,
                 shadowOpacity: 0,
               },
