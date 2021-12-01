@@ -23,7 +23,6 @@ import { shimmerColors } from "../../utils/styles";
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
 
-const VIDEO_WIDTH = screenWidth - 20;
 const TITLE_HEIGHT = 60;
 const FOOTER_HEIGHT = 80;
 const ITEM_MARGIN = 10;
@@ -31,7 +30,7 @@ const ITEM_MARGIN = 10;
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
 const getVideoHeight = (video_height) => {
-  const min_height = Math.min(VIDEO_WIDTH * video_height, screenHeight - 300);
+  const min_height = Math.min(video_height, screenHeight - 300);
   return min_height;
 };
 
@@ -146,7 +145,7 @@ class ClipsFeed extends Component {
     const dateThen = new Date(item.created_datetime);
     const dateDiff = dateTimeDiff(dateThen);
 
-    const video_height = getVideoHeight(item.height_to_width_ratio);
+    const video_height = getVideoHeight(item.height);
 
     if (this.props.type === "Feed") {
       return (
@@ -190,7 +189,7 @@ class ClipsFeed extends Component {
   };
 
   getItemLayout = (data, index) => {
-    const video_height = getVideoHeight(data[index].height_to_width_ratio);
+    const video_height = getVideoHeight(data[index].height);
 
     const item_height = video_height + TITLE_HEIGHT + FOOTER_HEIGHT;
     return {
@@ -334,6 +333,7 @@ class ClipsFeed extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    width: "100%",
     marginTop: 10,
   },
 });

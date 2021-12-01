@@ -24,7 +24,7 @@ class UploadScreen extends Component {
     timeLeft: null,
     videoUri: null,
     videoHeight: null,
-    videoHeightToWidthRatio: null,
+    videoWidth: null,
     selectText: "Select",
     title: "",
     file_key: null,
@@ -89,20 +89,18 @@ class UploadScreen extends Component {
             if (videoInfo.size > VIDEO_SIZE_IN_MB * 1000 * 1000) {
               flashAlert("Video should be smaller than 100 MB");
             } else {
-              let videoHeightToWidthRatio = null;
-              let videoHeight = null;
-              if (result.rotation) {
-                videoHeight = result.width;
-                videoHeightToWidthRatio = (result.width * 1.0) / result.height;
-              } else {
-                videoHeight = result.height;
-                videoHeightToWidthRatio = (result.height * 1.0) / result.width;
-              }
+              let videoHeight = result.height;
+              let videoWidth = result.width;
+              // if (result.rotation) {
+              //   videoHeight = result.width;
+              //   videoWidth = result.height;
+              // }
               this.setState({
                 videoUri: result.uri,
                 videoHeight,
-                videoHeightToWidthRatio,
+                videoWidth,
               });
+              console.log(videoHeight, videoWidth);
             }
           }
         }
@@ -164,7 +162,8 @@ class UploadScreen extends Component {
           clip_type: splitList[splitList.length - 1],
           game_code: "30035",
           title: this.state.title,
-          clip_height_to_width_ratio: this.state.videoHeightToWidthRatio,
+          clip_height: this.state.videoHeight,
+          clip_width: this.state.videoWidth,
         },
         { cancelToken: this.cancelTokenSource.token }
       );
@@ -188,7 +187,7 @@ class UploadScreen extends Component {
     this.setState({
       videoUri: null,
       videoHeight: null,
-      videoHeightToWidthRatio: null,
+      videoWidth: null,
     });
 
   render = () =>
