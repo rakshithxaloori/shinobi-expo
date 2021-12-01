@@ -7,7 +7,7 @@ import {
   Dimensions,
 } from "react-native";
 import axios from "axios";
-import { CommonActions } from "@react-navigation/native";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 
@@ -64,17 +64,38 @@ class ClipsFeed extends Component {
   );
 
   componentDidMount = async () => {
+    this._unsubscribeFocus = this.props.navigation.addListener(
+      "focus",
+      this.playViewableVideo
+    );
+    this._unsubscribeBlur = this.props.navigation.addListener(
+      "blur",
+      this.pauseViewableVideo
+    );
+
     await this.fetchClips();
   };
 
-  unmountAllVideos = async () => {
-    this.state.viewable?.current &&
-      (await this.state.viewable.current.unloadAsync());
+  componentWillUnmount = async () => {
+    await this.unmountViewableVideo();
+    this.cancelTokenSource.cancel();
+    this._unsubscribeFocus && this._unsubscribeFocus();
+    this._unsubscribeBlur && this._unsubscribeBlur();
   };
 
-  componentWillUnmount = async () => {
-    await this.unmountAllVideos();
-    this.cancelTokenSource.cancel();
+  unmountViewableVideo = async () => {
+    this.state.viewable?.videoRef?.current &&
+      (await this.state.viewable.videoRef.current.unloadAsync());
+  };
+
+  playViewableVideo = async () => {
+    this.state.viewable?.videoRef?.current &&
+      (await this.state.viewable.videoRef.current.playAsync());
+  };
+
+  pauseViewableVideo = async () => {
+    this.state.viewable?.videoRef?.current &&
+      (await this.state.viewable.videoRef.current.pauseAsync());
   };
 
   deleteClipFromList = async (clip) => {
@@ -200,7 +221,7 @@ class ClipsFeed extends Component {
   };
 
   navigateProfile = async (username) => {
-    await this.unmountAllVideos();
+    await this.unmountViewableVideo();
     const resetAction = CommonActions.reset({
       index: 1,
       routes: [{ name: "Home" }, { name: "Profile", params: { username } }],
@@ -338,4 +359,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ClipsFeed;
+export default function (props) {
+  const navigation = useNavigation();
+  return <ClipsFeed {...props} navigation={navigation} />;
+}

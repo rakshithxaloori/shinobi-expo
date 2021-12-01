@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Avatar } from "react-native-elements";
-import { CommonActions } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import FastImage from "react-native-fast-image";
 
@@ -12,8 +11,26 @@ import ClipsFeed from "../components/clips";
 import MatchList from "../components/feed/matchList";
 import VirtualizedList from "../utils/virtualizedList";
 
-const Feed = (props) => {
+const FeedScreen = (props) => {
+  const { navigation } = props;
+
   const { user } = useContext(AuthContext);
+
+  const navigateUpload = () => {
+    navigation.navigate("Upload");
+  };
+
+  const navigateProfile = () => {
+    navigation.navigate("Profile");
+  };
+
+  const navigateSearch = () => {
+    navigation.navigate("Search");
+  };
+
+  const navigateSettings = () => {
+    navigation.navigate("Settings");
+  };
 
   return (
     <VirtualizedList style={styles.container}>
@@ -24,27 +41,14 @@ const Feed = (props) => {
           title={user?.username[0]}
           source={{ uri: user?.picture }}
           containerStyle={[styles.avatar, avatarDefaultStyling]}
-          onPress={() => {
-            const resetAction = CommonActions.reset({
-              index: 1,
-              routes: [{ name: "Home" }, { name: "Profile" }],
-            });
-            props.navigation.dispatch(resetAction);
-          }}
+          onPress={navigateProfile}
           ImageComponent={FastImage}
         />
         <Text style={styles.title}>Welcome back,</Text>
         <Text style={styles.name}>{user?.username}</Text>
         <View style={styles.options}>
           <TouchableOpacity
-            onPress={() => {
-              const resetAction = CommonActions.reset({
-                index: 1,
-                routes: [{ name: "Home" }, { name: "Upload" }],
-              });
-
-              props.navigation.dispatch(resetAction);
-            }}
+            onPress={navigateUpload}
             style={{ marginRight: 10 }}
           >
             <Ionicons
@@ -54,37 +58,19 @@ const Feed = (props) => {
             />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => {
-              const resetAction = CommonActions.reset({
-                index: 1,
-                routes: [{ name: "Home" }, { name: "Search" }],
-              });
-
-              props.navigation.dispatch(resetAction);
-            }}
+            onPress={navigateSearch}
             style={{ marginRight: 10 }}
           >
             <Ionicons name="search-sharp" size={32} color={darkTheme.primary} />
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              const resetAction = CommonActions.reset({
-                index: 1,
-                routes: [{ name: "Home" }, { name: "Settings" }],
-              });
-
-              props.navigation.dispatch(resetAction);
-            }}
-          >
+          <TouchableOpacity onPress={navigateSettings}>
             <Ionicons name="settings" size={32} color={darkTheme.primary} />
           </TouchableOpacity>
         </View>
       </View>
       <Text style={styles.header}>Feed</Text>
       {/* <MatchList navigation={props.navigation} /> */}
-      <View style={{ width: "100%", paddingHorizontal: 10 }}>
-        <ClipsFeed navigation={props.navigation} type="Feed" />
-      </View>
+      <ClipsFeed type="Feed" />
     </VirtualizedList>
   );
 };
@@ -133,4 +119,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Feed;
+export default FeedScreen;
