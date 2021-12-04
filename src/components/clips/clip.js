@@ -153,7 +153,7 @@ class FeedClip extends React.Component {
                 onPress={this.onPressReport}
               >
                 <Ionicons
-                  name={"megaphone-outline"}
+                  name={"flag-outline"}
                   size={footerIconSize}
                   color={iconColor}
                   style={styles.icon}
