@@ -19,6 +19,7 @@ import { handleAPIError } from "../utils";
 import { darkTheme } from "../utils/theme";
 import { avatarDefaultStyling } from "../utils/styles";
 import { flashAlert } from "../utils/flash_message";
+import AuthContext from "../authContext";
 
 const PlaysGame = ({ game, removeGame }) => {
   const rmGame = () => {
@@ -66,6 +67,7 @@ const SearchGame = ({ game, chooseGame }) => {
 };
 
 class ChangeGamesScreen extends Component {
+  static contextType = AuthContext;
   state = {
     games: [],
     searchGames: [],
@@ -90,9 +92,13 @@ class ChangeGamesScreen extends Component {
     };
 
     const APIKit = await createAPIKit();
-    APIKit.get("/profile/games/get/", {
-      cancelToken: this.cancelTokenSource.token,
-    })
+    APIKit.post(
+      "/profile/games/get/",
+      { username: this.context.user.username },
+      {
+        cancelToken: this.cancelTokenSource.token,
+      }
+    )
       .then(onSuccess)
       .catch((e) => {
         handleAPIError(e);

@@ -14,7 +14,7 @@ import FollowStats from "../components/profile/follow/stats";
 import FollowButton from "../components/profile/follow/button";
 import BioText from "../components/profile/bio";
 import EditProfileButton from "../components/profile/editProfile/button";
-import Games from "../components/games";
+import Games from "../components/profile/games";
 import Clips from "../components/clips";
 
 import { createAPIKit } from "../utils/APIKit";
@@ -187,14 +187,8 @@ class Profile extends Component {
         </View>
 
         {this.state.user !== undefined && (
-          // <Games
-          //   username={this.state.user?.username}
-          //   reload={this.props.route?.params?.reload}
-          // />
           <View style={{ width: "100%" }}>
-            {/* Plays games */}
-            <View />
-            {/* My Clips */}
+            <Games username={this.state.user?.username} />
             <Clips username={this.state.user?.username} type="Profile" />
             <View />
           </View>
