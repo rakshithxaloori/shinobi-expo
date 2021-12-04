@@ -37,6 +37,7 @@ import { ShareIcon, shareLolMatch, shareProfile } from "../utils/share";
 import AuthContext from "../authContext";
 import UploadScreen from "../screens/uploadScreen";
 import ClipScreen from "../screens/clipScreen";
+import ChangeGamesScreen from "../screens/gamesScreen";
 
 const NavigationContext = React.createContext();
 
@@ -220,6 +221,11 @@ const StackNavigatorComponent = () => {
                     />
                   ),
                 })}
+              />
+              <Stack.Screen
+                name="Games"
+                component={ChangeGamesScreen}
+                options={{ title: "Games I Play" }}
               />
               <Stack.Screen name="Followers" component={Followers} />
               <Stack.Screen name="Following" component={Followings} />

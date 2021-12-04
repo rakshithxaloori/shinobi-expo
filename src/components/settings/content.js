@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/core";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import { Ionicons } from "@expo/vector-icons";
@@ -14,6 +15,7 @@ import { shareApp } from "../../utils/share";
 import { shimmerColors } from "../../utils/styles";
 
 const Content = () => {
+  const navigation = useNavigation();
   const linkURL = async (URL) => {
     try {
       Linking.openURL(URL);
@@ -50,6 +52,25 @@ const Content = () => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.games}
+        onPress={() => {
+          navigation.navigate("Games");
+        }}
+      >
+        <Ionicons
+          name="game-controller-outline"
+          style={styles.icon}
+          size={32}
+          color={darkTheme.on_background}
+        />
+        <View style={styles.content}>
+          <Text style={styles.title}>Change games I play</Text>
+          <Text style={styles.text}>
+            Shows the games you play in your profile
+          </Text>
+        </View>
+      </TouchableOpacity>
       <SocialsSettings setSocialsLoaded={setSocialsLoaded} />
       {socialsLoaded ? <LogOut /> : placeholder()}
       <View
@@ -101,6 +122,29 @@ const Content = () => {
 };
 
 const styles = StyleSheet.create({
+  title: {
+    color: darkTheme.on_surface_title,
+    fontSize: 24,
+    fontWeight: "600",
+  },
+  text: {
+    color: darkTheme.on_surface_title,
+    fontWeight: "600",
+    opacity: 0.6,
+    marginTop: 5,
+  },
+  content: {
+    paddingLeft: 20,
+  },
+  icon: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  games: {
+    flexDirection: "row",
+    marginTop: 15,
+    marginRight: 0,
+  },
   helpText: {
     color: darkTheme.on_surface_title,
     fontSize: 12,
