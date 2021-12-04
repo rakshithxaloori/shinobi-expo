@@ -54,14 +54,6 @@ class Search extends Component {
     });
   };
 
-  renderSearchItem = (user) => (
-    <SearchItem profile={user} navigateProfile={this.navigateProfile} />
-  );
-
-  // keyExtractor = ({ user }) => {
-  //   return user.username;
-  // };
-
   renderSeperator = () => (
     <Divider
       style={{
@@ -94,10 +86,11 @@ class Search extends Component {
             keyboardShouldPersistTaps="handled"
           >
             {this.state.users.map((user, index) => (
-              <View key={index} style={styles.searchItem}>
-                {this.renderSearchItem(user)}
-                {/* {index > 0 && this.renderSeperator()} */}
-              </View>
+              <SearchItem
+                key={index}
+                profile={user}
+                navigateProfile={this.navigateProfile}
+              />
             ))}
           </ScrollView>
         ) : this.state.search !== "" ? (
@@ -111,14 +104,6 @@ class Search extends Component {
             <Text style={styles.text}>who are you looking for?</Text>
           </View>
         )}
-        {/* <FlatList
-          contentContainerStyle={styles.searchList}
-          data={this.state.users}
-          renderItem={this.renderSearchItem}
-          keyExtractor={this.keyExtractor}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={this.renderSeperator}
-        /> */}
       </SafeAreaView>
     );
   };
