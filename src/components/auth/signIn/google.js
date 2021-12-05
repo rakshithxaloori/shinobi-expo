@@ -1,15 +1,15 @@
 import React, { useContext } from "react";
-import { StyleSheet } from "react-native";
+import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
-import { SocialIcon } from "react-native-elements";
+import { Asset } from "expo-asset";
+import { Avatar } from "react-native-elements";
 import axios from "axios";
 
 import AuthContext from "../../../authContext";
 
 import { createAPIKit } from "../../../utils/APIKit";
 import { handleAPIError } from "../../../utils";
-import { darkTheme } from "../../../utils/theme";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -21,6 +21,10 @@ const GoogleSignIn = ({ setError }) => {
     androidClientId: process.env.ANDROID_GOOGLE_CLIENT_ID,
     scopes: ["profile", "email"],
   });
+
+  const imageURI = Asset.fromModule(
+    require("../../../../assets/google-icon.png")
+  ).uri;
 
   React.useEffect(
     () => () => {
@@ -53,22 +57,41 @@ const GoogleSignIn = ({ setError }) => {
   }, [response]);
 
   return (
-    <SocialIcon
-      button
-      disabled={!request}
-      title="login with google"
-      type="google"
-      onPress={() => {
-        promptAsync();
-      }}
-      // iconColor={"orange"}
-      style={styles.button}
-    />
+    imageURI && (
+      <TouchableOpacity
+        disabled={!request}
+        style={styles.button}
+        onPress={() => {
+          promptAsync();
+        }}
+      >
+        <Avatar
+          source={{ uri: imageURI }}
+          size={40}
+          avatarStyle={styles.icon}
+        />
+        <Text style={styles.text}>Sign in with Google</Text>
+      </TouchableOpacity>
+    )
   );
 };
 
 const styles = StyleSheet.create({
-  button: { backgroundColor: darkTheme.primary, width: "70%" },
+  text: {
+    fontFamily: "roboto",
+    fontWeight: "bold",
+    color: "white",
+    paddingLeft: 8,
+  },
+  icon: { borderRadius: 10 },
+  button: {
+    flexDirection: "row",
+    paddingRight: 8,
+    backgroundColor: "#4285f4",
+    alignItems: "center",
+    borderRadius: 5,
+    height: 40,
+  },
 });
 
 export default GoogleSignIn;
