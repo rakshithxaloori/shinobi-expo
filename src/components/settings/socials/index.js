@@ -18,7 +18,6 @@ class SocialsSettings extends Component {
     instagram: undefined,
     twitch: undefined,
     youtube: undefined,
-    error: "",
   };
 
   cancelTokenSource = axios.CancelToken.source();
@@ -36,7 +35,7 @@ class SocialsSettings extends Component {
     })
       .then(onSuccess)
       .catch((e) => {
-        this.setState({ error: handleAPIError(e) });
+        handleAPIError(e);
       });
   };
 
