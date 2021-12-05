@@ -34,6 +34,11 @@
             },
             {
               "scheme": "https",
+              "host": "oauth.shinobi.cc",
+              "pathPrefix": "/instagram/callback"
+            },
+            {
+              "scheme": "https",
               "host": "*.shinobi.cc",
               "pathPrefix": "/lol"
             }
