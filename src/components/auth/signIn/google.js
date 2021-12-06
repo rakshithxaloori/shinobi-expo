@@ -78,7 +78,6 @@ const GoogleSignIn = ({ setError }) => {
 
 const styles = StyleSheet.create({
   text: {
-    fontFamily: "roboto",
     fontWeight: "bold",
     color: "white",
     paddingLeft: 8,
