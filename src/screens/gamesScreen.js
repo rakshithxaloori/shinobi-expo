@@ -190,7 +190,6 @@ class ChangeGamesScreen extends Component {
       Keyboard.dismiss();
     };
 
-    console.log(game.id);
     const APIKit = await createAPIKit();
     APIKit.post(
       "/profile/games/add/",

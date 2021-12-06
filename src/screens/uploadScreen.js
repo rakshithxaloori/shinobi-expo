@@ -91,16 +91,11 @@ class UploadScreen extends Component {
             } else {
               let videoHeight = result.height;
               let videoWidth = result.width;
-              // if (result.rotation) {
-              //   videoHeight = result.width;
-              //   videoWidth = result.height;
-              // }
               this.setState({
                 videoUri: result.uri,
                 videoHeight,
                 videoWidth,
               });
-              console.log(videoHeight, videoWidth);
             }
           }
         }
