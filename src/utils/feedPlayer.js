@@ -9,6 +9,7 @@ const videoIconSize = 20;
 
 const VideoPlayer = ({
   videoRef,
+  onViewedClip,
   VIDEO_HEIGHT,
   globalMute,
   globalToggleMute,
@@ -35,6 +36,10 @@ const VideoPlayer = ({
         onPlaybackStatusUpdate={(status) => {
           if (status.error) {
             console.log(status);
+          } else {
+            if (status.didJustFinish) {
+              onViewedClip();
+            }
           }
         }}
       />

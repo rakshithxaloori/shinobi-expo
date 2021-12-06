@@ -45,6 +45,10 @@ class FeedClip extends React.Component {
     this.props.setDeleteClip(this.props.clip);
   };
 
+  onViewedClip = () => {
+    this.props.onViewedClip(this.props.clip.id);
+  };
+
   render = () => {
     const {
       type,
@@ -115,6 +119,7 @@ class FeedClip extends React.Component {
         ) : null}
         <VideoPlayer
           videoUri={clip.url}
+          onViewedClip={this.onViewedClip}
           videoRef={clip.videoRef}
           VIDEO_HEIGHT={VIDEO_HEIGHT}
           globalMute={mute}

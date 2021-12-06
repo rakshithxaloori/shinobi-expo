@@ -162,6 +162,17 @@ class ClipsFeed extends Component {
     this.setState({ deleteClip: clip, showDeleteOverlay: true });
   };
 
+  onViewedClip = async (clip_id) => {
+    const APIKit = await createAPIKit();
+    APIKit.post(
+      "clips/viewed/",
+      { clip_id },
+      { cancelToken: this.cancelTokenSource.token }
+    ).catch((e) => {
+      flashAlert(handleAPIError(e));
+    });
+  };
+
   renderClip = ({ item }) => {
     const dateThen = new Date(item.created_datetime);
     const dateDiff = dateTimeDiff(dateThen);
@@ -180,6 +191,7 @@ class ClipsFeed extends Component {
           dateDiff={dateDiff}
           navigateProfile={this.navigateProfile}
           reportClip={this.reportClip}
+          onViewedClip={this.onViewedClip}
           mute={this.state.mute}
           toggleMute={this.toggleMute}
           toggleLike={this.toggleLike}
@@ -197,6 +209,7 @@ class ClipsFeed extends Component {
           MARGIN={ITEM_MARGIN}
           dateDiff={dateDiff}
           setDeleteClip={this.setDeleteClip}
+          onViewedClip={this.onViewedClip}
           toggleOverlay={this.toggleOverlay}
           mute={this.state.mute}
           toggleMute={this.toggleMute}
