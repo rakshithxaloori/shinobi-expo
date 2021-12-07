@@ -13,8 +13,8 @@ import SelectVideo from "../components/upload/selectVideo";
 import TitleGame from "../components/upload/titleGame";
 
 const VIDEO_MIN_LENGTH = 5;
-const VIDEO_MAX_LENGTH = 21;
-const VIDEO_SIZE_IN_MB = 100;
+const VIDEO_MAX_LENGTH = 61;
+const VIDEO_SIZE_IN_MB = 500;
 
 class UploadScreen extends Component {
   state = {
@@ -79,11 +79,22 @@ class UploadScreen extends Component {
         });
 
         if (!result.cancelled) {
-          // Check atleast 10 secs, atmost 20 secs
+          // Restrict to .mp4, .mov, .wmv, .avi
+          let videoType = result.uri.split(".");
+          videoType = videoType[videoType.length - 1];
+          const allowedTypes = ["mp4", "mov", "wmv", "avi"];
+          if (!allowedTypes.includes(videoType)) {
+            flashAlert("Choose a video of type mp4, mov, wmv or avi");
+            return;
+          }
+
+          // Check MIN MAX video length
           if (result.duration < VIDEO_MIN_LENGTH * 1000) {
-            flashAlert("Video has to be atleast 5 seconds");
+            flashAlert(`Video has to be atleast ${VIDEO_MIN_LENGTH} seconds`);
           } else if (result.duration > VIDEO_MAX_LENGTH * 1000) {
-            flashAlert("Video has to be shorter than 20 seconds");
+            flashAlert(
+              `Video has to be shorter than ${VIDEO_MAX_LENGTH - 1} seconds`
+            );
           } else {
             const videoInfo = await FileSystem.getInfoAsync(result.uri);
             if (videoInfo.size > VIDEO_SIZE_IN_MB * 1000 * 1000) {
