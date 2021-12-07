@@ -127,7 +127,7 @@ class ClipsFeed extends Component {
     let url = undefined;
     let postData = undefined;
     if (this.props.type === "Feed") {
-      url = "/feed/";
+      url = "/feed/following/";
       postData = {
         datetime:
           this.state.clips[this.state.clips.length - 1]?.created_datetime ||
