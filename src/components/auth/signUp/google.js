@@ -26,6 +26,7 @@ const GoogleSignUp = ({
     expoClientId: process.env.EXPO_GOOGLE_CLIENT_ID,
     androidClientId: process.env.ANDROID_GOOGLE_CLIENT_ID,
     scopes: ["profile", "email"],
+    extraParams: { force_verify: "true" },
   });
 
   const imageURI = Asset.fromModule(
