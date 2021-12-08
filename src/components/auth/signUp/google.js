@@ -10,7 +10,6 @@ import AuthContext from "../../../authContext";
 
 import { createAPIKit } from "../../../utils/APIKit";
 import { handleAPIError } from "../../../utils";
-import { flashAlert } from "../../../utils/flash_message";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -60,7 +59,7 @@ const GoogleSignUp = ({
           .then(onSuccess)
           .catch((e) => {
             setDisabled(false);
-            flashAlert(handleAPIError(e));
+            setError(handleAPIError(e));
           });
       } else {
         setDisabled(false);

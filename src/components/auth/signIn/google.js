@@ -14,7 +14,7 @@ import { flashAlert } from "../../../utils/flash_message";
 
 WebBrowser.maybeCompleteAuthSession();
 
-const GoogleSignIn = ({ setError }) => {
+const GoogleSignIn = () => {
   const { saveUser } = useContext(AuthContext);
   let cancelTokenSource = axios.CancelToken.source();
   const [request, response, promptAsync] = Google.useAuthRequest({
