@@ -10,6 +10,7 @@ import AuthContext from "../../../authContext";
 
 import { createAPIKit } from "../../../utils/APIKit";
 import { handleAPIError } from "../../../utils";
+import { flashAlert } from "../../../utils/flash_message";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -22,7 +23,7 @@ const GoogleSignUp = ({
 }) => {
   let cancelTokenSource = axios.CancelToken.source();
   const { saveUser } = useContext(AuthContext);
-  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+  const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: process.env.EXPO_GOOGLE_CLIENT_ID,
     androidClientId: process.env.ANDROID_GOOGLE_CLIENT_ID,
     scopes: ["profile", "email"],
@@ -43,7 +44,10 @@ const GoogleSignUp = ({
   React.useEffect(() => {
     const onResponse = async () => {
       if (response?.type === "success") {
-        const payload = { username, id_token: response.params.id_token };
+        const payload = {
+          username,
+          access_token: response.params.access_token,
+        };
 
         const onSuccess = async (response) => {
           await saveUser(response.data?.payload);
@@ -56,7 +60,7 @@ const GoogleSignUp = ({
           .then(onSuccess)
           .catch((e) => {
             setDisabled(false);
-            setError(handleAPIError(e));
+            flashAlert(handleAPIError(e));
           });
       } else {
         setDisabled(false);
