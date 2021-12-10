@@ -27,6 +27,7 @@ class UploadScreen extends Component {
     videoWidth: null,
     selectText: "Select",
     title: "",
+    selectedGame: null,
     file_key: null,
     disable: true,
     loaded: false,
@@ -120,7 +121,11 @@ class UploadScreen extends Component {
   uploadVideo = async () => {
     if (this.state.videoUri === null) return;
     if (this.state.title == "") {
-      flashAlert("Clip title can't be empty", undefined, undefined, 5000);
+      flashAlert("Clip title can't be empty");
+      return;
+    }
+    if (this.state.selectedGame === null) {
+      flashAlert("Choose a game");
       return;
     }
     this.setState({ disable: true, is_uploading: true });
@@ -166,7 +171,7 @@ class UploadScreen extends Component {
         {
           clip_size: videoInfo.size,
           clip_type: splitList[splitList.length - 1],
-          game_code: "30035",
+          game_code: this.state.selectedGame.id,
           title: this.state.title,
           clip_height: this.state.videoHeight,
           clip_width: this.state.videoWidth,
@@ -237,6 +242,10 @@ class UploadScreen extends Component {
                   });
                 }}
                 uploadVideo={this.uploadVideo}
+                selectedGame={this.state.selectedGame}
+                setSelectedGame={(game) =>
+                  this.setState({ selectedGame: game })
+                }
               />
             )
           : null}
