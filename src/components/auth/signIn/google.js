@@ -10,11 +10,10 @@ import AuthContext from "../../../authContext";
 
 import { createAPIKit } from "../../../utils/APIKit";
 import { handleAPIError } from "../../../utils";
-import { flashAlert } from "../../../utils/flash_message";
 
 WebBrowser.maybeCompleteAuthSession();
 
-const GoogleSignIn = () => {
+const GoogleSignIn = ({ setError }) => {
   const { saveUser } = useContext(AuthContext);
   let cancelTokenSource = axios.CancelToken.source();
   const [request, response, promptAsync] = Google.useAuthRequest({
@@ -52,7 +51,7 @@ const GoogleSignIn = () => {
         })
           .then(onSuccess)
           .catch((e) => {
-            flashAlert(handleAPIError(e));
+            setError(handleAPIError(e));
           });
       }
     };

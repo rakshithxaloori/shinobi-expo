@@ -7,10 +7,12 @@ import GoogleSignIn from "./google";
 import { darkTheme } from "../../../utils/theme";
 
 const SignIn = () => {
+  const [error, setError] = useState("");
+
   return (
     <View style={styles.container}>
       <Text style={styles.error}>{error !== "" && error}</Text>
-      <GoogleSignIn />
+      <GoogleSignIn setError={setError} />
       <StatusBar style={darkTheme.status_bar} />
     </View>
   );

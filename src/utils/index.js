@@ -32,7 +32,7 @@ export const dateTimeDiff = (dateThen) => {
   return dateDiff;
 };
 
-export const createErrorStr = (error) => {
+const createErrorStr = (error) => {
   console.log("NETWORK ERROR");
   if (error.response) {
     // Request made and server responded
@@ -55,6 +55,5 @@ export const handleAPIError = (error) => {
   if (!axios.isCancel(error)) {
     const errorStr = createErrorStr(error);
     flashAlert(errorStr);
-    return errorStr;
-  } else return "";
+  }
 };

@@ -91,7 +91,7 @@ const App = () => {
           const handleResponse = async ({ status, data }) => {
             if (status < 500) {
               try {
-                flashAlert;
+                flashAlert(data.detail);
                 await SecureStore.deleteItemAsync("token_key");
               } catch (e) {}
 

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { View, StyleSheet, Dimensions, Share } from "react-native";
+import { View, Dimensions } from "react-native";
 import {
   NavigationContainer,
   DefaultTheme,
@@ -304,6 +304,7 @@ const NavigatorWithContext = () => {
 
   const _urlListener = (url) => {
     const { path, queryParams } = Linking.parse(url);
+    console.log(path, queryParams);
     switch (path) {
       case "s":
         if (queryParams.hasOwnProperty("username")) {
@@ -322,6 +323,9 @@ const NavigatorWithContext = () => {
             match_id: queryParams.match_id,
           });
         }
+        break;
+      case "instagram/callback":
+        console.log(path, queryParams);
         break;
     }
   };
