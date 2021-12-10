@@ -199,10 +199,6 @@ class ChangeGamesScreen extends Component {
     // Finally clear search, searchGames
   };
 
-  renderSearchGame = ({ item }) => {
-    return <SearchGame game={item} chooseGame={this.addGameToPlays} />;
-  };
-
   render = () => {
     let searchStyle = null;
     if (this.state.searchGames.length > 0)

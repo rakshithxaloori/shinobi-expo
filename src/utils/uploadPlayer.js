@@ -70,7 +70,7 @@ const VideoPlayer = ({ videoUri, videoHeight }) => {
         onPress={toggleMute}
       />
       <Ionicons
-        name={play ? "play" : "pause"}
+        name={play ? "pause" : "play"}
         size={videoIconSize}
         style={[styles.icon, styles.play]}
         color={darkTheme.on_surface_title}
