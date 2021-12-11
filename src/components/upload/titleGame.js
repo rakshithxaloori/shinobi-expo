@@ -138,23 +138,28 @@ const TitleGame = ({
         style={styles.clipLabel}
       />
       {selectedGame && (
-        <View style={styles.game}>
-          <Avatar
-            rounded
-            size={24}
-            title={selectedGame.name[0]}
-            source={{ uri: selectedGame.logo_url }}
-            containerStyle={avatarDefaultStyling}
-            ImageComponent={FastImage}
-          />
-          <Text style={styles.gameName}>{selectedGame.name}</Text>
-          <Ionicons
-            name="close-circle"
-            style={styles.removeGame}
-            size={24}
-            color={darkTheme.on_background}
-            onPress={onRemoveGame}
-          />
+        <View>
+          <Text style={[styles.gameName, { fontWeight: "bold" }]}>
+            Game in the clip
+          </Text>
+          <View style={styles.game}>
+            <Avatar
+              rounded
+              size={24}
+              title={selectedGame.name[0]}
+              source={{ uri: selectedGame.logo_url }}
+              containerStyle={avatarDefaultStyling}
+              ImageComponent={FastImage}
+            />
+            <Text style={styles.gameName}>{selectedGame.name}</Text>
+            <Ionicons
+              name="close-circle"
+              style={styles.removeGame}
+              size={24}
+              color={darkTheme.on_background}
+              onPress={onRemoveGame}
+            />
+          </View>
         </View>
       )}
       {showSearchBar && (
