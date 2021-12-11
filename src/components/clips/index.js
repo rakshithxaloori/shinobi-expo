@@ -19,6 +19,7 @@ import FeedClip from "./clip";
 import ReportOverlay from "./reportOverlay";
 import DeleteOverlay from "./deleteOverlay";
 import { shimmerColors } from "../../utils/styles";
+import { clipUrlByNetSpeed } from "../../utils/clipUrl";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -30,6 +31,7 @@ const ITEM_MARGIN = 10;
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
 const getVideoHeight = (video_height) => {
+  return 300;
   const min_height = Math.min(video_height, screenHeight - 300);
   return min_height;
 };
@@ -297,8 +299,12 @@ class ClipsFeed extends Component {
     // Load the first viewable
     const loadCurrentViewable = async (currentViewable) => {
       console.log("Loading", currentViewable.index);
+
+      const videoUri = clipUrlByNetSpeed(currentViewable.item.url);
+      console.log(videoUri);
+
       await currentViewable.item.videoRef.current.loadAsync(
-        { uri: currentViewable.item.url },
+        { uri: videoUri },
         { shouldPlay: true, isLooping: true, isMuted: this.state.mute }
       );
       this.setState({ viewable: currentViewable.item });

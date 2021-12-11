@@ -314,9 +314,10 @@ const NavigatorWithContext = () => {
         }
         break;
       case "c":
-        if (queryParams.hasOwnProperty("clip")) {
-          RootNavigation.push("Clip", { clip_id: queryParams.clip });
+        if (queryParams.hasOwnProperty("clip_id")) {
+          RootNavigation.push("Clip", { clip_id: queryParams.clip_id });
         }
+        break;
       case "lol":
         if (queryParams.hasOwnProperty("match_id")) {
           RootNavigation.push("LolMatch", {

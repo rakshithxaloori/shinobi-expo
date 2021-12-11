@@ -61,6 +61,7 @@ class FeedClip extends React.Component {
       mute,
       toggleMute,
     } = this.props;
+
     return (
       <View
         style={[
@@ -118,7 +119,6 @@ class FeedClip extends React.Component {
           </View>
         ) : null}
         <VideoPlayer
-          videoUri={clip.url}
           onViewedClip={this.onViewedClip}
           videoRef={clip.videoRef}
           VIDEO_HEIGHT={VIDEO_HEIGHT}
