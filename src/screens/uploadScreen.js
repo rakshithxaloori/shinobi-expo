@@ -11,6 +11,7 @@ import { createAPIKit, uploadFileToS3 } from "../utils/APIKit";
 import { handleAPIError } from "../utils";
 import SelectVideo from "../components/upload/selectVideo";
 import TitleGame from "../components/upload/titleGame";
+import RecaptchaComponent from "../components/upload/recaptcha";
 
 const VIDEO_MIN_LENGTH = 5;
 const VIDEO_MAX_LENGTH = 61;
@@ -26,6 +27,7 @@ class UploadScreen extends Component {
     videoHeight: null,
     videoWidth: null,
     selectText: "Select",
+    recaptchaToken: null,
     title: "",
     selectedGame: null,
     file_key: null,
@@ -33,6 +35,7 @@ class UploadScreen extends Component {
     loaded: false,
   };
   cancelTokenSource = axios.CancelToken.source();
+  recaptchaRef = React.createRef();
 
   componentDidMount = async () => {
     const APIKit = await createAPIKit();
@@ -115,6 +118,7 @@ class UploadScreen extends Component {
         flashAlert("Sorry, we need camera roll permissions to make this work!");
       }
       this.setState({ selectText: "Select", disable: false });
+      this.recaptchaRef.current.open();
     }
   };
 
@@ -126,6 +130,10 @@ class UploadScreen extends Component {
     }
     if (this.state.selectedGame === null) {
       flashAlert("Choose a game");
+      return;
+    }
+    if (this.state.recaptchaToken === null) {
+      this.recaptchaRef.current.open();
       return;
     }
     this.setState({ disable: true, is_uploading: true });
@@ -169,6 +177,7 @@ class UploadScreen extends Component {
       const get_s3_url_response = await APIKit.post(
         "/clips/presigned/",
         {
+          recaptcha_token: this.state.recaptchaToken,
           clip_size: videoInfo.size,
           clip_type: splitList[splitList.length - 1],
           game_code: this.state.selectedGame.id,
@@ -201,58 +210,76 @@ class UploadScreen extends Component {
       videoWidth: null,
     });
 
-  render = () =>
-    this.state.loaded ? (
-      <View style={styles.container}>
-        <Text style={styles.title}>
-          You can upload {this.state.videoQuota} more{" "}
-          {this.state.videoQuota === 1 ? "clip" : "clips"} today
-        </Text>
-        {this.state.videoQuota === 0 && (
-          <Text style={styles.subTitle}>
-            {this.state.timeLeft} until you can upload more clips
+  onRecaptchaVerify = (token) => {
+    console.log("RECAPTCHA TOKEN", token);
+    this.setState({ recaptchaToken: token });
+  };
+
+  onRecaptchaExpire = () => {
+    this.setState({ recaptchaToken: null });
+    flashAlert("ReCAPTCHA expired!");
+  };
+
+  render = () => (
+    <View style={styles.container}>
+      {this.state.loaded ? (
+        <View style={styles.container}>
+          <Text style={styles.title}>
+            You can upload {this.state.videoQuota} more{" "}
+            {this.state.videoQuota === 1 ? "clip" : "clips"} today
           </Text>
-        )}
-        <Text style={styles.subTitle}>
-          Upload a clip that is b/w {VIDEO_MIN_LENGTH} and{" "}
-          {VIDEO_MAX_LENGTH - 1} seconds long{" "}
-        </Text>
-        {this.state.screenNum === 0
-          ? this.state.videoQuota > 0 && (
-              <SelectVideo
-                videoUri={this.state.videoUri}
-                videoHeight={this.state.videoHeight}
-                disable={this.state.disable}
-                clearVideo={this.clearVideo}
-                nextScreen={() => {
-                  this.setState({ screenNum: 1 });
-                }}
-                selectVideo={this.selectVideo}
-                selectText={this.state.selectText}
-              />
-            )
-          : this.state.screenNum === 1
-          ? this.state.videoUri && (
-              <TitleGame
-                is_uploading={this.state.is_uploading}
-                disable={this.state.disable}
-                onChangeText={(value) => {
-                  this.setState({
-                    title: value.trim(),
-                  });
-                }}
-                uploadVideo={this.uploadVideo}
-                selectedGame={this.state.selectedGame}
-                setSelectedGame={(game) =>
-                  this.setState({ selectedGame: game })
-                }
-              />
-            )
-          : null}
-      </View>
-    ) : (
-      <View style={styles.container} />
-    );
+          {this.state.videoQuota === 0 && (
+            <Text style={styles.subTitle}>
+              {this.state.timeLeft} until you can upload more clips
+            </Text>
+          )}
+          <Text style={styles.subTitle}>
+            Upload a clip that is b/w {VIDEO_MIN_LENGTH} and{" "}
+            {VIDEO_MAX_LENGTH - 1} seconds long{" "}
+          </Text>
+          {this.state.screenNum === 0
+            ? this.state.videoQuota > 0 && (
+                <SelectVideo
+                  videoUri={this.state.videoUri}
+                  videoHeight={this.state.videoHeight}
+                  disable={this.state.disable}
+                  clearVideo={this.clearVideo}
+                  nextScreen={() => {
+                    this.setState({ screenNum: 1 });
+                  }}
+                  selectVideo={this.selectVideo}
+                  selectText={this.state.selectText}
+                />
+              )
+            : this.state.screenNum === 1
+            ? this.state.videoUri && (
+                <TitleGame
+                  is_uploading={this.state.is_uploading}
+                  disable={this.state.disable}
+                  onChangeText={(value) => {
+                    this.setState({
+                      title: value.trim(),
+                    });
+                  }}
+                  uploadVideo={this.uploadVideo}
+                  selectedGame={this.state.selectedGame}
+                  setSelectedGame={(game) =>
+                    this.setState({ selectedGame: game })
+                  }
+                />
+              )
+            : null}
+        </View>
+      ) : (
+        <View style={styles.container} />
+      )}
+      <RecaptchaComponent
+        recaptchaRef={this.recaptchaRef}
+        onVerify={this.onRecaptchaVerify}
+        onExpire={this.onRecaptchaExpire}
+      />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
