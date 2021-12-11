@@ -299,9 +299,7 @@ class ClipsFeed extends Component {
     // Load the first viewable
     const loadCurrentViewable = async (currentViewable) => {
       console.log("Loading", currentViewable.index);
-
       const videoUri = clipUrlByNetSpeed(currentViewable.item.url);
-      console.log(videoUri);
 
       await currentViewable.item.videoRef.current.loadAsync(
         { uri: videoUri },
