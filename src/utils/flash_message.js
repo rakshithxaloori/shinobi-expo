@@ -7,15 +7,17 @@ export const flashAlert = (
   big = false,
   duration = 1850
 ) => {
-  showMessage({
-    message: message,
-    duration: duration,
-    description: description,
-    type: "info",
-    icon: "auto",
-    position: "bottom",
-    color: "white",
-    backgroundColor: darkTheme.secondary,
-    textStyle: { fontSize: 14 },
-  });
+  if (message) {
+    showMessage({
+      message: message,
+      duration: duration,
+      description: description,
+      type: "info",
+      icon: "auto",
+      position: "bottom",
+      color: "white",
+      backgroundColor: darkTheme.secondary,
+      textStyle: { fontSize: 14 },
+    });
+  }
 };
