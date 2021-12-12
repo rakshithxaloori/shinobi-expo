@@ -3,6 +3,9 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Avatar } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 import FastImage from "react-native-fast-image";
+import * as SecureStore from "expo-secure-store";
+import Constants from "expo-constants";
+import axios from "axios";
 
 import AuthContext from "../authContext";
 import { avatarDefaultStyling } from "../utils/styles";
@@ -10,8 +13,56 @@ import { darkTheme } from "../utils/theme";
 import ClipsFeed from "../components/clips";
 import MatchList from "../components/feed/matchList";
 import VirtualizedList from "../utils/virtualizedList";
+import { createAPIKit } from "../utils/APIKit";
+import { flashAlert } from "../utils/flash_message";
+import { handleAPIError } from "../utils";
+import UpdatesOverlay from "../components/feed/updatesOverlay";
 
 const FeedScreen = (props) => {
+  let cancelTokenSource = axios.CancelToken.source();
+  const [isVisible, setIsVisible] = React.useState(false);
+  const [updates, setUpdates] = React.useState([]);
+
+  React.useEffect(() => {
+    const checkAppUpdate = async () => {
+      const fetchUpdates = async () => {
+        const onSuccess = async (response) => {
+          const { updates } = response.data?.payload?.updates;
+          setUpdates(updates);
+          setIsVisible(true);
+          await SecureStore.setItemAsync("update", Constants.manifest.version);
+        };
+
+        const APIKit = await createAPIKit();
+        APIKit.post(
+          "ux/updates/",
+          { version: Constants.manifest.version },
+          { cancelToken: cancelTokenSource.token }
+        )
+          .then(onSuccess)
+          .catch((e) => {
+            flashAlert(handleAPIError(e));
+          });
+      };
+
+      try {
+        const updateVersion = await SecureStore.getItemAsync("update");
+        if (
+          updateVersion === undefined ||
+          updateVersion === null ||
+          updateVersion !== Constants.manifest.version
+        ) {
+          // Fetch updates
+          await fetchUpdates();
+        }
+      } catch (e) {
+        // Fetch updates
+        await fetchUpdates();
+      }
+    };
+    checkAppUpdate();
+  }, []);
+
   const { navigation } = props;
 
   const { user } = useContext(AuthContext);
@@ -71,6 +122,11 @@ const FeedScreen = (props) => {
       <Text style={styles.header}>Feed</Text>
       {/* <MatchList navigation={props.navigation} /> */}
       <ClipsFeed type="Feed" />
+      <UpdatesOverlay
+        isVisible={isVisible}
+        updates={updates}
+        setVisible={setIsVisible}
+      />
     </VirtualizedList>
   );
 };

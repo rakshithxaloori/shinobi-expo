@@ -38,6 +38,7 @@ import AuthContext from "../authContext";
 import UploadScreen from "../screens/uploadScreen";
 import ClipScreen from "../screens/clipScreen";
 import ChangeGamesScreen from "../screens/gamesScreen";
+import { flashAlert } from "../utils/flash_message";
 
 const NavigationContext = React.createContext();
 
@@ -64,9 +65,10 @@ Notifications.setNotificationHandler({
 
 const TabNavigatorComponent = () => {
   let cancelTokenSource = axios.CancelToken.source();
-  const [error, setError] = React.useState("");
+
   const [unreadChats, setUnreadChats] = React.useState(false);
   const [newNotifs, setNewNotifs] = React.useState(false);
+
   React.useEffect(() => {
     const fetchNotiChats = async () => {
       const onSuccess = (response) => {
@@ -77,7 +79,7 @@ const TabNavigatorComponent = () => {
       APIKit.get("/chat/unread/", { cancelToken: cancelTokenSource.token })
         .then(onSuccess)
         .catch((e) => {
-          setError(handleAPIError(e));
+          flashAlert(handleAPIError(e));
         });
     };
 

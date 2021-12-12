@@ -13,7 +13,6 @@ import axios from "axios";
 import FastImage from "react-native-fast-image";
 import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
-import * as FileSystem from "expo-file-system";
 
 import { uploadFile } from "../../../utils/APIKit";
 import { handleAPIError } from "../../../utils";
