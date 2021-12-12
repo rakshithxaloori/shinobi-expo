@@ -50,8 +50,16 @@ class ClipScreen extends Component {
       });
   };
 
+  unmountVideo = async () => {
+    this.state.clip && (await this.state.clip.videoRef.current.unloadAsync());
+  };
+
+  componentWillUnmount = async () => {
+    await this.unmountVideo();
+  };
+
   navigateProfile = async (username) => {
-    await this.unmountViewableVideo();
+    await this.unmountVideo();
     const resetAction = CommonActions.reset({
       index: 1,
       routes: [{ name: "Home" }, { name: "Profile", params: { username } }],
