@@ -1,8 +1,15 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Text, Platform } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  Platform,
+} from "react-native";
 import { CommonActions } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
+import * as Linking from "expo-linking";
 import axios from "axios";
 
 import { flashAlert } from "../utils/flash_message";
@@ -15,6 +22,7 @@ import TitleGame from "../components/upload/titleGame";
 const VIDEO_MIN_LENGTH = 5;
 const VIDEO_MAX_LENGTH = 61;
 const VIDEO_SIZE_IN_MB = 500;
+const UPLOAD_SITE_URL = "https://upload.shinobi.cc";
 
 class UploadScreen extends Component {
   state = {
@@ -205,6 +213,14 @@ class UploadScreen extends Component {
       videoWidth: null,
     });
 
+  linkURL = async (URL) => {
+    try {
+      Linking.openURL(URL);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   render = () =>
     this.state.loaded ? (
       <View style={styles.container}>
@@ -253,6 +269,30 @@ class UploadScreen extends Component {
               />
             )
           : null}
+        <View
+          style={{
+            flexDirection: "row",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style={styles.subTitle}>
+            Did you know you can also upload clips at
+          </Text>
+          <TouchableOpacity
+            onPress={() => {
+              this.linkURL(UPLOAD_SITE_URL);
+            }}
+          >
+            <Text
+              style={[styles.subTitle, { textDecorationLine: "underline" }]}
+            >
+              {UPLOAD_SITE_URL}
+            </Text>
+          </TouchableOpacity>
+          <Text style={styles.subTitle}> from your PC?</Text>
+        </View>
       </View>
     ) : (
       <View style={styles.container} />
