@@ -38,7 +38,7 @@ const _handleShare = async (message) => {
 };
 
 export const shareProfile = async (username) => {
-  const message = `Here's a Shinobi profile https://www.shinobi.cc/s?username=${username}`;
+  const message = `${username}'s a Shinobi profile https://www.shinobi.cc/s?username=${username}`;
   await _handleShare(message);
 };
 
@@ -48,7 +48,7 @@ export const shareLolMatch = async (match_id) => {
 };
 
 export const shareApp = async () => {
-  const message = `Shinobi app on Play Store https://play.google.com/store/apps/details?id=cc.shinobi.android`;
+  const message = `Upload a game clip! Shinobi app on Play Store https://play.google.com/store/apps/details?id=cc.shinobi.android`;
   await _handleShare(message);
 };
 

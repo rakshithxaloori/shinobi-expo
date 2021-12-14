@@ -2,6 +2,7 @@
   "expo": {
     "name": "Shinobi",
     "slug": "Shinobi",
+    "description": "Upload a game clip",
     "version": "1.1.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
