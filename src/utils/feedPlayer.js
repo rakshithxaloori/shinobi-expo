@@ -33,12 +33,13 @@ const VideoPlayer = ({
         style={[styles.video, { height: VIDEO_HEIGHT }]}
         resizeMode="contain"
         useNativeControls={false}
-        onPlaybackStatusUpdate={(status) => {
+        onPlaybackStatusUpdate={async (status) => {
           if (status.error) {
             console.log(status);
           } else {
             if (status.didJustFinish) {
               onViewedClip();
+              await videoRef.current.replayAsync();
             }
           }
         }}

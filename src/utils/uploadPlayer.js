@@ -26,8 +26,8 @@ const VideoPlayer = ({ videoUri, videoHeight }) => {
     };
     loadVideo();
 
-    return () => {
-      videoRef.current && videoRef.current.unloadAsync();
+    return async () => {
+      videoRef.current && (await videoRef.current.unloadAsync());
     };
   }, [videoRef.current]);
 

@@ -29,7 +29,8 @@ class ClipScreen extends Component {
       const loadClip = async () => {
         this.state.clip.videoRef.current.loadAsync(
           { uri: clipUrlByNetSpeed(this.state.clip.url) },
-          { shouldPlay: true, isLooping: true, isMuted: this.state.mute }
+          // { shouldPlay: true, isLooping: true, isMuted: this.state.mute }
+          { shouldPlay: true, isMuted: this.state.mute }
         );
       };
 
