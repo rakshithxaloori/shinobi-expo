@@ -31,8 +31,7 @@ const ITEM_MARGIN = 10;
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
 const getVideoHeight = (video_height) => {
-  return 300;
-  const min_height = Math.min(video_height, screenHeight - 300);
+  const min_height = Math.min(video_height, 0.6 * screenHeight, 450);
   return min_height;
 };
 
@@ -303,7 +302,8 @@ class ClipsFeed extends Component {
 
       await currentViewable.item.videoRef.current.loadAsync(
         { uri: videoUri },
-        { shouldPlay: true, isLooping: true, isMuted: this.state.mute }
+        // { shouldPlay: true, isLooping: true, isMuted: this.state.mute }
+        { shouldPlay: true, isMuted: this.state.mute }
       );
       this.setState({ viewable: currentViewable.item });
     };
