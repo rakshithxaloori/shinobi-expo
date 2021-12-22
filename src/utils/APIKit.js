@@ -59,6 +59,7 @@ export const uploadFileToS3 = async (
 
   const response = await FileSystem.uploadAsync(presignedUri, localFileUri, {
     uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+    sessionType: FileSystem.FileSystemSessionType.BACKGROUND,
     fieldName: "file",
     parameters: parameters,
   });
