@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { flashAlert } from "./flash_message";
 import { darkTheme } from "./theme";
 import { createAPIKit } from "./APIKit";
+import { handleAPIError } from ".";
 
 export const ShareIcon = ({ onPress }) => (
   <Ionicons
@@ -53,12 +54,27 @@ export const shareApp = async () => {
 };
 
 export const shareClip = async (clip_id, username, game_name) => {
-  const APIKit = await createAPIKit();
-  try {
-    await APIKit.post("/clips/share/", { clip_id });
-  } catch (e) {
-    console.log(e);
-  }
   const message = `${game_name} clip by ${username} https://www.shinobi.cc/c?clip_id=${clip_id}`;
-  await _handleShare(message);
+  try {
+    const result = await Share.share({
+      message,
+    });
+    if (result.action === Share.sharedAction) {
+      const APIKit = await createAPIKit();
+      try {
+        await APIKit.post("/clips/share/", { clip_id });
+      } catch (e) {
+        flashAlert(handleAPIError(e));
+      }
+      if (result.activityType) {
+        // shared with activity type of result.activityType
+      } else {
+        // shared
+      }
+    } else if (result.action === Share.dismissedAction) {
+      // dismissed
+    }
+  } catch (error) {
+    flashAlert(error.message);
+  }
 };
