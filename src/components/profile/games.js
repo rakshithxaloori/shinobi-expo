@@ -65,6 +65,7 @@ const Games = ({ username }) => {
         renderItem={renderGame}
         keyExtractor={keyExtractor}
         horizontal
+        showsHorizontalScrollIndicator={false}
       />
     </View>
   );
