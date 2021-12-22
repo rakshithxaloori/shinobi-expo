@@ -1,11 +1,13 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { Video } from "expo-av";
+import { Asset } from "expo-asset";
 import { Ionicons } from "@expo/vector-icons";
 
 import { darkTheme } from "./theme";
 
-const videoIconSize = 20;
+const ICON_SIZE = 20;
+const POSTER_SIZE = 88;
 
 const VideoPlayer = ({
   videoRef,
@@ -30,8 +32,17 @@ const VideoPlayer = ({
     <View style={[styles.container, { height: VIDEO_HEIGHT }]}>
       <Video
         ref={videoRef}
+        usePoster
+        posterSource={{
+          uri: Asset.fromModule(require("../../assets/notification-icon.png"))
+            .uri,
+        }}
+        posterStyle={[
+          styles.poster,
+          { marginTop: (VIDEO_HEIGHT - POSTER_SIZE) / 2 },
+        ]}
         style={[styles.video, { height: VIDEO_HEIGHT }]}
-        resizeMode="contain"
+        resizeMode={Video.RESIZE_MODE_CONTAIN}
         useNativeControls={false}
         onPlaybackStatusUpdate={async (status) => {
           if (status.error) {
@@ -46,7 +57,7 @@ const VideoPlayer = ({
       />
       <Ionicons
         name={globalMute ? "volume-mute" : "volume-high"}
-        size={videoIconSize}
+        size={ICON_SIZE}
         style={[styles.icon, styles.mute]}
         color={darkTheme.on_surface_title}
         onPress={toggleMute}
@@ -61,9 +72,13 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
   },
+  poster: {
+    height: POSTER_SIZE,
+    alignSelf: "center",
+  },
   video: { width: "100%" },
   icon: {
-    borderRadius: videoIconSize / 2,
+    borderRadius: ICON_SIZE / 2,
     backgroundColor: darkTheme.surface,
     zIndex: 1,
     padding: 5,
