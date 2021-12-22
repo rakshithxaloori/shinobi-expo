@@ -30,8 +30,12 @@ const ITEM_MARGIN = 10;
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
-const getVideoHeight = (video_height) => {
-  const min_height = Math.min(video_height, 0.6 * screenHeight, 450);
+const getVideoHeight = (video_height, video_width) => {
+  const min_height = Math.min(
+    (video_height * screenWidth) / video_width,
+    0.6 * screenHeight,
+    450
+  );
   return min_height;
 };
 
@@ -178,7 +182,7 @@ class ClipsFeed extends Component {
     const dateThen = new Date(item.created_datetime);
     const dateDiff = dateTimeDiff(dateThen);
 
-    const video_height = getVideoHeight(item.height);
+    const video_height = getVideoHeight(item.height, item.width);
 
     if (this.props.type === "Feed") {
       return (
@@ -224,7 +228,7 @@ class ClipsFeed extends Component {
   };
 
   getItemLayout = (data, index) => {
-    const video_height = getVideoHeight(data[index].height);
+    const video_height = getVideoHeight(data[index].height, data[index].width);
 
     const item_height = video_height + TITLE_HEIGHT + FOOTER_HEIGHT;
     return {
