@@ -84,7 +84,7 @@ class FeedClip extends React.Component {
             />
             <View style={{ paddingLeft: 10 }}>
               <Text style={styles.username}>{clip.uploader.username}</Text>
-              <View style={{ flexDirection: "row" }}>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Avatar
                   rounded
                   size={15}

@@ -106,6 +106,7 @@ const TitleGame = ({
   };
 
   const onRemoveGame = () => {
+    if (disable) return;
     setSelectedGame(null);
     setShowSearchBar(true);
   };
