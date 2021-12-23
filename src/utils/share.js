@@ -19,12 +19,20 @@ export const ShareIcon = ({ onPress }) => (
 
 const styles = StyleSheet.create({ shareHeader: { marginRight: 16 } });
 
-const _handleShare = async (message) => {
+const _handleShare = async (message, urlPath = null, postData = null) => {
   try {
     const result = await Share.share({
       message,
     });
     if (result.action === Share.sharedAction) {
+      if (urlPath !== null) {
+        const APIKit = await createAPIKit();
+        try {
+          await APIKit.post(urlPath, postData);
+        } catch (e) {
+          flashAlert(handleAPIError(e));
+        }
+      }
       if (result.activityType) {
         // shared with activity type of result.activityType
       } else {
@@ -39,12 +47,17 @@ const _handleShare = async (message) => {
 };
 
 export const shareProfile = async (username) => {
-  const message = `${username}'s a Shinobi profile https://www.shinobi.cc/s?username=${username}`;
+  const message = `${username}'s a Shinobi profile https://www.shinobi.cc/s?u=${username}`;
   await _handleShare(message);
 };
 
+export const shareMatch = async (match) => {
+  // TODO generalised
+  // Here's a {game_name} match https://www.shinobi.cc/match/?g={game_code}&m={match_id}
+};
+
 export const shareLolMatch = async (match_id) => {
-  const message = `Here's a League of Legends' match https://www.shinobi.cc/lol?match_id=${match_id}`;
+  const message = `Here's a League of Legends' match https://www.shinobi.cc/match/lol?m=${match_id}`;
   await _handleShare(message);
 };
 
@@ -54,27 +67,6 @@ export const shareApp = async () => {
 };
 
 export const shareClip = async (clip_id, username, game_name) => {
-  const message = `${game_name} clip by ${username} https://www.shinobi.cc/c?clip_id=${clip_id}`;
-  try {
-    const result = await Share.share({
-      message,
-    });
-    if (result.action === Share.sharedAction) {
-      const APIKit = await createAPIKit();
-      try {
-        await APIKit.post("/clips/share/", { clip_id });
-      } catch (e) {
-        flashAlert(handleAPIError(e));
-      }
-      if (result.activityType) {
-        // shared with activity type of result.activityType
-      } else {
-        // shared
-      }
-    } else if (result.action === Share.dismissedAction) {
-      // dismissed
-    }
-  } catch (error) {
-    flashAlert(error.message);
-  }
+  const message = `${game_name} clip by ${username} https://www.shinobi.cc/clip?c=${clip_id}`;
+  await _handleShare(message, "/clips/share/", { clip_id });
 };

@@ -306,24 +306,24 @@ const NavigatorWithContext = () => {
 
   const _urlListener = (url) => {
     const { path, queryParams } = Linking.parse(url);
-    console.log(path, queryParams);
+
     switch (path) {
       case "s":
-        if (queryParams.hasOwnProperty("username")) {
+        if (queryParams.hasOwnProperty("u")) {
           RootNavigation.push("Profile", {
-            username: queryParams.username,
+            username: queryParams.u,
           });
         }
         break;
-      case "c":
-        if (queryParams.hasOwnProperty("clip_id")) {
-          RootNavigation.push("Clip", { clip_id: queryParams.clip_id });
+      case "clip":
+        if (queryParams.hasOwnProperty("c")) {
+          RootNavigation.push("Clip", { clip_id: queryParams.c });
         }
         break;
-      case "lol":
-        if (queryParams.hasOwnProperty("match_id")) {
+      case "match/lol":
+        if (queryParams.hasOwnProperty("m")) {
           RootNavigation.push("LolMatch", {
-            match_id: queryParams.match_id,
+            match_id: queryParams.m,
           });
         }
         break;
