@@ -7,7 +7,7 @@ import FastImage from "react-native-fast-image";
 import { avatarDefaultStyling } from "../utils/styles";
 import { darkTheme } from "../utils/theme";
 
-const MiniProfile = ({ user, game_alias }) => {
+const MiniProfile = ({ user }) => {
   const navigation = useNavigation();
   const navigateProfile = () => {
     navigation.push("Profile", { username: user.username });
@@ -25,18 +25,6 @@ const MiniProfile = ({ user, game_alias }) => {
       />
       <View style={styles.text}>
         <Text style={styles.title}>{user.username}</Text>
-        {game_alias?.alias?.length > 0 && (
-          <View style={styles.gameAlias}>
-            <Avatar
-              rounded
-              size={18}
-              source={{ uri: game_alias.logo }}
-              containerStyle={avatarDefaultStyling}
-              ImageComponent={FastImage}
-            />
-            <Text style={styles.subtitle}>{game_alias.alias}</Text>
-          </View>
-        )}
       </View>
     </TouchableOpacity>
   );

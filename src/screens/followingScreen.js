@@ -52,7 +52,7 @@ class Following extends Component {
   };
 
   renderProfile = ({ item }) => {
-    return <MiniProfile user={item.user} game_alias={item.game_alias} />;
+    return <MiniProfile user={item.user} />;
   };
 
   keyExtractor = (profile) => profile.user.username;
