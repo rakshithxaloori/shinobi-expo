@@ -14,9 +14,9 @@ const iconColor = darkTheme.primary;
 
 class FeedClip extends React.Component {
   shouldComponentUpdate = (nextProps) => {
-    const { me_like, likes } = nextProps.clip;
+    const { me_like, likes } = nextProps.post;
     const { mute } = nextProps;
-    const { me_like: prevMe_like, likes: prevLikes } = this.props.clip;
+    const { me_like: prevMe_like, likes: prevLikes } = this.props.post;
     const { mute: prevMute } = this.props;
 
     // If "me_like" or "likes" is different, then update
@@ -24,35 +24,35 @@ class FeedClip extends React.Component {
   };
 
   navigateProfile = async () => {
-    await this.props.navigateProfile(this.props.clip.uploader.username);
+    await this.props.navigateProfile(this.props.post.uploader.username);
   };
 
   onPressLike = () => {
-    const { clip, toggleLike } = this.props;
-    toggleLike(clip);
+    const { post, toggleLike } = this.props;
+    toggleLike(post);
   };
 
   onPressShare = () => {
-    const { clip } = this.props;
-    shareClip(clip.id, clip.uploader.username, clip.game.name);
+    const { post } = this.props;
+    shareClip(post.id, post.uploader.username, post.game.name);
   };
 
   onPressReport = () => {
-    this.props.reportClip(this.props.clip.id);
+    this.props.reportPost(this.props.post.id);
   };
 
   onPressDelete = () => {
-    this.props.setDeleteClip(this.props.clip);
+    this.props.setDeletePost(this.props.post);
   };
 
   onViewedClip = () => {
-    this.props.onViewedClip(this.props.clip.id);
+    this.props.onViewedClip(this.props.post.clip.id);
   };
 
   render = () => {
     const {
       type,
-      clip,
+      post,
       TITLE_HEIGHT,
       VIDEO_HEIGHT,
       FOOTER_HEIGHT,
@@ -79,20 +79,20 @@ class FeedClip extends React.Component {
           >
             <Avatar
               rounded
-              source={{ uri: clip.uploader.picture }}
+              source={{ uri: post.uploader.picture }}
               ImageComponent={FastImage}
             />
             <View style={{ paddingLeft: 10 }}>
-              <Text style={styles.username}>{clip.uploader.username}</Text>
+              <Text style={styles.username}>{post.uploader.username}</Text>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Avatar
                   rounded
                   size={15}
-                  source={{ uri: clip.game.logo_url }}
+                  source={{ uri: post.game.logo_url }}
                   containerStyle={avatarDefaultStyling}
                   ImageComponent={FastImage}
                 />
-                <Text style={styles.game_name}>{clip.game.name}</Text>
+                <Text style={styles.game_name}>{post.game.name}</Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -100,45 +100,45 @@ class FeedClip extends React.Component {
           <View style={[styles.touchable, { height: TITLE_HEIGHT }]}>
             <Avatar
               rounded
-              source={{ uri: clip.uploader.picture }}
+              source={{ uri: post.uploader.picture }}
               ImageComponent={FastImage}
             />
             <View style={{ paddingLeft: 10 }}>
-              <Text style={styles.username}>{clip.uploader.username}</Text>
+              <Text style={styles.username}>{post.uploader.username}</Text>
               <View style={{ flexDirection: "row" }}>
                 <Avatar
                   rounded
                   size={15}
-                  source={{ uri: clip.game.logo_url }}
+                  source={{ uri: post.game.logo_url }}
                   containerStyle={avatarDefaultStyling}
                   ImageComponent={FastImage}
                 />
-                <Text style={styles.game_name}>{clip.game.name}</Text>
+                <Text style={styles.game_name}>{post.game.name}</Text>
               </View>
             </View>
           </View>
         ) : null}
         <VideoPlayer
           onViewedClip={this.onViewedClip}
-          videoRef={clip.videoRef}
+          videoRef={post.videoRef}
           VIDEO_HEIGHT={VIDEO_HEIGHT}
           globalMute={mute}
           globalToggleMute={toggleMute}
         />
         <View style={[styles.footer, { height: FOOTER_HEIGHT }]}>
-          <Text style={styles.clipTitle}>{clip.title}</Text>
+          <Text style={styles.clipTitle}>{post.title}</Text>
           {type === "Feed" ? (
             <View style={styles.clipIconSection}>
               <View style={styles.footerIconSection}>
                 <Ionicons
-                  name={clip.me_like ? "heart" : "heart-outline"}
+                  name={post.me_like ? "heart" : "heart-outline"}
                   size={footerIconSize}
                   color={iconColor}
                   onPress={this.onPressLike}
                   style={styles.icon}
                 />
                 <Text style={styles.iconText}>
-                  {clip.likes} {clip.likes === 1 ? "like" : "likes"}
+                  {post.likes} {post.likes === 1 ? "like" : "likes"}
                 </Text>
               </View>
               <TouchableOpacity
@@ -176,7 +176,7 @@ class FeedClip extends React.Component {
                   style={styles.icon}
                 />
                 <Text style={styles.iconText}>
-                  {clip.likes} {clip.likes === 1 ? "like" : "likes"}
+                  {post.likes} {post.likes === 1 ? "like" : "likes"}
                 </Text>
               </View>
               <TouchableOpacity
@@ -191,7 +191,7 @@ class FeedClip extends React.Component {
                 />
                 <Text style={styles.iconText}>Share</Text>
               </TouchableOpacity>
-              {this.props.username === clip.uploader.username && (
+              {this.props.username === post.uploader.username && (
                 <TouchableOpacity
                   style={styles.footerIconSection}
                   onPress={this.onPressDelete}

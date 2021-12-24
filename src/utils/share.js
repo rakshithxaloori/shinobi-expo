@@ -66,7 +66,7 @@ export const shareApp = async () => {
   await _handleShare(message);
 };
 
-export const shareClip = async (clip_id, username, game_name) => {
-  const message = `${game_name} clip by ${username} https://www.shinobi.cc/clip?c=${clip_id}`;
-  await _handleShare(message, "/clips/share/", { clip_id });
+export const shareClip = async (post_id, username, game_name) => {
+  const message = `${game_name} clip by ${username} https://www.shinobi.cc/clip?c=${post_id}`;
+  await _handleShare(message, "/feed/post/share/", { post_id });
 };

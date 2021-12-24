@@ -5,8 +5,8 @@ import axios from "axios";
 import { createAPIKit } from "../utils/APIKit";
 import { flashAlert } from "../utils/flash_message";
 import { dateTimeDiff, handleAPIError } from "../utils";
-import FeedClip from "../components/clips/clip";
-import ReportOverlay from "../components/clips/reportOverlay";
+import FeedClip from "../components/posts/post";
+import ReportOverlay from "../components/posts/reportOverlay";
 import { clipUrlByNetSpeed } from "../utils/clipUrl";
 
 const screenHeight = Dimensions.get("window").height;
@@ -20,7 +20,7 @@ const getVideoHeight = (video_height) => {
   return min_height;
 };
 
-class ClipScreen extends Component {
+class PostScreen extends Component {
   state = { clip: null, mute: false };
   cancelTokenSource = axios.CancelToken.source();
 
@@ -42,7 +42,7 @@ class ClipScreen extends Component {
     const APIKit = await createAPIKit();
     APIKit.post(
       "clips/clip/",
-      { clip_id: this.props.route?.params?.clip_id },
+      { post_id: this.props.route?.params?.post_id },
       { cancelToken: this.cancelTokenSource.token }
     )
       .then(onSuccess)
@@ -69,15 +69,15 @@ class ClipScreen extends Component {
     this.props.navigation.dispatch(resetAction);
   };
 
-  reportClip = (clip_id) => {
-    this.setState({ reportClipId: clip_id });
+  reportPost = (post_id) => {
+    this.setState({ reportClipId: post_id });
   };
 
-  onViewedClip = async (clip_id) => {
+  onViewedClip = async (post_id) => {
     const APIKit = await createAPIKit();
     APIKit.post(
       "clips/viewed/",
-      { clip_id },
+      { post_id },
       { cancelToken: this.cancelTokenSource.token }
     ).catch((e) => {
       flashAlert(handleAPIError(e));
@@ -88,22 +88,22 @@ class ClipScreen extends Component {
     this.setState((prevState) => ({ mute: !prevState.mute }));
   };
 
-  toggleLike = async (clip) => {
+  toggleLike = async (post) => {
     const onSuccess = () => {
-      let newClip = {
-        ...clip,
-        me_like: !clip.me_like,
-        likes: clip.me_like ? clip.likes - 1 : clip.likes + 1,
+      let newPost = {
+        ...post,
+        me_like: !post.me_like,
+        likes: post.me_like ? post.likes - 1 : post.likes + 1,
       };
-      this.setState({ clip: newClip });
+      this.setState({ clip: newPost });
     };
     const APIKit = await createAPIKit();
     let url = null;
-    if (clip.me_like) url = "clips/unlike/";
-    else url = "clips/like/";
+    if (post.me_like) url = "feed/post/unlike/";
+    else url = "feed/post/like/";
     APIKit.post(
       url,
-      { clip_id: clip.id },
+      { post_id: post.id },
       { cancelToken: this.cancelTokenSource.token }
     )
       .then(onSuccess)
@@ -129,7 +129,7 @@ class ClipScreen extends Component {
             MARGIN={ITEM_MARGIN}
             dateDiff={dateDiff}
             navigateProfile={this.navigateProfile}
-            reportClip={this.reportClip}
+            reportPost={this.reportPost}
             onViewedClip={this.onViewedClip}
             mute={this.state.mute}
             toggleMute={this.toggleMute}
@@ -137,7 +137,7 @@ class ClipScreen extends Component {
           />
           {this.state.reportClipId && (
             <ReportOverlay
-              clip_id={this.state.reportClipId}
+              post_id={this.state.reportClipId}
               clearReport={this.clearReport}
             />
           )}
@@ -153,4 +153,4 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
 });
 
-export default ClipScreen;
+export default PostScreen;

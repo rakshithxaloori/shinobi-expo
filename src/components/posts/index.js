@@ -15,7 +15,7 @@ import { createAPIKit } from "../../utils/APIKit";
 import { flashAlert } from "../../utils/flash_message";
 import { dateTimeDiff, handleAPIError } from "../../utils";
 import { darkTheme } from "../../utils/theme";
-import FeedClip from "./clip";
+import Post from "./post";
 import ReportOverlay from "./reportOverlay";
 import DeleteOverlay from "./deleteOverlay";
 import { shimmerColors } from "../../utils/styles";
@@ -39,16 +39,16 @@ const getVideoHeight = (video_height, video_width) => {
   return min_height;
 };
 
-class ClipsFeed extends Component {
+class Posts extends Component {
   state = {
-    clips: [],
+    posts: [],
     viewable: null,
     mute: true,
     initLoaded: false,
     isLoading: true,
     endReached: false,
-    reportClipId: undefined,
-    deleteClip: undefined,
+    reportPostId: undefined,
+    deletePost: undefined,
     showDeleteOverlay: false,
   };
 
@@ -78,7 +78,7 @@ class ClipsFeed extends Component {
       this.pauseViewableVideo
     );
 
-    await this.fetchClips();
+    await this.fetchPosts();
   };
 
   componentWillUnmount = async () => {
@@ -103,27 +103,27 @@ class ClipsFeed extends Component {
       (await this.state.viewable.videoRef.current.pauseAsync());
   };
 
-  deleteClipFromList = async (clip) => {
-    const clip_id = clip.id;
-    clip.videoRef.current && (await clip.videoRef.current.unloadAsync());
-    const filteredData = this.state.clips.filter((item) => item.id !== clip_id);
-    this.setState({ clips: filteredData });
+  deletePostFromList = async (post) => {
+    const post_id = post.id;
+    post.videoRef.current && (await post.videoRef.current.unloadAsync());
+    const filteredData = this.state.posts.filter((item) => item.id !== post_id);
+    this.setState({ posts: filteredData });
   };
 
-  fetchClips = async () => {
+  fetchPosts = async () => {
     if (this.state.endReached) return;
     const onSuccess = (response) => {
-      const { clips } = response.data.payload;
-      const clipsWithRef = clips.map((clip) => ({
-        ...clip,
+      const { posts } = response.data.payload;
+      const clipsWithRef = posts.map((post) => ({
+        ...post,
         videoRef: React.createRef(),
       }));
 
       this.setState((prevState) => ({
         initLoaded: true,
         isLoading: false,
-        clips: [...prevState.clips, ...clipsWithRef],
-        endReached: clips.length < this.fetchCount,
+        posts: [...prevState.posts, ...clipsWithRef],
+        endReached: posts.length < this.fetchCount,
       }));
     };
 
@@ -132,18 +132,18 @@ class ClipsFeed extends Component {
     let url = undefined;
     let postData = undefined;
     if (this.props.type === "Feed") {
-      url = "/feed/following/";
+      url = "/feed/posts/following/";
       postData = {
         datetime:
-          this.state.clips[this.state.clips.length - 1]?.created_datetime ||
+          this.state.posts[this.state.posts.length - 1]?.created_datetime ||
           dateNow,
       };
     } else if (this.props.type === "Profile") {
-      url = "/clips/clips/profile/";
+      url = "/feed/posts/profile/";
       postData = {
         username: this.props.username,
         datetime:
-          this.state.clips[this.state.clips.length - 1]?.created_datetime ||
+          this.state.posts[this.state.posts.length - 1]?.created_datetime ||
           dateNow,
       };
     }
@@ -155,16 +155,16 @@ class ClipsFeed extends Component {
       });
   };
 
-  reportClip = (clip_id) => {
-    this.setState({ reportClipId: clip_id });
+  reportPost = (post_id) => {
+    this.setState({ reportPostId: post_id });
   };
 
   clearReport = () => {
-    this.setState({ reportClipId: undefined });
+    this.setState({ reportPostId: undefined });
   };
 
-  setDeleteClip = (clip) => {
-    this.setState({ deleteClip: clip, showDeleteOverlay: true });
+  setDeletePost = (post) => {
+    this.setState({ deletePost: post, showDeleteOverlay: true });
   };
 
   onViewedClip = async (clip_id) => {
@@ -178,24 +178,24 @@ class ClipsFeed extends Component {
     });
   };
 
-  renderClip = ({ item }) => {
+  renderPost = ({ item }) => {
     const dateThen = new Date(item.created_datetime);
     const dateDiff = dateTimeDiff(dateThen);
 
-    const video_height = getVideoHeight(item.height, item.width);
+    const video_height = getVideoHeight(item.clip.height, item.clip.width);
 
     if (this.props.type === "Feed") {
       return (
-        <FeedClip
+        <Post
           type={this.props.type}
-          clip={item}
+          post={item}
           TITLE_HEIGHT={TITLE_HEIGHT}
           VIDEO_HEIGHT={video_height}
           FOOTER_HEIGHT={FOOTER_HEIGHT}
           MARGIN={ITEM_MARGIN}
           dateDiff={dateDiff}
           navigateProfile={this.navigateProfile}
-          reportClip={this.reportClip}
+          reportPost={this.reportPost}
           onViewedClip={this.onViewedClip}
           mute={this.state.mute}
           toggleMute={this.toggleMute}
@@ -204,16 +204,16 @@ class ClipsFeed extends Component {
       );
     } else if (this.props.type === "Profile") {
       return (
-        <FeedClip
+        <Post
           type={this.props.type}
           username={this.props.username}
-          clip={item}
+          post={item}
           TITLE_HEIGHT={TITLE_HEIGHT}
           VIDEO_HEIGHT={video_height}
           FOOTER_HEIGHT={FOOTER_HEIGHT}
           MARGIN={ITEM_MARGIN}
           dateDiff={dateDiff}
-          setDeleteClip={this.setDeleteClip}
+          setDeletePost={this.setDeletePost}
           onViewedClip={this.onViewedClip}
           toggleOverlay={this.toggleOverlay}
           mute={this.state.mute}
@@ -223,12 +223,15 @@ class ClipsFeed extends Component {
     }
   };
 
-  keyExtractor = (clip) => {
-    return clip.id;
+  keyExtractor = (post) => {
+    return post.id;
   };
 
   getItemLayout = (data, index) => {
-    const video_height = getVideoHeight(data[index].height, data[index].width);
+    const video_height = getVideoHeight(
+      data[index].clip.height,
+      data[index].clip.width
+    );
 
     const item_height = video_height + TITLE_HEIGHT + FOOTER_HEIGHT;
     return {
@@ -252,17 +255,17 @@ class ClipsFeed extends Component {
     this.setState((prevState) => ({ mute: !prevState.mute }));
   };
 
-  toggleLike = async (clip) => {
+  toggleLike = async (post) => {
     const onSuccess = () => {
-      let newClip = {
-        ...clip,
-        me_like: !clip.me_like,
-        likes: clip.me_like ? clip.likes - 1 : clip.likes + 1,
+      let newPost = {
+        ...post,
+        me_like: !post.me_like,
+        likes: post.me_like ? post.likes - 1 : post.likes + 1,
       };
       this.setState((prevState) => {
         return {
-          clips: prevState.clips.map((item) =>
-            item.id === newClip.id ? newClip : item
+          posts: prevState.posts.map((item) =>
+            item.id === newPost.id ? newPost : item
           ),
         };
       });
@@ -270,11 +273,11 @@ class ClipsFeed extends Component {
 
     const APIKit = await createAPIKit();
     let url = null;
-    if (clip.me_like) url = "clips/unlike/";
-    else url = "clips/like/";
+    if (post.me_like) url = "feed/post/unlike/";
+    else url = "feed/post/like/";
     APIKit.post(
       url,
-      { clip_id: clip.id },
+      { post_id: post.id },
       { cancelToken: this.cancelTokenSource.token }
     )
       .then(onSuccess)
@@ -302,7 +305,8 @@ class ClipsFeed extends Component {
     // Load the first viewable
     const loadCurrentViewable = async (currentViewable) => {
       console.log("Loading", currentViewable.index);
-      const videoUri = clipUrlByNetSpeed(currentViewable.item.url);
+      const videoUri = clipUrlByNetSpeed(currentViewable.item.clip.url);
+      console.log(videoUri);
 
       await currentViewable.item.videoRef.current.loadAsync(
         { uri: videoUri },
@@ -330,10 +334,10 @@ class ClipsFeed extends Component {
       <View style={styles.container}>
         <FlatList
           contentContainerStyle={styles.list}
-          data={this.state.clips}
-          onEndReached={this.fetchClips}
+          data={this.state.posts}
+          onEndReached={this.fetchPosts}
           onEndReachedThreshold={1}
-          renderItem={this.renderClip}
+          renderItem={this.renderPost}
           keyExtractor={this.keyExtractor}
           showsVerticalScrollIndicator={false}
           ListFooterComponent={
@@ -345,23 +349,24 @@ class ClipsFeed extends Component {
           // Optimizations
           maxToRenderPerBatch={10}
           getItemLayout={this.getItemLayout}
+          // View controls
           onViewableItemsChanged={this.onViewableItemsChanged}
           viewabilityConfig={{
-            itemVisiblePercentThreshold: 80,
+            itemVisiblePercentThreshold: 60,
           }}
         />
-        {this.state.reportClipId && (
+        {this.state.reportPostId && (
           <ReportOverlay
-            clip_id={this.state.reportClipId}
+            post_id={this.state.reportPostId}
             clearReport={this.clearReport}
           />
         )}
         {this.state.showDeleteOverlay && (
           <DeleteOverlay
-            clip={this.state.deleteClip}
+            post={this.state.deletePost}
             showOverlay={this.state.showDeleteOverlay}
             toggleOverlay={this.toggleOverlay}
-            deleteClipFromList={this.deleteClipFromList}
+            deletePostFromList={this.deletePostFromList}
           />
         )}
       </View>
@@ -382,5 +387,5 @@ const styles = StyleSheet.create({
 
 export default function (props) {
   const navigation = useNavigation();
-  return <ClipsFeed {...props} navigation={navigation} />;
+  return <Posts {...props} navigation={navigation} />;
 }

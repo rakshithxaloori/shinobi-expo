@@ -36,7 +36,7 @@ import LolConnect from "../screens/league_of_legends/connectScreen";
 import { ShareIcon, shareLolMatch, shareProfile } from "../utils/share";
 import AuthContext from "../authContext";
 import UploadScreen from "../screens/uploadScreen";
-import ClipScreen from "../screens/clipScreen";
+import PostScreen from "../screens/postScreen";
 import ChangeGamesScreen from "../screens/gamesScreen";
 import { flashAlert } from "../utils/flash_message";
 
@@ -207,7 +207,7 @@ const StackNavigatorComponent = () => {
                 }}
               />
               <Stack.Screen name="Chat" component={Chat} />
-              <Stack.Screen name="Clip" component={ClipScreen} />
+              <Stack.Screen name="Clip" component={PostScreen} />
               <Stack.Screen
                 name="Profile"
                 component={Profile}
@@ -317,7 +317,7 @@ const NavigatorWithContext = () => {
         break;
       case "clip":
         if (queryParams.hasOwnProperty("c")) {
-          RootNavigation.push("Clip", { clip_id: queryParams.c });
+          RootNavigation.push("Clip", { post_id: queryParams.c });
         }
         break;
       case "match/lol":

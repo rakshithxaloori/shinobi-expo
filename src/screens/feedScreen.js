@@ -10,7 +10,7 @@ import axios from "axios";
 import AuthContext from "../authContext";
 import { avatarDefaultStyling } from "../utils/styles";
 import { darkTheme } from "../utils/theme";
-import ClipsFeed from "../components/clips";
+import PostsFeed from "../components/posts";
 import MatchList from "../components/feed/matchList";
 import VirtualizedList from "../utils/virtualizedList";
 import { createAPIKit } from "../utils/APIKit";
@@ -121,7 +121,7 @@ const FeedScreen = (props) => {
       </View>
       <Text style={styles.header}>Feed</Text>
       {/* <MatchList navigation={props.navigation} /> */}
-      <ClipsFeed type="Feed" />
+      <PostsFeed type="Feed" />
       <UpdatesOverlay
         isVisible={isVisible}
         updates={updates}

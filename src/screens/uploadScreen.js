@@ -224,19 +224,17 @@ class UploadScreen extends Component {
   render = () =>
     this.state.loaded ? (
       <View style={styles.container}>
-        <Text style={styles.title}>
-          You can upload {this.state.videoQuota} more{" "}
-          {this.state.videoQuota === 1 ? "clip" : "clips"} today
-        </Text>
-        {this.state.videoQuota === 0 && (
+        {this.state.videoQuota <= 0 ? (
           <Text style={styles.subTitle}>
             {this.state.timeLeft} until you can upload more clips
           </Text>
+        ) : (
+          <Text style={styles.subTitle}>
+            Upload a clip that is b/w {VIDEO_MIN_LENGTH} and{" "}
+            {VIDEO_MAX_LENGTH - 1} seconds long{" "}
+          </Text>
         )}
-        <Text style={styles.subTitle}>
-          Upload a clip that is b/w {VIDEO_MIN_LENGTH} and{" "}
-          {VIDEO_MAX_LENGTH - 1} seconds long{" "}
-        </Text>
+
         {this.state.screenNum === 0
           ? this.state.videoQuota > 0 && (
               <SelectVideo
@@ -275,6 +273,7 @@ class UploadScreen extends Component {
             flexWrap: "wrap",
             justifyContent: "center",
             alignItems: "center",
+            paddingTop: 20,
           }}
         >
           <Text style={styles.subTitle}>

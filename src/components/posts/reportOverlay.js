@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Dimensions,
 } from "react-native";
-import { Overlay } from "react-native-elements";
+import { Overlay, CheckBox } from "react-native-elements";
 import axios from "axios";
 
 import { darkTheme } from "../../utils/theme";
@@ -16,14 +16,12 @@ import { handleAPIError } from "../../utils";
 
 const screenDimensions = Dimensions.get("screen");
 
-const DeleteOverlay = ({
-  clip,
-  showOverlay,
-  toggleOverlay,
-  deleteClipFromList,
-}) => {
+const ReportOverlay = ({ post_id, clearReport }) => {
   let cancelTokenSource = axios.CancelToken.source();
   const [disabled, setDisabled] = React.useState(false);
+
+  const [notPlay, setNotPlay] = React.useState(false);
+  const [notGame, setNotGame] = React.useState(false);
 
   React.useEffect(
     () => () => {
@@ -32,18 +30,23 @@ const DeleteOverlay = ({
     []
   );
 
-  const deleteClip = async () => {
+  const report = async () => {
+    if (!notGame && !notPlay) {
+      flashAlert("Nothing to report!");
+      clearReport();
+      return;
+    }
     setDisabled(true);
 
     const onSuccess = (response) => {
-      deleteClipFromList(clip);
-      toggleOverlay();
+      clearReport();
+      flashAlert("Thank you for reporting!");
     };
 
     const APIKit = await createAPIKit();
     APIKit.post(
-      `/clips/delete/`,
-      { clip_id: clip.id },
+      `/feed/post/report/`,
+      { post_id, not_play: notPlay, not_game: notGame },
       {
         cancelToken: cancelTokenSource.token,
       }
@@ -57,27 +60,42 @@ const DeleteOverlay = ({
 
   return (
     <Overlay
-      isVisible={showOverlay}
-      onBackdropPress={toggleOverlay}
+      isVisible={post_id !== undefined}
+      onBackdropPress={clearReport}
       overlayStyle={styles.container}
     >
-      <Text style={styles.overlayTitle}>Delete the clip?</Text>
-      <Text style={styles.overlaySubtitle}>
-        Deleting a clip, like time, is irreversible and can't be undone
-      </Text>
+      <Text style={styles.overlayTitle}>Report the clip?</Text>
+      <Text style={styles.overlaySubtitle}>Something fishy with the clip?</Text>
 
+      <View style={{ alignItems: "flex-start" }}>
+        <CheckBox
+          title="Not playing"
+          checked={notPlay}
+          onPress={() => setNotPlay(!notPlay)}
+          checkedColor={darkTheme.on_background}
+          containerStyle={styles.checkBox}
+        />
+
+        <CheckBox
+          title="Not a gaming clip"
+          checked={notGame}
+          onPress={() => setNotGame(!notGame)}
+          checkedColor={darkTheme.on_background}
+          containerStyle={styles.checkBox}
+        />
+      </View>
       <View style={{ width: 200, height: 150 }}>
         <TouchableOpacity
-          style={[styles.button, styles.delete]}
+          style={[styles.button, styles.report]}
           disabled={disabled}
-          onPress={deleteClip}
+          onPress={report}
         >
-          <Text style={styles.deleteText}>Delete</Text>
+          <Text style={styles.reportText}>Report</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={[styles.button, styles.cancel]}
-          onPress={toggleOverlay}
+          onPress={clearReport}
         >
           <Text style={styles.cancelText}>Cancel</Text>
         </TouchableOpacity>
@@ -106,12 +124,12 @@ const styles = StyleSheet.create({
     width: "100%",
     borderWidth: 2,
   },
-  deleteText: {
+  reportText: {
     fontSize: 15,
     fontWeight: "bold",
     color: darkTheme.on_background,
   },
-  delete: {
+  report: {
     backgroundColor: darkTheme.primary,
   },
   overlayTitle: {
@@ -142,4 +160,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DeleteOverlay;
+export default ReportOverlay;
