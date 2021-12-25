@@ -192,6 +192,7 @@ class Chat extends Component {
       <GiftedChat
         renderInputToolbar={this.renderInputToolbar}
         renderBubble={this.renderBubble}
+        textInputStyle={{ color: darkTheme.on_surface_title }}
         messages={this.state.messages}
         onSend={(messages) => {
           this.sendMessages(messages);
@@ -210,7 +211,9 @@ class Chat extends Component {
 }
 
 const styles = StyleSheet.create({
-  input: { backgroundColor: darkTheme.surface },
+  input: {
+    backgroundColor: darkTheme.surface,
+  },
   container: { flex: 1, justifyContent: "center", alignItems: "center" },
 });
 
