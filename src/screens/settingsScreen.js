@@ -1,5 +1,6 @@
 import React from "react";
-import { View, TouchableOpacity, StyleSheet } from "react-native";
+import { ScrollView, TouchableOpacity, StyleSheet } from "react-native";
+import Constants from "expo-constants";
 import { Ionicons } from "@expo/vector-icons";
 
 import Content from "../components/settings/content";
@@ -13,20 +14,20 @@ const Settings = (props) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <Cover />
       <TouchableOpacity style={styles.closeButton} onPress={closeSettings}>
         <Ionicons name="close-outline" size={44} />
       </TouchableOpacity>
       <Content />
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   closeButton: {
     position: "absolute",
-    top: "19%",
+    top: 140 - Constants.statusBarHeight,
     left: "50%",
     marginLeft: -22,
     backgroundColor: darkTheme.on_background,
@@ -34,11 +35,8 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   container: {
-    position: "absolute",
-    backgroundColor: darkTheme.on_background,
-    width: "100%",
-    height: "100%",
-    zIndex: 100,
+    flex: 1,
+    marginTop: Constants.statusBarHeight,
   },
 });
 

@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   container: {
-    flex: 2,
+    height: 140,
     backgroundColor: darkTheme.secondary,
     justifyContent: "center",
     alignItems: "center",
