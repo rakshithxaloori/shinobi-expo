@@ -39,6 +39,8 @@ import UploadScreen from "../screens/uploadScreen";
 import PostScreen from "../screens/postScreen";
 import ChangeGamesScreen from "../screens/gamesScreen";
 import { flashAlert } from "../utils/flash_message";
+import TermsScreen from "../screens/termsScreen";
+import PolicyScreen from "../screens/policyScreen";
 
 const NavigationContext = React.createContext();
 
@@ -243,6 +245,8 @@ const StackNavigatorComponent = () => {
                   headerShown: false,
                 }}
               />
+              <Stack.Screen name="Terms" component={TermsScreen} />
+              <Stack.Screen name="Privacy Policy" component={PolicyScreen} />
               <Stack.Screen name="Search" component={Search} />
               <Stack.Screen
                 name="LolMatch"

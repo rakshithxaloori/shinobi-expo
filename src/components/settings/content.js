@@ -53,7 +53,7 @@ const Content = () => {
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        style={styles.games}
+        style={styles.row}
         onPress={() => {
           navigation.navigate("Games");
         }}
@@ -72,6 +72,40 @@ const Content = () => {
         </View>
       </TouchableOpacity>
       <SocialsSettings setSocialsLoaded={setSocialsLoaded} />
+      <TouchableOpacity
+        style={styles.row}
+        onPress={() => {
+          navigation.navigate("Terms");
+        }}
+      >
+        <Ionicons
+          name="document-text-outline"
+          style={styles.icon}
+          size={32}
+          color={darkTheme.on_background}
+        />
+        <View style={styles.content}>
+          <Text style={styles.title}>Terms and Conditions</Text>
+          <Text style={styles.text}>In case, you want to read it</Text>
+        </View>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.row}
+        onPress={() => {
+          navigation.navigate("Privacy Policy");
+        }}
+      >
+        <Ionicons
+          name="file-tray-full-outline"
+          style={styles.icon}
+          size={32}
+          color={darkTheme.on_background}
+        />
+        <View style={styles.content}>
+          <Text style={styles.title}>Privacy Policy</Text>
+          <Text style={styles.text}>Are you bored?</Text>
+        </View>
+      </TouchableOpacity>
       {socialsLoaded ? <LogOut /> : placeholder()}
       <View
         style={{
@@ -140,7 +174,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  games: {
+  row: {
     flexDirection: "row",
     marginTop: 15,
     marginRight: 0,
