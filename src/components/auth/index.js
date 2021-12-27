@@ -5,6 +5,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Welcome from "./welcome";
 import SignIn from "./signIn";
 import SignUp from "./signUp";
+import TermsScreen from "../../screens/termsScreen";
+import PolicyScreen from "../../screens/policyScreen";
 
 const Stack = createStackNavigator();
 
@@ -30,6 +32,8 @@ const Auth = () => (
           headerShown: false,
         }}
       />
+      <Stack.Screen name="Terms" component={TermsScreen} />
+      <Stack.Screen name="Privacy Policy" component={PolicyScreen} />
     </Stack.Navigator>
   </NavigationContainer>
 );

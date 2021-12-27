@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Input } from "react-native-elements";
 import axios from "axios";
@@ -62,7 +62,7 @@ const SignUp = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>
+      <Text style={styles.quote}>
         Choices make us who we are. So choose your username wisely, for it is
         eternal!
       </Text>
@@ -80,6 +80,16 @@ const SignUp = ({ navigation }) => {
         errorStyle={{ color: "red" }}
         errorMessage={error}
       />
+      <View>
+        <Text style={styles.text}>By signing up, you agree to Shinobi's</Text>
+        <TouchableOpacity onPress={navigation.navigate("Terms")}>
+          <Text style={styles.text}>Terms</Text>
+        </TouchableOpacity>
+        <Text style={styles.text}>and</Text>
+        <TouchableOpacity onPress={navigation.navigate("Privacy Policy")}>
+          <Text style={styles.text}>Privacy Policy</Text>
+        </TouchableOpacity>
+      </View>
       <GoogleSignUp
         setError={setError}
         disabled={disabled}
@@ -99,7 +109,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 30,
   },
-  text: { paddingBottom: 20, fontWeight: "bold" },
+  quote: { paddingBottom: 20, fontWeight: "bold" },
+  text: { fontSize: 16 },
 });
 
 export default SignUp;
