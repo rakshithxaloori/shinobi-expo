@@ -80,14 +80,28 @@ const SignUp = ({ navigation }) => {
         errorStyle={{ color: "red" }}
         errorMessage={error}
       />
-      <View>
-        <Text style={styles.text}>By signing up, you agree to Shinobi's</Text>
-        <TouchableOpacity onPress={navigation.navigate("Terms")}>
-          <Text style={styles.text}>Terms</Text>
+      <View style={{ flexDirection: "row", flexWrap: "wrap", padding: 10 }}>
+        <Text style={styles.text}>
+          By signing up, you agree to Shinobi's code -{" "}
+        </Text>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Terms");
+          }}
+        >
+          <Text style={[styles.text, { textDecorationLine: "underline" }]}>
+            Terms
+          </Text>
         </TouchableOpacity>
-        <Text style={styles.text}>and</Text>
-        <TouchableOpacity onPress={navigation.navigate("Privacy Policy")}>
-          <Text style={styles.text}>Privacy Policy</Text>
+        <Text style={styles.text}> and </Text>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Privacy Policy");
+          }}
+        >
+          <Text style={[styles.text, { textDecorationLine: "underline" }]}>
+            Privacy Policy
+          </Text>
         </TouchableOpacity>
       </View>
       <GoogleSignUp
@@ -110,7 +124,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
   },
   quote: { paddingBottom: 20, fontWeight: "bold" },
-  text: { fontSize: 16 },
+  text: { fontSize: 12 },
 });
 
 export default SignUp;
