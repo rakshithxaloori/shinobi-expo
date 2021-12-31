@@ -3,8 +3,9 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/core";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Linking from "expo-linking";
+import {} from "react-native-vector-icons";
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -44,6 +45,10 @@ const Content = () => {
 
   const openSubReddit = () => {
     linkURL("https://www.reddit.com/r/shinobi_app");
+  };
+
+  const openDiscord = () => {
+    linkURL(process.env.DISCORD_INVITE_LINK);
   };
 
   const shareAppLink = () => {
@@ -122,20 +127,21 @@ const Content = () => {
             justifyContent: "center",
           }}
         >
-          <TouchableOpacity
-            style={{ alignItems: "center", paddingRight: 10 }}
-            onPress={openSubReddit}
-          >
+          <TouchableOpacity style={styles.socialIcon} onPress={openSubReddit}>
             <Ionicons
               name="logo-reddit"
               size={33}
               color={darkTheme.on_surface_title}
             />
           </TouchableOpacity>
-          <TouchableOpacity
-            style={{ alignItems: "center", paddingLeft: 10 }}
-            onPress={shareAppLink}
-          >
+          <TouchableOpacity style={styles.socialIcon} onPress={openDiscord}>
+            <MaterialCommunityIcons
+              name="discord"
+              size={33}
+              color={darkTheme.on_surface_title}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.socialIcon} onPress={shareAppLink}>
             <Ionicons
               name="share-social-sharp"
               size={33}
@@ -144,8 +150,8 @@ const Content = () => {
           </TouchableOpacity>
         </View>
         <Text style={styles.helpText}>
-          Did you know there's r/shinobi_app? Post on the subreddit to report
-          bugs or request new features.
+          Post on our subreddit or discord server to report bugs or request new
+          features.
         </Text>
         <Text style={styles.helpText}>
           Tell your friends about Shinobi! Click the share icon to share.
@@ -190,6 +196,7 @@ const styles = StyleSheet.create({
     marginRight: 0,
     borderRadius: 10,
   },
+  socialIcon: { alignItems: "center", paddingHorizontal: 10 },
   container: {
     flex: 6,
     backgroundColor: darkTheme.background,
