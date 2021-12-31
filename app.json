@@ -2,7 +2,7 @@
   "expo": {
     "name": "Shinobi",
     "slug": "Shinobi",
-    "description": "Upload a game clip",
+    "description": "Upload a video-game clip",
     "version": "1.2.4",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,7 +17,7 @@
       "package": "cc.shinobi.android",
       "permissions": ["CAMERA"],
       "googleServicesFile": "./google-services.json",
-      "versionCode": 20,
+      "versionCode": 21,
       "intentFilters": [
         {
           "action": "VIEW",
