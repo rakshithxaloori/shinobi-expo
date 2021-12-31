@@ -75,7 +75,7 @@ const TitleGame = ({
         if (games.length === 0) {
           flashAlert(
             "Sorry, we don't have that game",
-            "Post on r/shinobi_app to let us know you want the game",
+            "Let us know on Discord or Reddit",
             undefined,
             5000
           );
