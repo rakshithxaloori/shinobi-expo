@@ -28,6 +28,7 @@ const YouTube = ({ connectedBool, setError }) => {
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: process.env.EXPO_GOOGLE_CLIENT_ID,
     androidClientId: process.env.ANDROID_GOOGLE_CLIENT_ID,
+    iosClientId: process.env.IOS_GOOGLE_CLIENT_ID,
     scopes: ["https://www.googleapis.com/auth/youtube.readonly"],
     extraParams: { force_verify: "true" },
   });

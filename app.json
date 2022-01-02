@@ -3,7 +3,7 @@
     "name": "Shinobi",
     "slug": "Shinobi",
     "description": "Upload a video-game clip",
-    "version": "1.2.6",
+    "version": "1.2.7",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "notification": {
@@ -17,7 +17,7 @@
       "package": "cc.shinobi.android",
       "permissions": ["CAMERA"],
       "googleServicesFile": "./google-services.json",
-      "versionCode": 23,
+      "versionCode": 24,
       "intentFilters": [
         {
           "action": "VIEW",
@@ -47,6 +47,16 @@
           "category": ["BROWSABLE", "DEFAULT"]
         }
       ]
+    },
+    "ios": {
+      "bundleIdentifier": "cc.shinobi.ios",
+      "icon": "./assets/ios-icon.png",
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "com.googleusercontent.apps.680842267587-peo8k5kmn7a1kub8mlgi74u1dm2supt8"
+        }
+      }
     },
     "scheme": "shn",
     "plugins": [
