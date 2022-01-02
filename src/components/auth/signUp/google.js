@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
@@ -22,9 +22,12 @@ const GoogleSignUp = ({
 }) => {
   let cancelTokenSource = axios.CancelToken.source();
   const { saveUser } = useContext(AuthContext);
+  const [loggingIn, setLoggingIn] = useState(false);
+
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: process.env.EXPO_GOOGLE_CLIENT_ID,
     androidClientId: process.env.ANDROID_GOOGLE_CLIENT_ID,
+    iosClientId: process.env.IOS_GOOGLE_CLIENT_ID,
     scopes: ["profile", "email"],
     extraParams: { force_verify: "true" },
   });
@@ -43,12 +46,14 @@ const GoogleSignUp = ({
   React.useEffect(() => {
     const onResponse = async () => {
       if (response?.type === "success") {
+        setDisabled(true);
         const payload = {
           username,
           access_token: response.params.access_token,
         };
 
         const onSuccess = async (response) => {
+          setLoggingIn(true);
           await saveUser(response.data?.payload);
         };
 
@@ -61,8 +66,6 @@ const GoogleSignUp = ({
             setDisabled(false);
             setError(handleAPIError(e));
           });
-      } else {
-        setDisabled(false);
       }
     };
 
@@ -92,7 +95,11 @@ const GoogleSignUp = ({
           size={40}
           avatarStyle={styles.icon}
         />
-        <Text style={styles.text}>Sign up with Google</Text>
+        {disabled && loggingIn ? (
+          <Text style={styles.text}>Logging in...</Text>
+        ) : (
+          <Text style={styles.text}>Sign up with Google</Text>
+        )}
       </TouchableOpacity>
     )
   );

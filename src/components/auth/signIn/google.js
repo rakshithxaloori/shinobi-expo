@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
@@ -13,12 +13,15 @@ import { handleAPIError } from "../../../utils";
 
 WebBrowser.maybeCompleteAuthSession();
 
-const GoogleSignIn = ({ setError }) => {
+const GoogleSignIn = ({ setError, disabled, setDisabled }) => {
   const { saveUser } = useContext(AuthContext);
+  const [loggingIn, setLoggingIn] = useState(false);
+
   let cancelTokenSource = axios.CancelToken.source();
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: process.env.EXPO_GOOGLE_CLIENT_ID,
     androidClientId: process.env.ANDROID_GOOGLE_CLIENT_ID,
+    iosClientId: process.env.IOS_GOOGLE_CLIENT_ID,
     scopes: ["profile", "email"],
     extraParams: { force_verify: "true" },
   });
@@ -37,11 +40,13 @@ const GoogleSignIn = ({ setError }) => {
   React.useEffect(() => {
     const onResponse = async () => {
       if (response?.type === "success") {
+        setDisabled(true);
         const payload = {
           access_token: response.params.access_token,
         };
 
         const onSuccess = async (response) => {
+          setLoggingIn(true);
           await saveUser(response.data?.payload);
         };
 
@@ -51,6 +56,7 @@ const GoogleSignIn = ({ setError }) => {
         })
           .then(onSuccess)
           .catch((e) => {
+            setDisabled(false);
             setError(handleAPIError(e));
           });
       }
@@ -62,7 +68,7 @@ const GoogleSignIn = ({ setError }) => {
   return (
     imageURI && (
       <TouchableOpacity
-        disabled={!request}
+        disabled={!request || disabled}
         style={styles.button}
         onPress={() => {
           promptAsync();
@@ -73,7 +79,11 @@ const GoogleSignIn = ({ setError }) => {
           size={40}
           avatarStyle={styles.icon}
         />
-        <Text style={styles.text}>Sign in with Google</Text>
+        {disabled && loggingIn ? (
+          <Text style={styles.text}>Logging in...</Text>
+        ) : (
+          <Text style={styles.text}>Sign in with Google</Text>
+        )}
       </TouchableOpacity>
     )
   );

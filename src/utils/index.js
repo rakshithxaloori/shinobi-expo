@@ -55,5 +55,6 @@ export const handleAPIError = (error) => {
   if (!axios.isCancel(error)) {
     const errorStr = createErrorStr(error);
     flashAlert(errorStr);
+    return errorStr;
   }
 };
