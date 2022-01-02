@@ -205,6 +205,7 @@ const styles = StyleSheet.create({
     backgroundColor: darkTheme.surface,
     borderRadius: 10,
     padding: 10,
+    marginHorizontal: 15,
   },
   profilePicture: {
     marginLeft: 10,
@@ -224,7 +225,6 @@ const styles = StyleSheet.create({
   container: {
     height: "100%",
     width: "100%",
-    paddingHorizontal: 10,
     paddingBottom: 10,
   },
 });

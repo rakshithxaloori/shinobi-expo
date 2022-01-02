@@ -58,8 +58,8 @@ const Games = ({ username }) => {
   const keyExtractor = (item) => item.id;
 
   return (
-    <View>
-      <Text style={styles.title}>Plays</Text>
+    <View style={styles.container}>
+      {games.length > 0 && <Text style={styles.title}>Plays</Text>}
       <FlatList
         data={games}
         renderItem={renderGame}
@@ -94,6 +94,9 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     borderRadius: 10,
     alignItems: "center",
+  },
+  container: {
+    marginHorizontal: 10,
   },
 });
 

@@ -68,7 +68,7 @@ class FeedClip extends React.Component {
           styles.container,
           {
             height: VIDEO_HEIGHT + TITLE_HEIGHT + FOOTER_HEIGHT,
-            marginVertical: MARGIN,
+            margin: MARGIN,
           },
         ]}
       >

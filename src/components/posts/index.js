@@ -26,7 +26,7 @@ const screenHeight = Dimensions.get("window").height;
 
 const TITLE_HEIGHT = 60;
 const FOOTER_HEIGHT = 80;
-const ITEM_MARGIN = 10;
+const ITEM_MARGIN = 15;
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 

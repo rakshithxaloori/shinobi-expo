@@ -41,7 +41,7 @@ const VideoPlayer = ({
           styles.poster,
           { marginTop: (VIDEO_HEIGHT - POSTER_SIZE) / 2 },
         ]}
-        style={[styles.video, { height: VIDEO_HEIGHT }]}
+        style={{ height: VIDEO_HEIGHT }}
         resizeMode={Video.RESIZE_MODE_CONTAIN}
         useNativeControls={false}
         onPlaybackStatusUpdate={async (status) => {
@@ -68,7 +68,6 @@ const VideoPlayer = ({
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
   },
@@ -76,7 +75,6 @@ const styles = StyleSheet.create({
     height: POSTER_SIZE,
     alignSelf: "center",
   },
-  video: { width: "100%" },
   icon: {
     borderRadius: ICON_SIZE / 2,
     backgroundColor: darkTheme.surface,
