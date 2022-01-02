@@ -57,8 +57,6 @@ class Following extends Component {
 
   keyExtractor = (profile) => profile.user.username;
 
-  seperatorComponent = () => <View style={styles.seperator} />;
-
   render = () => {
     return (
       <View style={styles.container}>
@@ -67,9 +65,9 @@ class Following extends Component {
           data={this.state.following}
           renderItem={this.renderProfile}
           keyExtractor={this.keyExtractor}
+          onEndReachedThreshold={3}
           onEndReached={this.fetchFollowing}
           showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={this.seperatorComponent()}
         />
       </View>
     );
@@ -78,7 +76,7 @@ class Following extends Component {
 
 const styles = StyleSheet.create({
   container: { flex: 1, paddingHorizontal: 15 },
-  seperator: { borderWidth: 1, borderColor: darkTheme.on_background },
+  seperator: { height: 1, backgroundColor: darkTheme.on_background },
 });
 
 export default Following;

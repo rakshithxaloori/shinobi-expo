@@ -57,8 +57,6 @@ class Followers extends Component {
 
   keyExtractor = (profile) => profile.user.username;
 
-  seperatorComponent = () => <View style={styles.seperator} />;
-
   render = () => {
     return (
       <View style={styles.container}>
@@ -69,7 +67,6 @@ class Followers extends Component {
           keyExtractor={this.keyExtractor}
           onEndReached={this.fetchFollowers}
           showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={this.seperatorComponent()}
         />
       </View>
     );

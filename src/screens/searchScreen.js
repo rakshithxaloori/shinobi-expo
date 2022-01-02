@@ -21,7 +21,7 @@ class Search extends Component {
 
   updateSearch = (search) => {
     this.setState({ search, loading: true });
-    if (search === "") this.setState({ users: undefined });
+    if (search === "") this.setState({ users: [] });
   };
 
   componentDidUpdate = async () => {
