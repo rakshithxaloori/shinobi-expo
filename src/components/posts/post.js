@@ -170,9 +170,10 @@ class FeedClip extends React.Component {
             <View style={styles.clipIconSection}>
               <View style={styles.footerIconSection}>
                 <Ionicons
-                  name={"heart"}
+                  name={post.me_like ? "heart" : "heart-outline"}
                   size={footerIconSize}
                   color={iconColor}
+                  onPress={this.onPressLike}
                   style={styles.icon}
                 />
                 <Text style={styles.iconText}>
@@ -191,7 +192,7 @@ class FeedClip extends React.Component {
                 />
                 <Text style={styles.iconText}>Share</Text>
               </TouchableOpacity>
-              {this.props.username === post.uploader.username && (
+              {this.props.username === post.uploader.username ? (
                 <TouchableOpacity
                   style={styles.footerIconSection}
                   onPress={this.onPressDelete}
@@ -203,6 +204,19 @@ class FeedClip extends React.Component {
                     style={styles.icon}
                   />
                   <Text style={styles.iconText}>Delete</Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  style={styles.footerIconSection}
+                  onPress={this.onPressReport}
+                >
+                  <Ionicons
+                    name={"flag-outline"}
+                    size={footerIconSize}
+                    color={iconColor}
+                    style={styles.icon}
+                  />
+                  <Text style={styles.iconText}>Report</Text>
                 </TouchableOpacity>
               )}
             </View>

@@ -24,6 +24,7 @@ import ReportOverlay from "./reportOverlay";
 import DeleteOverlay from "./deleteOverlay";
 import { shimmerColors } from "../../utils/styles";
 import { clipUrlByNetSpeed } from "../../utils/clipUrl";
+import AuthContext from "../../authContext";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -46,6 +47,8 @@ const getVideoHeight = (video_height, video_width) => {
 };
 
 class Posts extends Component {
+  static contextType = AuthContext;
+
   state = {
     posts: [],
     viewable: null,
@@ -231,18 +234,20 @@ class Posts extends Component {
       return (
         <Post
           type={this.props.type}
-          username={this.props.username}
+          username={this.context.user.username}
           post={item}
           TITLE_HEIGHT={TITLE_HEIGHT}
           VIDEO_HEIGHT={video_height}
           FOOTER_HEIGHT={FOOTER_HEIGHT}
           MARGIN={ITEM_MARGIN}
           dateDiff={dateDiff}
+          reportPost={this.reportPost}
           setDeletePost={this.setDeletePost}
           onViewedClip={this.onViewedClip}
           toggleOverlay={this.toggleOverlay}
           mute={this.state.mute}
           toggleMute={this.toggleMute}
+          toggleLike={this.toggleLike}
         />
       );
     }
