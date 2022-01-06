@@ -228,13 +228,13 @@ class Posts extends Component {
           mute={this.state.mute}
           toggleMute={this.toggleMute}
           toggleLike={this.toggleLike}
+          username={this.context.user.username}
         />
       );
     } else if (this.props.type === "Profile") {
       return (
         <Post
           type={this.props.type}
-          username={this.context.user.username}
           post={item}
           TITLE_HEIGHT={TITLE_HEIGHT}
           VIDEO_HEIGHT={video_height}
@@ -242,12 +242,13 @@ class Posts extends Component {
           MARGIN={ITEM_MARGIN}
           dateDiff={dateDiff}
           reportPost={this.reportPost}
-          setDeletePost={this.setDeletePost}
           onViewedClip={this.onViewedClip}
-          toggleOverlay={this.toggleOverlay}
           mute={this.state.mute}
           toggleMute={this.toggleMute}
           toggleLike={this.toggleLike}
+          username={this.context.user.username}
+          //
+          setDeletePost={this.setDeletePost}
         />
       );
     }
@@ -316,7 +317,7 @@ class Posts extends Component {
       });
   };
 
-  toggleOverlay = () => {
+  toggleDeleteOverlay = () => {
     this.setState((prevState) => ({
       showDeleteOverlay: !prevState.showDeleteOverlay,
     }));
@@ -442,7 +443,7 @@ class Posts extends Component {
           <DeleteOverlay
             post={this.state.deletePost}
             showOverlay={this.state.showDeleteOverlay}
-            toggleOverlay={this.toggleOverlay}
+            toggleOverlay={this.toggleDeleteOverlay}
             deletePostFromList={this.deletePostFromList}
           />
         )}

@@ -127,32 +127,45 @@ class FeedClip extends React.Component {
         />
         <View style={[styles.footer, { height: FOOTER_HEIGHT }]}>
           <Text style={styles.clipTitle}>{post.title}</Text>
-          {type === "Feed" ? (
-            <View style={styles.clipIconSection}>
-              <View style={styles.footerIconSection}>
-                <Ionicons
-                  name={post.me_like ? "heart" : "heart-outline"}
-                  size={footerIconSize}
-                  color={iconColor}
-                  onPress={this.onPressLike}
-                  style={styles.icon}
-                />
-                <Text style={styles.iconText}>
-                  {post.likes} {post.likes === 1 ? "like" : "likes"}
-                </Text>
-              </View>
+          <View style={styles.clipIconSection}>
+            <View style={styles.footerIconSection}>
+              <Ionicons
+                name={post.me_like ? "heart" : "heart-outline"}
+                size={footerIconSize}
+                color={iconColor}
+                onPress={this.onPressLike}
+                style={styles.icon}
+              />
+              <Text style={styles.iconText}>
+                {post.likes} {post.likes === 1 ? "like" : "likes"}
+              </Text>
+            </View>
+            <TouchableOpacity
+              style={styles.footerIconSection}
+              onPress={this.onPressShare}
+            >
+              <Ionicons
+                name={"share-social"}
+                size={footerIconSize}
+                color={iconColor}
+                style={styles.icon}
+              />
+              <Text style={styles.iconText}>Share</Text>
+            </TouchableOpacity>
+            {this.props.username === post.uploader.username ? (
               <TouchableOpacity
                 style={styles.footerIconSection}
-                onPress={this.onPressShare}
+                onPress={this.onPressDelete}
               >
                 <Ionicons
-                  name={"share-social"}
+                  name={"trash-outline"}
                   size={footerIconSize}
                   color={iconColor}
                   style={styles.icon}
                 />
-                <Text style={styles.iconText}>Share</Text>
+                <Text style={styles.iconText}>Delete</Text>
               </TouchableOpacity>
+            ) : (
               <TouchableOpacity
                 style={styles.footerIconSection}
                 onPress={this.onPressReport}
@@ -165,62 +178,8 @@ class FeedClip extends React.Component {
                 />
                 <Text style={styles.iconText}>Report</Text>
               </TouchableOpacity>
-            </View>
-          ) : type === "Profile" ? (
-            <View style={styles.clipIconSection}>
-              <View style={styles.footerIconSection}>
-                <Ionicons
-                  name={post.me_like ? "heart" : "heart-outline"}
-                  size={footerIconSize}
-                  color={iconColor}
-                  onPress={this.onPressLike}
-                  style={styles.icon}
-                />
-                <Text style={styles.iconText}>
-                  {post.likes} {post.likes === 1 ? "like" : "likes"}
-                </Text>
-              </View>
-              <TouchableOpacity
-                style={styles.footerIconSection}
-                onPress={this.onSharePress}
-              >
-                <Ionicons
-                  name={"share-social"}
-                  size={footerIconSize}
-                  color={iconColor}
-                  style={styles.icon}
-                />
-                <Text style={styles.iconText}>Share</Text>
-              </TouchableOpacity>
-              {this.props.username === post.uploader.username ? (
-                <TouchableOpacity
-                  style={styles.footerIconSection}
-                  onPress={this.onPressDelete}
-                >
-                  <Ionicons
-                    name={"trash-outline"}
-                    size={footerIconSize}
-                    color={iconColor}
-                    style={styles.icon}
-                  />
-                  <Text style={styles.iconText}>Delete</Text>
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  style={styles.footerIconSection}
-                  onPress={this.onPressReport}
-                >
-                  <Ionicons
-                    name={"flag-outline"}
-                    size={footerIconSize}
-                    color={iconColor}
-                    style={styles.icon}
-                  />
-                  <Text style={styles.iconText}>Report</Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          ) : null}
+            )}
+          </View>
         </View>
       </View>
     );
