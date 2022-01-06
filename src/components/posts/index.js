@@ -353,7 +353,6 @@ class Posts extends Component {
       <View style={styles.container}>
         {this.state.posts.length > 0 ? (
           <FlatList
-            contentContainerStyle={styles.list}
             data={this.state.posts}
             onEndReached={this.fetchPosts}
             onEndReachedThreshold={1}
@@ -376,7 +375,7 @@ class Posts extends Component {
             }}
           />
         ) : (
-          <>
+          <View style={{ alignItems: "center", justifyContent: "center" }}>
             <LottieView
               ref={(animation) => {
                 this.animation = animation;
@@ -401,7 +400,7 @@ class Posts extends Component {
               />
               <Text style={styles.buttonText}>Upload a Clip</Text>
             </TouchableOpacity>
-          </>
+          </View>
         )}
         {this.state.reportPostId && (
           <ReportOverlay
@@ -446,8 +445,6 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     marginTop: 10,
-    alignItems: "center",
-    justifyContent: "center",
   },
 });
 
