@@ -131,7 +131,13 @@ class Posts extends Component {
 
       const callback = () => {
         if (this.state.posts.length === 0) {
-          this.animation.play();
+          if (this.props.type === "Feed") {
+            this.feedAnimation.play();
+          } else {
+            if (this.props.type === "Profile") {
+              this.profileAnimation.play();
+            }
+          }
         }
       };
 
@@ -374,11 +380,11 @@ class Posts extends Component {
               itemVisiblePercentThreshold: 60,
             }}
           />
-        ) : (
+        ) : this.props.type === "Feed" ? (
           <View style={{ alignItems: "center", justifyContent: "center" }}>
             <LottieView
               ref={(animation) => {
-                this.animation = animation;
+                this.feedAnimation = animation;
               }}
               style={{
                 width: 0.8 * screenWidth,
@@ -400,6 +406,25 @@ class Posts extends Component {
               />
               <Text style={styles.buttonText}>Upload a Clip</Text>
             </TouchableOpacity>
+          </View>
+        ) : (
+          <View
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: 20,
+            }}
+          >
+            <LottieView
+              ref={(animation) => {
+                this.profileAnimation = animation;
+              }}
+              style={{
+                width: 0.9 * screenWidth,
+                height: 0.9 * screenWidth,
+              }}
+              source={require("../../../assets/51382-astronaut-light-theme.json")}
+            />
           </View>
         )}
         {this.state.reportPostId && (
