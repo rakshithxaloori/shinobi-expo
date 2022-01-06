@@ -13,7 +13,6 @@ import { CommonActions, useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import { Ionicons } from "@expo/vector-icons";
-import { Asset } from "expo-asset";
 import LottieView from "lottie-react-native";
 
 import { createAPIKit } from "../../utils/APIKit";
@@ -59,7 +58,6 @@ class Posts extends Component {
     showDeleteOverlay: false,
   };
 
-  animationRef = React.createRef();
   fetchCount = 10;
   cancelTokenSource = axios.CancelToken.source();
   // 9844-loading-40-paperplane.json
@@ -133,17 +131,19 @@ class Posts extends Component {
 
       const callback = () => {
         if (this.state.posts.length === 0) {
-          this.animationRef.current.play();
+          this.animation.play();
         }
       };
 
-      this.setState((prevState) => ({
-        initLoaded: true,
-        isLoading: false,
-        posts: [...prevState.posts, ...clipsWithRef],
-        endReached: posts.length < this.fetchCount,
-      })),
-        callback;
+      this.setState(
+        (prevState) => ({
+          initLoaded: true,
+          isLoading: false,
+          posts: [...prevState.posts, ...clipsWithRef],
+          endReached: posts.length < this.fetchCount,
+        }),
+        callback
+      );
     };
 
     const APIKit = await createAPIKit();
@@ -378,10 +378,12 @@ class Posts extends Component {
         ) : (
           <>
             <LottieView
-              ref={this.animationRef}
+              ref={(animation) => {
+                this.animation = animation;
+              }}
               style={{
-                width: 100,
-                height: 100,
+                width: 0.8 * screenWidth,
+                height: 0.8 * screenWidth,
               }}
               source={require("../../../assets/9844-loading-40-paperplane.json")}
             />
