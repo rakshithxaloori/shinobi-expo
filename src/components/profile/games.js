@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   container: {
-    marginHorizontal: 10,
+    marginHorizontal: 15,
   },
 });
 
