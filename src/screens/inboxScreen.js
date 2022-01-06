@@ -12,6 +12,7 @@ import { Divider } from "react-native-elements";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import axios from "axios";
+import LottieView from "lottie-react-native";
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -43,14 +44,23 @@ class AllChats extends Component {
       this.setState({ isLoading: this.state.chat_users.length > 0 });
 
       const onSuccess = (response) => {
+        const callback = () => {
+          if (this.state.chat_users.length === 0) {
+            this.profileAnimation.play();
+          }
+        };
+
         const { chat_users } = response.data?.payload;
-        this.setState((prevState) => ({
-          initialLoading: false,
-          chat_users: [...prevState.chat_users, ...chat_users],
-          endReached: chat_users.length !== this.fetchCount,
-          isLoading: false,
-          isRefreshing: false,
-        }));
+        this.setState(
+          (prevState) => ({
+            initialLoading: false,
+            chat_users: [...prevState.chat_users, ...chat_users],
+            endReached: chat_users.length !== this.fetchCount,
+            isLoading: false,
+            isRefreshing: false,
+          }),
+          callback
+        );
       };
 
       const APIKit = await createAPIKit();
@@ -181,7 +191,16 @@ class AllChats extends Component {
         />
       ) : (
         <View style={styles.empty}>
-          <Text style={styles.emptyText}>Wow, such empty</Text>
+          <LottieView
+            ref={(animation) => {
+              this.profileAnimation = animation;
+            }}
+            style={{
+              width: 0.9 * screenWidth,
+              height: 0.9 * screenWidth,
+            }}
+            source={require("../../assets/51382-astronaut-light-theme.json")}
+          />
         </View>
       )}
     </SafeAreaView>

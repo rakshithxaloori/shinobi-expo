@@ -1,16 +1,17 @@
 import React, { Component } from "react";
 import {
   View,
-  Text,
   SafeAreaView,
   FlatList,
   StyleSheet,
   ActivityIndicator,
+  Dimensions,
 } from "react-native";
 import { Divider } from "react-native-elements";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import axios from "axios";
+import LottieView from "lottie-react-native";
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -20,6 +21,8 @@ import { createAPIKit } from "../utils/APIKit";
 import { handleAPIError } from "../utils";
 import { darkTheme } from "../utils/theme";
 import { shimmerColors } from "../utils/styles";
+
+const screenWidth = Dimensions.get("screen").width;
 
 class Notifications extends Component {
   state = {
@@ -40,13 +43,22 @@ class Notifications extends Component {
       this.setState({ isLoading: this.state.notifications.length === 0 });
 
       const onSuccess = (response) => {
+        const callback = () => {
+          if (this.state.notifications.length === 0) {
+            this.profileAnimation.play();
+          }
+        };
+
         const { notifications } = response.data?.payload;
-        this.setState((prevState) => ({
-          initialLoading: false,
-          notifications: [...prevState.notifications, ...notifications],
-          endReached: notifications.length !== this.fetchCount,
-          isLoading: false,
-        }));
+        this.setState(
+          (prevState) => ({
+            initialLoading: false,
+            notifications: [...prevState.notifications, ...notifications],
+            endReached: notifications.length !== this.fetchCount,
+            isLoading: false,
+          }),
+          callback
+        );
       };
 
       const APIKit = await createAPIKit();
@@ -169,9 +181,16 @@ class Notifications extends Component {
         />
       ) : (
         <View style={styles.empty}>
-          <Text style={{ fontWeight: "600", fontSize: 18 }}>
-            Wow, such empty
-          </Text>
+          <LottieView
+            ref={(animation) => {
+              this.profileAnimation = animation;
+            }}
+            style={{
+              width: 0.9 * screenWidth,
+              height: 0.9 * screenWidth,
+            }}
+            source={require("../../assets/51382-astronaut-light-theme.json")}
+          />
         </View>
       )}
     </SafeAreaView>
@@ -187,6 +206,7 @@ const styles = StyleSheet.create({
   },
   empty: { flex: 1, justifyContent: "center", alignItems: "center" },
   container: {
+    flex: 1,
     paddingHorizontal: 10,
   },
 });
