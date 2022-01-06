@@ -56,11 +56,6 @@ export const shareMatch = async (match) => {
   // Here's a {game_name} match https://www.shinobi.cc/match/?g={game_code}&m={match_id}
 };
 
-export const shareLolMatch = async (match_id) => {
-  const message = `Here's a League of Legends' match https://www.shinobi.cc/match/lol?m=${match_id}`;
-  await _handleShare(message);
-};
-
 export const shareApp = async () => {
   const message = `Upload a game clip! Shinobi app on Play Store https://play.google.com/store/apps/details?id=cc.shinobi.android`;
   await _handleShare(message);

@@ -32,7 +32,6 @@ class Profile extends Component {
     following_count: undefined,
     me_following: undefined,
     bio: undefined,
-    lol_profile: undefined,
     instagram: undefined,
     twitch: undefined,
     youtube: undefined,

@@ -11,7 +11,6 @@ import AuthContext from "../authContext";
 import { avatarDefaultStyling } from "../utils/styles";
 import { darkTheme } from "../utils/theme";
 import PostsFeed from "../components/posts";
-import MatchList from "../components/feed/matchList";
 import VirtualizedList from "../utils/virtualizedList";
 import { createAPIKit } from "../utils/APIKit";
 import { flashAlert } from "../utils/flash_message";
@@ -120,7 +119,6 @@ const FeedScreen = (props) => {
         </View>
       </View>
       <Text style={styles.header}>Feed</Text>
-      {/* <MatchList navigation={props.navigation} /> */}
       <PostsFeed type="Feed" />
       <UpdatesOverlay
         isVisible={isVisible}

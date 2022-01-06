@@ -31,9 +31,7 @@ import { createAPIKit } from "../utils/APIKit";
 import { handleAPIError } from "../utils";
 import { darkTheme } from "../utils/theme";
 
-import LolMatch from "../screens/league_of_legends/lolMatchScreen";
-import LolConnect from "../screens/league_of_legends/connectScreen";
-import { ShareIcon, shareLolMatch, shareProfile } from "../utils/share";
+import { ShareIcon, shareProfile } from "../utils/share";
 import AuthContext from "../authContext";
 import UploadScreen from "../screens/uploadScreen";
 import PostScreen from "../screens/postScreen";
@@ -248,25 +246,6 @@ const StackNavigatorComponent = () => {
               <Stack.Screen name="Terms" component={TermsScreen} />
               <Stack.Screen name="Privacy Policy" component={PolicyScreen} />
               <Stack.Screen name="Search" component={Search} />
-              <Stack.Screen
-                name="LolMatch"
-                component={LolMatch}
-                options={({ route }) => ({
-                  title: "Match",
-                  headerRight: () => (
-                    <ShareIcon
-                      onPress={async () => {
-                        await shareLolMatch(route.params?.match_id);
-                      }}
-                    />
-                  ),
-                })}
-              />
-              <Stack.Screen
-                name="LolConnect"
-                component={LolConnect}
-                options={{ title: "Connect" }}
-              />
             </Stack.Navigator>
           </NavigationContainer>
         );
@@ -322,13 +301,6 @@ const NavigatorWithContext = () => {
       case "clip":
         if (queryParams.hasOwnProperty("c")) {
           RootNavigation.push("Clip", { post_id: queryParams.c });
-        }
-        break;
-      case "match/lol":
-        if (queryParams.hasOwnProperty("m")) {
-          RootNavigation.push("LolMatch", {
-            match_id: queryParams.m,
-          });
         }
         break;
       case "instagram/callback":
