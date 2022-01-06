@@ -44,7 +44,7 @@ const Content = () => {
   );
 
   const openSubReddit = () => {
-    linkURL("https://www.reddit.com/r/shinobi_app");
+    linkURL("https://www.reddit.com/r/ShinobiApp/");
   };
 
   const openDiscord = () => {
