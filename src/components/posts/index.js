@@ -13,6 +13,8 @@ import { CommonActions, useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import { Ionicons } from "@expo/vector-icons";
+import { Asset } from "expo-asset";
+import LottieView from "lottie-react-native";
 
 import { createAPIKit } from "../../utils/APIKit";
 import { flashAlert } from "../../utils/flash_message";
@@ -57,8 +59,13 @@ class Posts extends Component {
     showDeleteOverlay: false,
   };
 
+  animationRef = React.createRef();
   fetchCount = 10;
   cancelTokenSource = axios.CancelToken.source();
+  // 9844-loading-40-paperplane.json
+  // animationObj = Asset.fromModule(
+  //   require("../../../assets/9844-loading-40-paperplane.json")
+  // );
 
   placeholder = (
     <View style={{ marginBottom: 20, alignItems: "center" }}>
@@ -124,12 +131,19 @@ class Posts extends Component {
         videoRef: React.createRef(),
       }));
 
+      const callback = () => {
+        if (this.state.posts.length === 0) {
+          this.animationRef.current.play();
+        }
+      };
+
       this.setState((prevState) => ({
         initLoaded: true,
         isLoading: false,
         posts: [...prevState.posts, ...clipsWithRef],
         endReached: posts.length < this.fetchCount,
-      }));
+      })),
+        callback;
     };
 
     const APIKit = await createAPIKit();
@@ -362,20 +376,30 @@ class Posts extends Component {
             }}
           />
         ) : (
-          <TouchableOpacity
-            onPress={() => {
-              this.props.navigation.navigate("Upload");
-            }}
-            style={styles.button}
-          >
-            <Ionicons
-              style={styles.icon}
-              name="cloud-upload-outline"
-              size={ICON_SIZE}
-              color={darkTheme.on_background}
+          <>
+            <LottieView
+              ref={this.animationRef}
+              style={{
+                width: 100,
+                height: 100,
+              }}
+              source={require("../../../assets/9844-loading-40-paperplane.json")}
             />
-            <Text style={styles.buttonText}>Upload a Clip</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate("Upload");
+              }}
+              style={styles.button}
+            >
+              <Ionicons
+                style={styles.icon}
+                name="cloud-upload-outline"
+                size={ICON_SIZE}
+                color={darkTheme.on_background}
+              />
+              <Text style={styles.buttonText}>Upload a Clip</Text>
+            </TouchableOpacity>
+          </>
         )}
         {this.state.reportPostId && (
           <ReportOverlay
