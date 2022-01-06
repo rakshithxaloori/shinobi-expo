@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import {
   View,
   FlatList,
+  TouchableOpacity,
+  Text,
   StyleSheet,
   ActivityIndicator,
   Dimensions,
@@ -10,6 +12,7 @@ import axios from "axios";
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
+import { Ionicons } from "@expo/vector-icons";
 
 import { createAPIKit } from "../../utils/APIKit";
 import { flashAlert } from "../../utils/flash_message";
@@ -27,6 +30,8 @@ const screenHeight = Dimensions.get("window").height;
 const TITLE_HEIGHT = 60;
 const FOOTER_HEIGHT = 80;
 const ITEM_MARGIN = 15;
+
+const ICON_SIZE = 25;
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -332,29 +337,46 @@ class Posts extends Component {
   render = () =>
     this.state.initLoaded ? (
       <View style={styles.container}>
-        <FlatList
-          contentContainerStyle={styles.list}
-          data={this.state.posts}
-          onEndReached={this.fetchPosts}
-          onEndReachedThreshold={1}
-          renderItem={this.renderPost}
-          keyExtractor={this.keyExtractor}
-          showsVerticalScrollIndicator={false}
-          ListFooterComponent={
-            <ActivityIndicator
-              animating={this.state.isLoading}
+        {this.state.posts.length > 0 ? (
+          <FlatList
+            contentContainerStyle={styles.list}
+            data={this.state.posts}
+            onEndReached={this.fetchPosts}
+            onEndReachedThreshold={1}
+            renderItem={this.renderPost}
+            keyExtractor={this.keyExtractor}
+            showsVerticalScrollIndicator={false}
+            ListFooterComponent={
+              <ActivityIndicator
+                animating={this.state.isLoading}
+                color={darkTheme.on_background}
+              />
+            }
+            // Optimizations
+            maxToRenderPerBatch={10}
+            getItemLayout={this.getItemLayout}
+            // View controls
+            onViewableItemsChanged={this.onViewableItemsChanged}
+            viewabilityConfig={{
+              itemVisiblePercentThreshold: 60,
+            }}
+          />
+        ) : (
+          <TouchableOpacity
+            onPress={() => {
+              this.props.navigation.navigate("Upload");
+            }}
+            style={styles.button}
+          >
+            <Ionicons
+              style={styles.icon}
+              name="cloud-upload-outline"
+              size={ICON_SIZE}
               color={darkTheme.on_background}
             />
-          }
-          // Optimizations
-          maxToRenderPerBatch={10}
-          getItemLayout={this.getItemLayout}
-          // View controls
-          onViewableItemsChanged={this.onViewableItemsChanged}
-          viewabilityConfig={{
-            itemVisiblePercentThreshold: 60,
-          }}
-        />
+            <Text style={styles.buttonText}>Upload a Clip</Text>
+          </TouchableOpacity>
+        )}
         {this.state.reportPostId && (
           <ReportOverlay
             post_id={this.state.reportPostId}
@@ -379,9 +401,27 @@ class Posts extends Component {
 }
 
 const styles = StyleSheet.create({
+  buttonText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: darkTheme.on_background,
+  },
+  icon: { marginRight: 8 },
+  button: {
+    borderRadius: 30,
+    padding: 15,
+    margin: 10,
+    flexDirection: "row",
+    backgroundColor: darkTheme.primary,
+    width: "50%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   container: {
     width: "100%",
     marginTop: 10,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 
