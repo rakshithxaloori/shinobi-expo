@@ -24,7 +24,9 @@ class FeedClip extends React.Component {
   };
 
   navigateProfile = async () => {
-    await this.props.navigateProfile(this.props.post.uploader.username);
+    if (this.props.type === "Feed") {
+      await this.props.navigateProfile(this.props.post.uploader.username);
+    }
   };
 
   onPressLike = () => {
@@ -72,52 +74,31 @@ class FeedClip extends React.Component {
           },
         ]}
       >
-        {type === "Feed" ? (
-          <TouchableOpacity
-            style={[styles.touchable, { height: TITLE_HEIGHT }]}
-            onPress={this.navigateProfile}
-          >
-            <Avatar
-              rounded
-              source={{ uri: post.uploader.picture }}
-              ImageComponent={FastImage}
-            />
-            <View style={{ paddingLeft: 10 }}>
-              <Text style={styles.username}>{post.uploader.username}</Text>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Avatar
-                  rounded
-                  size={15}
-                  source={{ uri: post.game.logo_url }}
-                  containerStyle={avatarDefaultStyling}
-                  ImageComponent={FastImage}
-                />
-                <Text style={styles.game_name}>{post.game.name}</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-        ) : type === "Profile" ? (
-          <View style={[styles.touchable, { height: TITLE_HEIGHT }]}>
-            <Avatar
-              rounded
-              source={{ uri: post.uploader.picture }}
-              ImageComponent={FastImage}
-            />
-            <View style={{ paddingLeft: 10 }}>
-              <Text style={styles.username}>{post.uploader.username}</Text>
-              <View style={{ flexDirection: "row" }}>
-                <Avatar
-                  rounded
-                  size={15}
-                  source={{ uri: post.game.logo_url }}
-                  containerStyle={avatarDefaultStyling}
-                  ImageComponent={FastImage}
-                />
-                <Text style={styles.game_name}>{post.game.name}</Text>
-              </View>
+        <TouchableOpacity
+          style={[styles.touchable, { height: TITLE_HEIGHT }]}
+          disabled={this.props.type === "Profile"}
+          onPress={this.navigateProfile}
+        >
+          <Avatar
+            rounded
+            source={{ uri: post.uploader.picture }}
+            ImageComponent={FastImage}
+          />
+          <View style={{ paddingLeft: 10 }}>
+            <Text style={styles.username}>{post.uploader.username}</Text>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Avatar
+                rounded
+                size={15}
+                source={{ uri: post.game.logo_url }}
+                containerStyle={avatarDefaultStyling}
+                ImageComponent={FastImage}
+              />
+              <Text style={styles.game_name}>{post.game.name}</Text>
             </View>
           </View>
-        ) : null}
+        </TouchableOpacity>
+
         <VideoPlayer
           onViewedClip={this.onViewedClip}
           videoRef={post.videoRef}

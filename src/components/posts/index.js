@@ -209,49 +209,27 @@ class Posts extends Component {
   renderPost = ({ item }) => {
     const dateThen = new Date(item.created_datetime);
     const dateDiff = dateTimeDiff(dateThen);
-
     const video_height = getVideoHeight(item.clip.height, item.clip.width);
 
-    if (this.props.type === "Feed") {
-      return (
-        <Post
-          type={this.props.type}
-          post={item}
-          TITLE_HEIGHT={TITLE_HEIGHT}
-          VIDEO_HEIGHT={video_height}
-          FOOTER_HEIGHT={FOOTER_HEIGHT}
-          MARGIN={ITEM_MARGIN}
-          dateDiff={dateDiff}
-          navigateProfile={this.navigateProfile}
-          reportPost={this.reportPost}
-          onViewedClip={this.onViewedClip}
-          mute={this.state.mute}
-          toggleMute={this.toggleMute}
-          toggleLike={this.toggleLike}
-          username={this.context.user.username}
-        />
-      );
-    } else if (this.props.type === "Profile") {
-      return (
-        <Post
-          type={this.props.type}
-          post={item}
-          TITLE_HEIGHT={TITLE_HEIGHT}
-          VIDEO_HEIGHT={video_height}
-          FOOTER_HEIGHT={FOOTER_HEIGHT}
-          MARGIN={ITEM_MARGIN}
-          dateDiff={dateDiff}
-          reportPost={this.reportPost}
-          onViewedClip={this.onViewedClip}
-          mute={this.state.mute}
-          toggleMute={this.toggleMute}
-          toggleLike={this.toggleLike}
-          username={this.context.user.username}
-          //
-          setDeletePost={this.setDeletePost}
-        />
-      );
-    }
+    return (
+      <Post
+        type={this.props.type}
+        post={item}
+        TITLE_HEIGHT={TITLE_HEIGHT}
+        VIDEO_HEIGHT={video_height}
+        FOOTER_HEIGHT={FOOTER_HEIGHT}
+        MARGIN={ITEM_MARGIN}
+        dateDiff={dateDiff}
+        navigateProfile={this.navigateProfile}
+        reportPost={this.reportPost}
+        onViewedClip={this.onViewedClip}
+        mute={this.state.mute}
+        toggleMute={this.toggleMute}
+        toggleLike={this.toggleLike}
+        username={this.context.user.username}
+        setDeletePost={this.setDeletePost}
+      />
+    );
   };
 
   keyExtractor = (post) => {
