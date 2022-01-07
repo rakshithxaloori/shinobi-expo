@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import {
   View,
-  SafeAreaView,
   FlatList,
   StyleSheet,
   ActivityIndicator,
@@ -21,6 +20,7 @@ import { createAPIKit } from "../utils/APIKit";
 import { handleAPIError } from "../utils";
 import { darkTheme } from "../utils/theme";
 import { shimmerColors } from "../utils/styles";
+import VirtualizedList from "../utils/virtualizedList";
 
 const screenWidth = Dimensions.get("screen").width;
 
@@ -157,7 +157,7 @@ class Notifications extends Component {
   };
 
   render = () => (
-    <SafeAreaView style={styles.container}>
+    <VirtualizedList style={styles.container}>
       {this.state.initialLoading ? (
         <View style={styles.container}>{this.placeholders()}</View>
       ) : this.state.notifications.length > 0 ? (
@@ -193,7 +193,7 @@ class Notifications extends Component {
           />
         </View>
       )}
-    </SafeAreaView>
+    </VirtualizedList>
   );
 }
 

@@ -6,7 +6,6 @@ import {
   StyleSheet,
   ActivityIndicator,
   Dimensions,
-  SafeAreaView,
 } from "react-native";
 import { Divider } from "react-native-elements";
 import { LinearGradient } from "expo-linear-gradient";
@@ -22,6 +21,7 @@ import { createAPIKit } from "../utils/APIKit";
 import { handleAPIError } from "../utils";
 import { darkTheme } from "../utils/theme";
 import { shimmerColors } from "../utils/styles";
+import VirtualizedList from "../utils/virtualizedList";
 
 const screenWidth = Dimensions.get("screen").width;
 
@@ -164,7 +164,7 @@ class AllChats extends Component {
   };
 
   render = () => (
-    <SafeAreaView style={styles.container}>
+    <VirtualizedList style={styles.container}>
       <Text style={styles.info}>
         You can only chat with people who follow you and who you follow back
       </Text>
@@ -203,7 +203,7 @@ class AllChats extends Component {
           />
         </View>
       )}
-    </SafeAreaView>
+    </VirtualizedList>
   );
 }
 
