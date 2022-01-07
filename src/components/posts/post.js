@@ -9,8 +9,8 @@ import { avatarDefaultStyling } from "../../utils/styles";
 import VideoPlayer from "../../utils/feedPlayer";
 import { shareClip } from "../../utils/share";
 
-const footerIconSize = 20;
-const iconColor = darkTheme.primary;
+const FOOTER_ICON_SIZE = 20;
+const ICON_COLOR = darkTheme.primary;
 
 class ClipPost extends React.Component {
   shouldComponentUpdate = (nextProps) => {
@@ -112,8 +112,8 @@ class ClipPost extends React.Component {
             <View style={styles.footerIconSection}>
               <Ionicons
                 name={post.me_like ? "heart" : "heart-outline"}
-                size={footerIconSize}
-                color={iconColor}
+                size={FOOTER_ICON_SIZE}
+                color={ICON_COLOR}
                 onPress={this.onPressLike}
                 style={styles.icon}
               />
@@ -126,9 +126,9 @@ class ClipPost extends React.Component {
               onPress={this.onPressShare}
             >
               <Ionicons
-                name={"share-social"}
-                size={footerIconSize}
-                color={iconColor}
+                name={"share-social-outline"}
+                size={FOOTER_ICON_SIZE}
+                color={ICON_COLOR}
                 style={styles.icon}
               />
               <Text style={styles.iconText}>Share</Text>
@@ -140,8 +140,8 @@ class ClipPost extends React.Component {
               >
                 <Ionicons
                   name={"trash-outline"}
-                  size={footerIconSize}
-                  color={iconColor}
+                  size={FOOTER_ICON_SIZE}
+                  color={ICON_COLOR}
                   style={styles.icon}
                 />
                 <Text style={styles.iconText}>Delete</Text>
@@ -153,8 +153,8 @@ class ClipPost extends React.Component {
               >
                 <Ionicons
                   name={"flag-outline"}
-                  size={footerIconSize}
-                  color={iconColor}
+                  size={FOOTER_ICON_SIZE}
+                  color={ICON_COLOR}
                   style={styles.icon}
                 />
                 <Text style={styles.iconText}>Report</Text>
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   icon: { marginRight: 5 },
-  iconText: { fontSize: footerIconSize - 5, color: iconColor },
+  iconText: { fontSize: 15, color: ICON_COLOR },
   touchable: {
     flexDirection: "row",
     alignItems: "center",

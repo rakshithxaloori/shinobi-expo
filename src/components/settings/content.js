@@ -143,7 +143,7 @@ const Content = () => {
           </TouchableOpacity>
           <TouchableOpacity style={styles.socialIcon} onPress={shareAppLink}>
             <Ionicons
-              name="share-social-sharp"
+              name="share-social"
               size={33}
               color={darkTheme.on_surface_title}
             />
