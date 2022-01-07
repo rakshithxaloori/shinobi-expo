@@ -22,6 +22,9 @@ export const getDeepLink = (type, params) => {
 
     case DEEP_LINK_TYPES.FOLLOW:
       return baseURL + "notifications";
+
+    default:
+      return null;
   }
 };
 

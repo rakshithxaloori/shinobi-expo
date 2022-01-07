@@ -259,10 +259,8 @@ const NavigatorWithContext = () => {
             // Handle URL from expo push notifications
             const response =
               await Notifications.getLastNotificationResponseAsync();
-            const { data } = response.notification.request.content;
-            url = getDeepLink(data.type, data);
-            console.log(url);
-
+            const data = response?.notification?.request?.content?.data;
+            url = getDeepLink(data?.type, data);
             return url;
           },
           subscribe(listener) {
@@ -277,7 +275,6 @@ const NavigatorWithContext = () => {
                 (response) => {
                   const { data } = response.notification.request.content;
                   const url = getDeepLink(data.type, data);
-                  console.log(url);
 
                   // Let React Navigation handle the URL
                   listener(url);
