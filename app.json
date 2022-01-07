@@ -26,7 +26,7 @@
             {
               "scheme": "https",
               "host": "*.shinobi.cc",
-              "pathPrefix": "/s"
+              "pathPrefix": "/profile"
             },
             {
               "scheme": "https",
@@ -36,12 +36,7 @@
             {
               "scheme": "https",
               "host": "*.shinobi.cc",
-              "pathPrefix": "/match"
-            },
-            {
-              "scheme": "https",
-              "host": "oauth.shinobi.cc",
-              "pathPrefix": "/instagram/callback"
+              "pathPrefix": "/notifications"
             }
           ],
           "category": ["BROWSABLE", "DEFAULT"]

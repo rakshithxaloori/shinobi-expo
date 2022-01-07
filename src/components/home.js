@@ -14,8 +14,6 @@ import { StatusBar } from "expo-status-bar";
 import FlashMessage from "react-native-flash-message";
 import { Ionicons } from "@expo/vector-icons";
 
-import * as RootNavigation from "./rootNavigation";
-
 import FeedScreen from "../screens/feedScreen";
 import InboxScreen from "../screens/inboxScreen";
 import NotificationsScreen from "../screens/notificationsScreen";
@@ -31,7 +29,7 @@ import { createAPIKit } from "../utils/APIKit";
 import { handleAPIError } from "../utils";
 import { darkTheme } from "../utils/theme";
 
-import { ShareIcon, shareProfile } from "../utils/share";
+import { getDeepLink, ShareIcon, shareProfile } from "../utils/share";
 import AuthContext from "../authContext";
 import UploadScreen from "../screens/uploadScreen";
 import PostScreen from "../screens/postScreen";
@@ -43,6 +41,7 @@ import PolicyScreen from "../screens/policyScreen";
 const NavigationContext = React.createContext();
 
 const fullScreenWidth = Dimensions.get("window").width;
+const TAB_ICON_SIZE = 22;
 
 const Stack = createStackNavigator();
 const MyTheme = {
@@ -91,72 +90,62 @@ const TabNavigatorComponent = () => {
   }, []);
 
   return (
-    <NavigationContext.Consumer>
-      {(navigateRoute) => {
-        const iconSize = 22;
-        return (
-          <Tab.Navigator
-            screenOptions={{
-              tabBarStyle: {
-                borderTopWidth: 0,
-                backgroundColor: darkTheme.background,
-                elevation: 0,
-                shadowOpacity: 0,
-              },
-              tabBarActiveTintColor: darkTheme.primary,
-              tabBarInactiveTintColor: "grey",
-              tabBarShowLabel: false,
-              style: { width: fullScreenWidth },
-            }}
-            initialRouteName={navigateRoute}
-          >
-            <Tab.Screen
-              name="Feed"
-              component={FeedScreen}
-              options={{
-                headerShown: false,
-                tabBarIcon: ({ focused, color }) => {
-                  let iconName = focused ? "home" : "home-outline";
-                  return (
-                    <Ionicons name={iconName} size={iconSize} color={color} />
-                  );
-                },
-              }}
-            />
-            <Tab.Screen
-              name="Inbox"
-              component={InboxScreen}
-              options={{
-                headerShown: false,
-                tabBarIcon: ({ focused, color }) => {
-                  let iconName = focused
-                    ? "chatbubble-ellipses"
-                    : "chatbubble-ellipses-outline";
-                  return (
-                    <Ionicons name={iconName} size={iconSize} color={color} />
-                  );
-                },
-              }}
-            />
-            <Tab.Screen
-              name="Notifications"
-              component={NotificationsScreen}
-              options={{
-                headerShown: false,
-                tabBarIcon: ({ focused, color }) => {
-                  let iconName = focused
-                    ? "notifications"
-                    : "notifications-outline";
-                  return (
-                    <Ionicons name={iconName} size={iconSize} color={color} />
-                  );
-                },
-              }}
-            />
-          </Tab.Navigator>
-        );
+    <Tab.Navigator
+      screenOptions={{
+        tabBarStyle: {
+          borderTopWidth: 0,
+          backgroundColor: darkTheme.background,
+          elevation: 0,
+          shadowOpacity: 0,
+        },
+        tabBarActiveTintColor: darkTheme.primary,
+        tabBarInactiveTintColor: "grey",
+        tabBarShowLabel: false,
+        style: { width: fullScreenWidth },
       }}
-    </NavigationContext.Consumer>
+    >
+      <Tab.Screen
+        name="Feed"
+        component={FeedScreen}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused, color }) => {
+            let iconName = focused ? "home" : "home-outline";
+            return (
+              <Ionicons name={iconName} size={TAB_ICON_SIZE} color={color} />
+            );
+          },
+        }}
+      />
+      <Tab.Screen
+        name="Inbox"
+        component={InboxScreen}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused, color }) => {
+            let iconName = focused
+              ? "chatbubble-ellipses"
+              : "chatbubble-ellipses-outline";
+            return (
+              <Ionicons name={iconName} size={TAB_ICON_SIZE} color={color} />
+            );
+          },
+        }}
+      />
+      <Tab.Screen
+        name="Notifications"
+        component={NotificationsScreen}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused, color }) => {
+            let iconName = focused ? "notifications" : "notifications-outline";
+            return (
+              <Ionicons name={iconName} size={TAB_ICON_SIZE} color={color} />
+            );
+          },
+        }}
+      />
+    </Tab.Navigator>
   );
 };
 
@@ -164,179 +153,143 @@ const StackNavigatorComponent = () => {
   const { user } = useContext(AuthContext);
 
   return (
-    <NavigationContext.Consumer>
-      {(navigateRoute) => {
-        return (
-          <NavigationContainer
-            ref={RootNavigation.navigationRef}
-            theme={MyTheme}
-          >
-            <Stack.Navigator
-              initialRouteName={navigateRoute}
-              screenOptions={{
-                headerBackImage: () => (
-                  <Ionicons
-                    style={{ marginLeft: 8 }}
-                    name="arrow-back-outline"
-                    size={30}
-                    color={darkTheme.on_background}
-                  />
-                ),
-                headerBackTitleVisible: false,
-                headerTitleAlign: "center",
-                headerTintColor: darkTheme.on_background,
-                headerTitleStyle: { fontSize: 20 },
-                headerStyle: {
-                  backgroundColor: darkTheme.background,
-                  elevation: 0,
-                  shadowOpacity: 0,
-                },
-              }}
-            >
-              <Stack.Screen
-                name="Home"
-                component={TabNavigatorComponent}
-                options={({ route }) => {
-                  const routeName =
-                    getFocusedRouteNameFromRoute(route) || "Feed";
-                  return routeName && routeName !== "Feed"
-                    ? {
-                        headerTitle: routeName,
-                      }
-                    : { headerShown: false };
-                }}
-              />
-              <Stack.Screen name="Chat" component={Chat} />
-              <Stack.Screen name="Clip" component={PostScreen} />
-              <Stack.Screen
-                name="Profile"
-                component={Profile}
-                options={({ route }) => ({
-                  title: "Profile",
-                  headerRight: () => (
-                    <ShareIcon
-                      onPress={async () => {
-                        await shareProfile(
-                          route.params?.username || user?.username
-                        );
-                      }}
-                    />
-                  ),
-                })}
-              />
-              <Stack.Screen
-                name="Games"
-                component={ChangeGamesScreen}
-                options={{ title: "Games I Play" }}
-              />
-              <Stack.Screen name="Followers" component={Followers} />
-              <Stack.Screen name="Following" component={Followings} />
-              <Stack.Screen
-                name="Upload"
-                component={UploadScreen}
-                options={{ title: "Upload Clip" }}
-              />
-              <Stack.Screen
-                name="Settings"
-                component={Settings}
-                options={{
-                  headerShown: false,
-                }}
-              />
-              <Stack.Screen name="Terms" component={TermsScreen} />
-              <Stack.Screen name="Privacy Policy" component={PolicyScreen} />
-              <Stack.Screen name="Search" component={Search} />
-            </Stack.Navigator>
-          </NavigationContainer>
-        );
+    <Stack.Navigator
+      screenOptions={{
+        headerBackImage: () => (
+          <Ionicons
+            style={{ marginLeft: 8 }}
+            name="arrow-back-outline"
+            size={30}
+            color={darkTheme.on_background}
+          />
+        ),
+        headerBackTitleVisible: false,
+        headerTitleAlign: "center",
+        headerTintColor: darkTheme.on_background,
+        headerTitleStyle: { fontSize: 20 },
+        headerStyle: {
+          backgroundColor: darkTheme.background,
+          elevation: 0,
+          shadowOpacity: 0,
+        },
       }}
-    </NavigationContext.Consumer>
+    >
+      <Stack.Screen
+        name="Home"
+        component={TabNavigatorComponent}
+        options={({ route }) => {
+          const routeName = getFocusedRouteNameFromRoute(route) || "Feed";
+          return routeName && routeName !== "Feed"
+            ? {
+                headerTitle: routeName,
+              }
+            : { headerShown: false };
+        }}
+      />
+      <Stack.Screen name="Chat" component={Chat} />
+      <Stack.Screen name="Clip" component={PostScreen} />
+      <Stack.Screen
+        name="Profile"
+        component={Profile}
+        options={({ route }) => ({
+          title: "Profile",
+          headerRight: () => (
+            <ShareIcon
+              onPress={async () => {
+                await shareProfile(route.params?.username || user?.username);
+              }}
+            />
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="Games"
+        component={ChangeGamesScreen}
+        options={{ title: "Games I Play" }}
+      />
+      <Stack.Screen name="Followers" component={Followers} />
+      <Stack.Screen name="Following" component={Followings} />
+      <Stack.Screen
+        name="Upload"
+        component={UploadScreen}
+        options={{ title: "Upload Clip" }}
+      />
+      <Stack.Screen
+        name="Settings"
+        component={Settings}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen name="Terms" component={TermsScreen} />
+      <Stack.Screen name="Privacy Policy" component={PolicyScreen} />
+      <Stack.Screen name="Search" component={Search} />
+    </Stack.Navigator>
   );
 };
 
 const NavigatorWithContext = () => {
-  const [navigateRoute, setNavigateRoute] = React.useState("");
-
-  React.useEffect(() => {
-    // const nrl =
-    //   Notifications.addNotificationReceivedListener(_handleNotification);
-    const nrrl = Notifications.addNotificationResponseReceivedListener(
-      _handleNotificationResponse
-    );
-
-    // Handle deep links
-    Linking.addEventListener("url", _foregroundURLListener);
-    Linking.getInitialURL().then((url) => {
-      if (url === null) return;
-      _urlListener(url);
-    });
-
-    return () => {
-      // Notifications.removeNotificationSubscription(nrl);
-      Notifications.removeNotificationSubscription(nrrl);
-
-      Linking.removeEventListener("url", _foregroundURLListener);
-    };
-  }, []);
-
-  // const _handleNotification = (notification) => {
-  //   console.log("_handleNotification", notification);
-  // };
-
-  const _foregroundURLListener = (event) => {
-    _urlListener(event.url);
-  };
-
-  const _urlListener = (url) => {
-    const { path, queryParams } = Linking.parse(url);
-
-    switch (path) {
-      case "s":
-        if (queryParams.hasOwnProperty("u")) {
-          RootNavigation.push("Profile", {
-            username: queryParams.u,
-          });
-        }
-        break;
-      case "clip":
-        if (queryParams.hasOwnProperty("c")) {
-          RootNavigation.push("Clip", { post_id: queryParams.c });
-        }
-        break;
-      case "instagram/callback":
-        console.log(path, queryParams);
-        break;
-    }
-  };
-
-  const _handleNotificationResponse = (response) => {
-    const { data } = response.notification?.request?.content;
-
-    switch (data?.type) {
-      case "s":
-        RootNavigation.push("Settings");
-        setNavigateRoute("Settings");
-        break;
-      case "f":
-        RootNavigation.push("Home", { screen: "Notifications" });
-        // navigateRoute is used when navigationRef is not yet ready
-        // and the RootNavigation.navigate is ignored
-        setNavigateRoute("Notifications");
-        break;
-      case "c":
-        RootNavigation.dispatch(1, [
-          { name: "Home" },
-          { name: "Clip", params: { post_id: data.post_id } },
-        ]);
-        break;
-    }
-  };
-
   return (
     <View style={{ flex: 1, backgroundColor: darkTheme.background }}>
-      <NavigationContext.Provider value={navigateRoute}>
+      <NavigationContainer
+        theme={MyTheme}
+        linking={{
+          prefixes: ["https://*.shinobi.cc"],
+          config: {
+            // Configuration for linking
+            initialRouteName: "Home",
+            screens: {
+              Profile: "profile/:username",
+              Clip: "clip/:post_id",
+              Notifications: "notifications",
+            },
+          },
+          async getInitialURL() {
+            // First, you may want to do the default deep link handling
+            // Check if app was opened from a deep link
+            let url = await Linking.getInitialURL();
+
+            if (url != null) {
+              return url;
+            }
+
+            // Handle URL from expo push notifications
+            const response =
+              await Notifications.getLastNotificationResponseAsync();
+            const { data } = response.notification.request.content;
+            url = getDeepLink(data.type, data);
+
+            return url;
+          },
+          subscribe(listener) {
+            const onReceiveURL = ({ url }) => listener(url);
+
+            // Listen to incoming links from deep linking
+            Linking.addEventListener("url", onReceiveURL);
+
+            // Listen to expo push notifications
+            const subscription =
+              Notifications.addNotificationResponseReceivedListener(
+                (response) => {
+                  const { data } = response.notification.request.content;
+                  const url = getDeepLink(data.type, data);
+
+                  // Let React Navigation handle the URL
+                  listener(url);
+                }
+              );
+
+            return () => {
+              // Clean up the event listeners
+              Linking.removeEventListener("url", onReceiveURL);
+              subscription.remove();
+            };
+          },
+        }}
+      >
         <StackNavigatorComponent />
-      </NavigationContext.Provider>
+      </NavigationContainer>
+
       <StatusBar
         style={darkTheme.status_bar}
         backgroundColor={darkTheme.background}

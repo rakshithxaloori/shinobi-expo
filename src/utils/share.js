@@ -7,6 +7,24 @@ import { darkTheme } from "./theme";
 import { createAPIKit } from "./APIKit";
 import { handleAPIError } from ".";
 
+export const DEEP_LINK_TYPES = { PROFILE: "p", CLIP: "c", FOLLOW: "f" };
+
+export const getDeepLink = (type, params) => {
+  const baseURL = "https://www.shinobi.cc/";
+  switch (type) {
+    case DEEP_LINK_TYPES.PROFILE:
+      const { username } = params;
+      return baseURL + `profile/${username}`;
+
+    case DEEP_LINK_TYPES.CLIP:
+      const { post_id } = params;
+      return baseURL + `clip/${post_id}`;
+
+    case DEEP_LINK_TYPES.FOLLOW:
+      return baseURL + "notifications";
+  }
+};
+
 export const ShareIcon = ({ onPress }) => (
   <Ionicons
     name="share-social"
@@ -47,7 +65,8 @@ const _handleShare = async (message, urlPath = null, postData = null) => {
 };
 
 export const shareProfile = async (username) => {
-  const message = `${username}'s a Shinobi profile https://www.shinobi.cc/s?u=${username}`;
+  const deepLinkURL = getDeepLink(DEEP_LINK_TYPES.PROFILE, { username });
+  const message = `${username}'s a Shinobi profile ${deepLinkURL}`;
   await _handleShare(message);
 };
 
@@ -62,6 +81,7 @@ export const shareApp = async () => {
 };
 
 export const shareClip = async (post_id, username, game_name) => {
-  const message = `${game_name} clip by ${username} https://www.shinobi.cc/clip?c=${post_id}`;
+  const deepLinkURL = getDeepLink(DEEP_LINK_TYPES.CLIP, { post_id });
+  const message = `${game_name} clip by ${username} ${deepLinkURL}`;
   await _handleShare(message, "/feed/post/share/", { post_id });
 };

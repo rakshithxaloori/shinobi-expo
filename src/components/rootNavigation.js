@@ -25,10 +25,3 @@ export function push(name, params) {
     // You can ignore this, or add these actions to a queue you can call later
   }
 }
-
-export function dispatch(index = 0, routes = [{ name: "Home" }]) {
-  if (navigationRef.isReady()) {
-    navigationRef.dispatch(CommonActions.reset({ index, routes }));
-  } else {
-  }
-}
