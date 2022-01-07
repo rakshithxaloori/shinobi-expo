@@ -155,7 +155,8 @@ const YouTube = ({ connectedBool, setError }) => {
             {connected ? "Disconnect YouTube" : "Connect YouTube"}
           </Text>
           <Text style={styles.text}>
-            {connected ? "Removes" : "Shows"} your YT channel link in profile
+            {connected ? "Removes" : "Shows"} your YT channel link on your
+            profile
           </Text>
         </View>
       </TouchableOpacity>

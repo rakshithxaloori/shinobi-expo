@@ -5,7 +5,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Linking from "expo-linking";
-import {} from "react-native-vector-icons";
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -26,22 +25,6 @@ const Content = () => {
   };
 
   const [socialsLoaded, setSocialsLoaded] = React.useState(false);
-
-  const placeholder = () => (
-    <>
-      <ShimmerPlaceHolder
-        height={20}
-        width={250}
-        shimmerStyle={styles.placeholder}
-        shimmerColors={shimmerColors}
-      />
-      <ShimmerPlaceHolder
-        height={10}
-        width={100}
-        shimmerStyle={styles.placeholder}
-      />
-    </>
-  );
 
   const openSubReddit = () => {
     linkURL("https://www.reddit.com/r/ShinobiApp/");
@@ -64,7 +47,7 @@ const Content = () => {
         }}
       >
         <Ionicons
-          name="game-controller-outline"
+          name="game-controller"
           style={styles.icon}
           size={32}
           color={darkTheme.on_background}
@@ -72,7 +55,7 @@ const Content = () => {
         <View style={styles.content}>
           <Text style={styles.title}>Change games I play</Text>
           <Text style={styles.text}>
-            Shows the games you play in your profile
+            Shows the games you play on your profile
           </Text>
         </View>
       </TouchableOpacity>
@@ -84,14 +67,14 @@ const Content = () => {
         }}
       >
         <Ionicons
-          name="document-text-outline"
+          name="document-text"
           style={styles.icon}
           size={32}
           color={darkTheme.on_background}
         />
         <View style={styles.content}>
           <Text style={styles.title}>Terms and Conditions</Text>
-          <Text style={styles.text}>In case, you want to read it</Text>
+          <Text style={styles.text}>In case, you want to read it!</Text>
         </View>
       </TouchableOpacity>
       <TouchableOpacity
@@ -101,17 +84,34 @@ const Content = () => {
         }}
       >
         <Ionicons
-          name="file-tray-full-outline"
+          name="file-tray-full"
           style={styles.icon}
           size={32}
           color={darkTheme.on_background}
         />
         <View style={styles.content}>
           <Text style={styles.title}>Privacy Policy</Text>
-          <Text style={styles.text}>Are you bored?</Text>
+          <Text style={styles.text}>Wait, are you bored?</Text>
         </View>
       </TouchableOpacity>
-      {socialsLoaded ? <LogOut /> : placeholder()}
+      <TouchableOpacity
+        style={styles.row}
+        onPress={() => {
+          Linking.openURL("mailto:hello@shinobi.cc");
+        }}
+      >
+        <Ionicons
+          name="mail"
+          style={styles.icon}
+          size={32}
+          color={darkTheme.on_background}
+        />
+        <View style={styles.content}>
+          <Text style={styles.title}>Contact Us</Text>
+          <Text style={styles.text}>Here, whenever you need</Text>
+        </View>
+      </TouchableOpacity>
+      <LogOut />
       <View
         style={{
           alignSelf: "flex-end",

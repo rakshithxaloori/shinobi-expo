@@ -12,7 +12,7 @@ const LogOut = ({ icon, title, text }) => {
   return (
     <TouchableOpacity style={styles.container} onPress={signOut}>
       <Ionicons
-        name="exit-outline"
+        name="log-out-outline"
         style={styles.icon}
         size={32}
         color={darkTheme.on_background}
