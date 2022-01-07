@@ -241,7 +241,10 @@ const NavigatorWithContext = () => {
             screens: {
               Profile: "profile/:username",
               Clip: "clip/:post_id",
-              Notifications: "notifications",
+              Home: {
+                initialRouteName: "Feed",
+                screens: { Notifications: "notifications" },
+              },
             },
           },
           async getInitialURL() {
@@ -258,6 +261,7 @@ const NavigatorWithContext = () => {
               await Notifications.getLastNotificationResponseAsync();
             const { data } = response.notification.request.content;
             url = getDeepLink(data.type, data);
+            console.log(url);
 
             return url;
           },
@@ -273,6 +277,7 @@ const NavigatorWithContext = () => {
                 (response) => {
                   const { data } = response.notification.request.content;
                   const url = getDeepLink(data.type, data);
+                  console.log(url);
 
                   // Let React Navigation handle the URL
                   listener(url);
