@@ -1,47 +1,43 @@
 import React, { Component } from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
 import axios from "axios";
+import LottieView from "lottie-react-native";
 
 import { createAPIKit } from "../utils/APIKit";
 import { flashAlert } from "../utils/flash_message";
 import { dateTimeDiff, handleAPIError } from "../utils";
-import FeedClip from "../components/posts/post";
+import ClipPost from "../components/posts/post";
 import ReportOverlay from "../components/posts/reportOverlay";
-import { clipUrlByNetSpeed } from "../utils/clipUrl";
+import { clipUrlByNetSpeed, getVideoHeight } from "../utils/clipUtils";
 
-const screenHeight = Dimensions.get("window").height;
+const screenWidth = Dimensions.get("window").width;
 
 const TITLE_HEIGHT = 60;
 const FOOTER_HEIGHT = 80;
-const ITEM_MARGIN = 10;
-
-const getVideoHeight = (video_height) => {
-  const min_height = Math.min(video_height, screenHeight - 300);
-  return min_height;
-};
+const ITEM_MARGIN = 15;
 
 class PostScreen extends Component {
-  state = { clip: null, mute: false };
+  state = { post: null, mute: false };
   cancelTokenSource = axios.CancelToken.source();
 
   componentDidMount = async () => {
     const onSuccess = (response) => {
       const loadClip = async () => {
-        this.state.clip.videoRef.current.loadAsync(
-          { uri: clipUrlByNetSpeed(this.state.clip.url) },
+        this.state.post.videoRef.current.loadAsync(
+          { uri: clipUrlByNetSpeed(this.state.post.clip.url) },
           // { shouldPlay: true, isLooping: true, isMuted: this.state.mute }
           { shouldPlay: true, isMuted: this.state.mute }
         );
       };
 
-      const { clip } = response.data.payload;
-      const clipWithRef = { ...clip, videoRef: React.createRef() };
-      this.setState({ clip: clipWithRef }, loadClip);
+      const { post } = response.data.payload;
+      const clipWithRef = { ...post, videoRef: React.createRef() };
+      this.setState({ post: clipWithRef }, loadClip);
     };
 
     const APIKit = await createAPIKit();
     APIKit.post(
-      "clips/clip/",
+      "feed/post/",
       { post_id: this.props.route?.params?.post_id },
       { cancelToken: this.cancelTokenSource.token }
     )
@@ -52,7 +48,7 @@ class PostScreen extends Component {
   };
 
   unmountVideo = async () => {
-    this.state.clip && (await this.state.clip.videoRef.current.unloadAsync());
+    this.state.post && (await this.state.post.videoRef.current.unloadAsync());
   };
 
   componentWillUnmount = async () => {
@@ -73,11 +69,11 @@ class PostScreen extends Component {
     this.setState({ reportClipId: post_id });
   };
 
-  onViewedClip = async (post_id) => {
+  onViewedClip = async () => {
     const APIKit = await createAPIKit();
     APIKit.post(
       "clips/viewed/",
-      { post_id },
+      { clip_id: this.state.post.clip.id },
       { cancelToken: this.cancelTokenSource.token }
     ).catch((e) => {
       flashAlert(handleAPIError(e));
@@ -113,16 +109,19 @@ class PostScreen extends Component {
   };
 
   render = () => {
-    if (this.state.clip !== null) {
-      const dateThen = new Date(this.state.clip?.created_datetime);
+    if (this.state.post !== null) {
+      const dateThen = new Date(this.state.post?.created_datetime);
       const dateDiff = dateTimeDiff(dateThen);
 
-      const video_height = getVideoHeight(this.state.clip?.height);
+      const video_height = getVideoHeight(
+        this.state.post?.clip.height,
+        this.state.post?.clip.width
+      );
       return (
         <View style={styles.container}>
-          <FeedClip
+          <ClipPost
             type={"Feed"}
-            clip={this.state.clip}
+            post={this.state.post}
             TITLE_HEIGHT={TITLE_HEIGHT}
             VIDEO_HEIGHT={video_height}
             FOOTER_HEIGHT={FOOTER_HEIGHT}
@@ -144,7 +143,20 @@ class PostScreen extends Component {
         </View>
       );
     } else {
-      return null;
+      return (
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+          <LottieView
+            style={{
+              width: 0.8 * screenWidth,
+              height: 0.8 * screenWidth,
+            }}
+            autoPlay
+            source={require("../../assets/1049-hourglass.json")}
+          />
+        </View>
+      );
     }
   };
 }

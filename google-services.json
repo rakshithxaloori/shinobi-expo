@@ -22,7 +22,7 @@
           }
         },
         {
-          "client_id": "680842267587-71ufp33teovp4bs4asnh6809rgcpk9ra.apps.googleusercontent.com",
+          "client_id": "680842267587-59d6nfqs1t33180su3n3l7c5r2ov73us.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -35,8 +35,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "680842267587-71ufp33teovp4bs4asnh6809rgcpk9ra.apps.googleusercontent.com",
+              "client_id": "680842267587-59d6nfqs1t33180su3n3l7c5r2ov73us.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "680842267587-4tp18vjiaejm58pltgnkr943tsojlaes.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "cc.shinobi.ios"
+              }
             }
           ]
         }

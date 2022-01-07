@@ -12,7 +12,7 @@ import { shareClip } from "../../utils/share";
 const footerIconSize = 20;
 const iconColor = darkTheme.primary;
 
-class FeedClip extends React.Component {
+class ClipPost extends React.Component {
   shouldComponentUpdate = (nextProps) => {
     const { me_like, likes } = nextProps.post;
     const { mute } = nextProps;
@@ -212,4 +212,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FeedClip;
+export default ClipPost;

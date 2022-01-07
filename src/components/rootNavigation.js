@@ -1,4 +1,5 @@
 import {
+  CommonActions,
   createNavigationContainerRef,
   StackActions,
 } from "@react-navigation/native";
@@ -22,5 +23,12 @@ export function push(name, params) {
   } else {
     // You can decide what to do if react navigation is not ready
     // You can ignore this, or add these actions to a queue you can call later
+  }
+}
+
+export function dispatch(index = 0, routes = [{ name: "Home" }]) {
+  if (navigationRef.isReady()) {
+    navigationRef.dispatch(CommonActions.reset({ index, routes }));
+  } else {
   }
 }

@@ -23,11 +23,10 @@ import Post from "./post";
 import ReportOverlay from "./reportOverlay";
 import DeleteOverlay from "./deleteOverlay";
 import { shimmerColors } from "../../utils/styles";
-import { clipUrlByNetSpeed } from "../../utils/clipUrl";
+import { clipUrlByNetSpeed, getVideoHeight } from "../../utils/clipUtils";
 import AuthContext from "../../authContext";
 
 const screenWidth = Dimensions.get("window").width;
-const screenHeight = Dimensions.get("window").height;
 
 const TITLE_HEIGHT = 60;
 const FOOTER_HEIGHT = 80;
@@ -36,15 +35,6 @@ const ITEM_MARGIN = 15;
 const ICON_SIZE = 25;
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
-
-const getVideoHeight = (video_height, video_width) => {
-  const min_height = Math.min(
-    (video_height * screenWidth) / video_width,
-    0.6 * screenHeight,
-    450
-  );
-  return min_height;
-};
 
 class Posts extends Component {
   static contextType = AuthContext;

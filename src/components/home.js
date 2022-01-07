@@ -310,9 +310,10 @@ const NavigatorWithContext = () => {
   };
 
   const _handleNotificationResponse = (response) => {
-    switch (response.notification?.request?.content?.data?.type) {
+    const { data } = response.notification?.request?.content;
+
+    switch (data?.type) {
       case "s":
-        // Example of using RootNavigation
         RootNavigation.push("Settings");
         setNavigateRoute("Settings");
         break;
@@ -321,6 +322,12 @@ const NavigatorWithContext = () => {
         // navigateRoute is used when navigationRef is not yet ready
         // and the RootNavigation.navigate is ignored
         setNavigateRoute("Notifications");
+        break;
+      case "c":
+        RootNavigation.dispatch(1, [
+          { name: "Home" },
+          { name: "Clip", params: { post_id: data.post_id } },
+        ]);
         break;
     }
   };
