@@ -23,12 +23,14 @@ import ReportOverlay from "./reportOverlay";
 import DeleteOverlay from "./deleteOverlay";
 import { clipUrlByNetSpeed, getVideoHeight } from "../../utils/clipUtils";
 import AuthContext from "../../authContext";
+import RepostOverlay from "./repostOverlay";
 
 const screenWidth = Dimensions.get("window").width;
 
 const TITLE_HEIGHT = 60;
 const FOOTER_HEIGHT = 80;
 const ITEM_MARGIN = 15;
+const REPOST_HEIGHT = 40;
 
 const ICON_SIZE = 25;
 
@@ -49,6 +51,7 @@ class Posts extends Component {
     selectedPost: null,
     showReportOverlay: false,
     showDeleteOverlay: false,
+    showRepostOverlay: false,
   };
 
   fetchCount = 10;
@@ -160,6 +163,10 @@ class Posts extends Component {
     this.RBSheet.open();
   };
 
+  repostPost = (post) => {
+    this.setState({ selectedPost: post, showRepostOverlay: true });
+  };
+
   onViewedClip = async (clip_id) => {
     const APIKit = await createAPIKit();
     APIKit.post(
@@ -180,6 +187,7 @@ class Posts extends Component {
       <Post
         type={this.props.type}
         post={item}
+        REPOST_HEIGHT={REPOST_HEIGHT}
         TITLE_HEIGHT={TITLE_HEIGHT}
         VIDEO_HEIGHT={video_height}
         FOOTER_HEIGHT={FOOTER_HEIGHT}
@@ -187,6 +195,7 @@ class Posts extends Component {
         dateDiff={dateDiff}
         navigateProfile={this.navigateProfile}
         setSelectedPost={this.setSelectedPost}
+        repostPost={this.repostPost}
         onViewedClip={this.onViewedClip}
         mute={this.state.mute}
         toggleMute={this.toggleMute}
@@ -206,7 +215,8 @@ class Posts extends Component {
       data[index].clip.width
     );
 
-    const item_height = video_height + TITLE_HEIGHT + FOOTER_HEIGHT;
+    let item_height = video_height + TITLE_HEIGHT + FOOTER_HEIGHT;
+    if (data[index].is_repost == true) item_height += REPOST_HEIGHT;
     return {
       length: item_height,
       offset: (item_height + ITEM_MARGIN) * index,
@@ -270,6 +280,13 @@ class Posts extends Component {
     this.setState({
       selectedPost: null,
       showReportOverlay: false,
+    });
+  };
+
+  hideRepostOverlay = () => {
+    this.setState({
+      selectedPost: null,
+      showRepostOverlay: false,
     });
   };
 
@@ -386,6 +403,13 @@ class Posts extends Component {
             showOverlay={this.state.showDeleteOverlay}
             hideDeleteOverlay={this.hideDeleteOverlay}
             deletePostFromList={this.deletePostFromList}
+          />
+        )}
+        {this.state.showRepostOverlay && (
+          <RepostOverlay
+            post={this.state.selectedPost}
+            showOverlay={this.state.showRepostOverlay}
+            hideRepostOverlay={this.hideRepostOverlay}
           />
         )}
         <RBSheet

@@ -9,6 +9,8 @@ import { avatarDefaultStyling } from "../../utils/styles";
 import VideoPlayer from "../../utils/feedPlayer";
 import { shareClip } from "../../utils/share";
 
+const REPOST_FONT_SIZE = 15;
+
 const FOOTER_ICON_SIZE = 18;
 const FOOTER_ICON_COLOR = darkTheme.on_surface_subtitle;
 
@@ -38,8 +40,8 @@ class Post extends React.Component {
   };
 
   onPressRepost = () => {
-    // TODO
     const { post } = this.props;
+    this.props.repostPost(post);
   };
 
   onPressShare = () => {
@@ -59,6 +61,7 @@ class Post extends React.Component {
     const {
       type,
       post,
+      REPOST_HEIGHT,
       TITLE_HEIGHT,
       VIDEO_HEIGHT,
       FOOTER_HEIGHT,
@@ -68,16 +71,40 @@ class Post extends React.Component {
       toggleMute,
     } = this.props;
 
+    let containerStyle = {
+      height: VIDEO_HEIGHT + TITLE_HEIGHT + FOOTER_HEIGHT,
+      margin: MARGIN,
+    };
+    if (post.is_repost) {
+      containerStyle.height += REPOST_HEIGHT;
+    }
     return (
-      <View
-        style={[
-          styles.container,
-          {
-            height: VIDEO_HEIGHT + TITLE_HEIGHT + FOOTER_HEIGHT,
-            margin: MARGIN,
-          },
-        ]}
-      >
+      <View style={[styles.container, containerStyle]}>
+        {post.is_repost && (
+          <View
+            style={{
+              flexDirection: "row",
+              backgroundColor: darkTheme.background,
+              height: REPOST_HEIGHT,
+              alignItems: "center",
+            }}
+          >
+            <Ionicons
+              name={"refresh-outline"}
+              size={FOOTER_ICON_SIZE}
+              color={darkTheme.on_background}
+              style={styles.footerIcon}
+            />
+            <Text
+              style={{
+                color: darkTheme.on_background,
+                fontSize: REPOST_FONT_SIZE,
+              }}
+            >
+              {post.reposted_by.username}
+            </Text>
+          </View>
+        )}
         <TouchableOpacity
           style={[
             styles.touchable,
@@ -163,34 +190,6 @@ class Post extends React.Component {
               />
               <Text style={styles.iconText}>{prettyNumber(post.shares)}</Text>
             </TouchableOpacity>
-
-            {/* {this.props.username === post.posted_by.username ? (
-              <TouchableOpacity
-                style={styles.footerIconSection}
-                onPress={this.onPressDelete}
-              >
-                <Ionicons
-                  name={"trash-outline"}
-                  size={FOOTER_ICON_SIZE}
-                  color={ICON_COLOR}
-                  style={styles.icon}
-                />
-                <Text style={styles.iconText}>Delete</Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                style={styles.footerIconSection}
-                onPress={this.onPressReport}
-              >
-                <Ionicons
-                  name={"flag-outline"}
-                  size={FOOTER_ICON_SIZE}
-                  color={ICON_COLOR}
-                  style={styles.icon}
-                />
-                <Text style={styles.iconText}>Report</Text>
-              </TouchableOpacity>
-            )} */}
           </View>
         </View>
       </View>
@@ -202,7 +201,7 @@ const styles = StyleSheet.create({
   username: { color: darkTheme.on_primary, fontWeight: "bold" },
   bullet: { marginHorizontal: 5 },
   date: { color: darkTheme.on_primary },
-  headerIcon: { position: "absolute", right: 10 },
+  headerIcon: { position: "absolute", right: 6, paddingHorizontal: 4 },
   game_name: { paddingLeft: 5, color: darkTheme.on_primary },
   footer: {
     width: "100%",
@@ -213,7 +212,7 @@ const styles = StyleSheet.create({
   },
   clipTitle: {
     flex: 1,
-    marginHorizontal: 20,
+    marginHorizontal: 15,
     fontSize: 15,
     color: darkTheme.on_surface_title,
   },
@@ -242,7 +241,8 @@ const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: darkTheme.surface,
-    borderRadius: 10,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
   },
 });
 
