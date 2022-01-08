@@ -19,7 +19,7 @@ const screenDimensions = Dimensions.get("screen");
 const DeleteOverlay = ({
   post,
   showOverlay,
-  toggleOverlay,
+  hideDeleteOverlay,
   deletePostFromList,
 }) => {
   let cancelTokenSource = axios.CancelToken.source();
@@ -37,7 +37,7 @@ const DeleteOverlay = ({
 
     const onSuccess = (response) => {
       deletePostFromList(post);
-      toggleOverlay();
+      hideDeleteOverlay();
     };
 
     const APIKit = await createAPIKit();
@@ -58,7 +58,7 @@ const DeleteOverlay = ({
   return (
     <Overlay
       isVisible={showOverlay}
-      onBackdropPress={toggleOverlay}
+      onBackdropPress={hideDeleteOverlay}
       overlayStyle={styles.container}
     >
       <Text style={styles.overlayTitle}>Delete the post?</Text>
@@ -77,7 +77,7 @@ const DeleteOverlay = ({
 
         <TouchableOpacity
           style={[styles.button, styles.cancel]}
-          onPress={toggleOverlay}
+          onPress={hideDeleteOverlay}
         >
           <Text style={styles.cancelText}>Cancel</Text>
         </TouchableOpacity>

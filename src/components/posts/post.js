@@ -15,7 +15,7 @@ const FOOTER_ICON_COLOR = darkTheme.on_surface_subtitle;
 const HEADER_ICON_SIZE = 22;
 const HEADER_ICON_COLOR = darkTheme.on_primary;
 
-class ClipPost extends React.Component {
+class Post extends React.Component {
   shouldComponentUpdate = (nextProps) => {
     const { me_like, likes } = nextProps.post;
     const { mute } = nextProps;
@@ -47,12 +47,8 @@ class ClipPost extends React.Component {
     shareClip(post.id, post.posted_by.username, post.game.name);
   };
 
-  onPressReport = () => {
-    this.props.reportPost(this.props.post.id);
-  };
-
-  onPressDelete = () => {
-    this.props.setDeletePost(this.props.post);
+  setSelectedPost = () => {
+    this.props.setSelectedPost(this.props.post);
   };
 
   onViewedClip = () => {
@@ -112,23 +108,13 @@ class ClipPost extends React.Component {
               <Text style={styles.game_name}>{post.game.name}</Text>
             </View>
           </View>
-          {this.props.username === post.posted_by.username ? (
-            <Ionicons
-              name={"trash-outline"}
-              size={HEADER_ICON_SIZE}
-              color={HEADER_ICON_COLOR}
-              style={styles.headerIcon}
-              onPress={this.onPressDelete}
-            />
-          ) : (
-            <Ionicons
-              name={"flag-outline"}
-              size={HEADER_ICON_SIZE}
-              color={HEADER_ICON_COLOR}
-              style={styles.headerIcon}
-              onPress={this.onPressReport}
-            />
-          )}
+          <Ionicons
+            name="ellipsis-vertical-outline"
+            size={HEADER_ICON_SIZE}
+            color={HEADER_ICON_COLOR}
+            style={styles.headerIcon}
+            onPress={this.setSelectedPost}
+          />
         </TouchableOpacity>
 
         <VideoPlayer
@@ -216,7 +202,7 @@ const styles = StyleSheet.create({
   username: { color: darkTheme.on_primary, fontWeight: "bold" },
   bullet: { marginHorizontal: 5 },
   date: { color: darkTheme.on_primary },
-  headerIcon: { position: "absolute", right: 20 },
+  headerIcon: { position: "absolute", right: 10 },
   game_name: { paddingLeft: 5, color: darkTheme.on_primary },
   footer: {
     width: "100%",
@@ -275,4 +261,4 @@ const prettyNumber = (number) => {
   }
 };
 
-export default ClipPost;
+export default Post;

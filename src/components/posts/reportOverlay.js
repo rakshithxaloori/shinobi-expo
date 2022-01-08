@@ -16,7 +16,7 @@ import { handleAPIError } from "../../utils";
 
 const screenDimensions = Dimensions.get("screen");
 
-const ReportOverlay = ({ post_id, clearReport }) => {
+const ReportOverlay = ({ post_id, hideReportOverlay }) => {
   let cancelTokenSource = axios.CancelToken.source();
   const [disabled, setDisabled] = React.useState(false);
 
@@ -33,13 +33,13 @@ const ReportOverlay = ({ post_id, clearReport }) => {
   const report = async () => {
     if (!notGame && !notPlay) {
       flashAlert("Nothing to report!");
-      clearReport();
+      hideReportOverlay();
       return;
     }
     setDisabled(true);
 
     const onSuccess = (response) => {
-      clearReport();
+      hideReportOverlay();
       flashAlert("Thank you for reporting!");
     };
 
@@ -61,7 +61,7 @@ const ReportOverlay = ({ post_id, clearReport }) => {
   return (
     <Overlay
       isVisible={post_id !== undefined}
-      onBackdropPress={clearReport}
+      onBackdropPress={hideReportOverlay}
       overlayStyle={styles.container}
     >
       <Text style={styles.overlayTitle}>Report the clip?</Text>
@@ -95,7 +95,7 @@ const ReportOverlay = ({ post_id, clearReport }) => {
 
         <TouchableOpacity
           style={[styles.button, styles.cancel]}
-          onPress={clearReport}
+          onPress={hideReportOverlay}
         >
           <Text style={styles.cancelText}>Cancel</Text>
         </TouchableOpacity>

@@ -10,10 +10,9 @@ import {
 } from "react-native";
 import axios from "axios";
 import { CommonActions, useNavigation } from "@react-navigation/native";
-import { LinearGradient } from "expo-linear-gradient";
-import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import { Ionicons } from "@expo/vector-icons";
 import LottieView from "lottie-react-native";
+import RBSheet from "react-native-raw-bottom-sheet";
 
 import { createAPIKit } from "../../utils/APIKit";
 import { flashAlert } from "../../utils/flash_message";
@@ -22,7 +21,6 @@ import { darkTheme } from "../../utils/theme";
 import Post from "./post";
 import ReportOverlay from "./reportOverlay";
 import DeleteOverlay from "./deleteOverlay";
-import { shimmerColors } from "../../utils/styles";
 import { clipUrlByNetSpeed, getVideoHeight } from "../../utils/clipUtils";
 import AuthContext from "../../authContext";
 
@@ -34,7 +32,9 @@ const ITEM_MARGIN = 15;
 
 const ICON_SIZE = 25;
 
-const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
+const SHEET_ICON_COLOR = darkTheme.on_surface_title;
+const SHEET_ICON_SIZE = 22;
+const SHEET_ITEM_MARGIN = 5;
 
 class Posts extends Component {
   static contextType = AuthContext;
@@ -46,30 +46,13 @@ class Posts extends Component {
     initLoaded: false,
     isLoading: true,
     endReached: false,
-    reportPostId: undefined,
-    deletePost: undefined,
+    selectedPost: null,
+    showReportOverlay: false,
     showDeleteOverlay: false,
   };
 
   fetchCount = 10;
   cancelTokenSource = axios.CancelToken.source();
-  // 9844-loading-40-paperplane.json
-  // animationObj = Asset.fromModule(
-  //   require("../../../assets/9844-loading-40-paperplane.json")
-  // );
-
-  placeholder = (
-    <View style={{ marginBottom: 20, alignItems: "center" }}>
-      <ShimmerPlaceHolder
-        width={screenWidth - 40}
-        height={250}
-        shimmerStyle={{
-          borderRadius: 10,
-        }}
-        shimmerColors={shimmerColors}
-      />
-    </View>
-  );
 
   componentDidMount = async () => {
     this._unsubscribeFocus = this.props.navigation.addListener(
@@ -80,7 +63,6 @@ class Posts extends Component {
       "blur",
       this.pauseViewableVideo
     );
-
     await this.fetchPosts();
   };
 
@@ -173,16 +155,9 @@ class Posts extends Component {
       });
   };
 
-  reportPost = (post_id) => {
-    this.setState({ reportPostId: post_id });
-  };
-
-  clearReport = () => {
-    this.setState({ reportPostId: undefined });
-  };
-
-  setDeletePost = (post) => {
-    this.setState({ deletePost: post, showDeleteOverlay: true });
+  setSelectedPost = (post) => {
+    this.setState({ selectedPost: post });
+    this.RBSheet.open();
   };
 
   onViewedClip = async (clip_id) => {
@@ -211,13 +186,12 @@ class Posts extends Component {
         MARGIN={ITEM_MARGIN}
         dateDiff={dateDiff}
         navigateProfile={this.navigateProfile}
-        reportPost={this.reportPost}
+        setSelectedPost={this.setSelectedPost}
         onViewedClip={this.onViewedClip}
         mute={this.state.mute}
         toggleMute={this.toggleMute}
         toggleLike={this.toggleLike}
         username={this.context.user.username}
-        setDeletePost={this.setDeletePost}
       />
     );
   };
@@ -285,10 +259,18 @@ class Posts extends Component {
       });
   };
 
-  toggleDeleteOverlay = () => {
-    this.setState((prevState) => ({
-      showDeleteOverlay: !prevState.showDeleteOverlay,
-    }));
+  hideDeleteOverlay = () => {
+    this.setState({
+      selectedPost: null,
+      showDeleteOverlay: false,
+    });
+  };
+
+  hideReportOverlay = () => {
+    this.setState({
+      selectedPost: null,
+      showReportOverlay: false,
+    });
   };
 
   onViewableItemsChanged = async ({ viewableItems, changed }) => {
@@ -382,49 +364,102 @@ class Posts extends Component {
             </TouchableOpacity>
           </View>
         ) : (
-          <View
-            style={{
-              alignItems: "center",
-              justifyContent: "center",
-              marginTop: 20,
-            }}
-          >
+          <View style={styles.lottieParent}>
             <LottieView
               ref={(animation) => {
                 this.profileAnimation = animation;
               }}
-              style={{
-                width: 0.9 * screenWidth,
-                height: 0.9 * screenWidth,
-              }}
+              style={styles.lottie}
               source={require("../../../assets/51382-astronaut-light-theme.json")}
             />
           </View>
         )}
-        {this.state.reportPostId && (
+        {this.state.showReportOverlay && (
           <ReportOverlay
-            post_id={this.state.reportPostId}
-            clearReport={this.clearReport}
+            post_id={this.state.selectedPost.id}
+            hideReportOverlay={this.hideReportOverlay}
           />
         )}
         {this.state.showDeleteOverlay && (
           <DeleteOverlay
-            post={this.state.deletePost}
+            post={this.state.selectedPost}
             showOverlay={this.state.showDeleteOverlay}
-            toggleOverlay={this.toggleDeleteOverlay}
+            hideDeleteOverlay={this.hideDeleteOverlay}
             deletePostFromList={this.deletePostFromList}
           />
         )}
+        <RBSheet
+          ref={(ref) => {
+            this.RBSheet = ref;
+          }}
+          animationType="slide"
+          closeOnDragDown
+          height={SHEET_ICON_SIZE + 2 * SHEET_ITEM_MARGIN + 50}
+          customStyles={{
+            container: styles.sheetContainer,
+          }}
+        >
+          {this.state.selectedPost &&
+            (this.state.selectedPost.posted_by.username ===
+            this.context.user.username ? (
+              <TouchableOpacity
+                style={styles.sheetTouchable}
+                onPress={() => {
+                  this.setState({ showDeleteOverlay: true });
+                  this.RBSheet.close();
+                }}
+              >
+                <Ionicons
+                  name={"trash-outline"}
+                  size={SHEET_ICON_SIZE}
+                  color={SHEET_ICON_COLOR}
+                  style={styles.sheetIcon}
+                />
+                <Text style={styles.sheetText}>Delete Post</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={styles.sheetTouchable}
+                onPress={() => {
+                  this.setState({ showReportOverlay: true });
+                  this.RBSheet.close();
+                }}
+              >
+                <Ionicons
+                  name={"flag-outline"}
+                  size={SHEET_ICON_SIZE}
+                  color={SHEET_ICON_COLOR}
+                  style={styles.sheetIcon}
+                />
+                <Text style={styles.sheetText}>Report Post</Text>
+              </TouchableOpacity>
+            ))}
+        </RBSheet>
       </View>
     ) : (
-      <View style={styles.container}>
-        {this.placeholder}
-        {this.placeholder}
+      <View style={styles.lottieParent}>
+        <LottieView
+          ref={(animation) => {
+            this.profileAnimation = animation;
+          }}
+          style={styles.lottie}
+          autoPlay
+          source={require("../../../assets/1049-hourglass.json")}
+        />
       </View>
     );
 }
 
 const styles = StyleSheet.create({
+  lottie: {
+    width: 0.9 * screenWidth,
+    height: 0.9 * screenWidth,
+  },
+  lottieParent: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
+  },
   buttonText: {
     fontSize: 18,
     fontWeight: "bold",
@@ -440,6 +475,22 @@ const styles = StyleSheet.create({
     width: "50%",
     alignItems: "center",
     justifyContent: "center",
+  },
+  sheetContainer: {
+    backgroundColor: darkTheme.background,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingHorizontal: 20,
+  },
+  sheetTouchable: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: SHEET_ITEM_MARGIN,
+  },
+  sheetIcon: { marginRight: 15 },
+  sheetText: {
+    fontSize: SHEET_ICON_SIZE - 5,
+    color: darkTheme.on_surface_title,
   },
   container: {
     width: "100%",
