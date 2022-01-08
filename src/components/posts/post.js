@@ -9,8 +9,8 @@ import { avatarDefaultStyling } from "../../utils/styles";
 import VideoPlayer from "../../utils/feedPlayer";
 import { shareClip } from "../../utils/share";
 
-const FOOTER_ICON_SIZE = 20;
-const ICON_COLOR = darkTheme.primary;
+const FOOTER_ICON_SIZE = 18;
+const ICON_COLOR = darkTheme.on_surface_subtitle;
 
 class ClipPost extends React.Component {
   shouldComponentUpdate = (nextProps) => {
@@ -25,7 +25,7 @@ class ClipPost extends React.Component {
 
   navigateProfile = async () => {
     if (this.props.type === "Feed") {
-      await this.props.navigateProfile(this.props.post.uploader.username);
+      await this.props.navigateProfile(this.props.post.posted_by.username);
     }
   };
 
@@ -34,9 +34,14 @@ class ClipPost extends React.Component {
     toggleLike(post);
   };
 
+  onPressRepost = () => {
+    // TODO
+    const { post } = this.props;
+  };
+
   onPressShare = () => {
     const { post } = this.props;
-    shareClip(post.id, post.uploader.username, post.game.name);
+    shareClip(post.id, post.posted_by.username, post.game.name);
   };
 
   onPressReport = () => {
@@ -76,16 +81,20 @@ class ClipPost extends React.Component {
       >
         <TouchableOpacity
           style={[styles.touchable, { height: TITLE_HEIGHT }]}
-          disabled={this.props.type === "Profile"}
+          disabled={type === "Profile"}
           onPress={this.navigateProfile}
         >
           <Avatar
             rounded
-            source={{ uri: post.uploader.picture }}
+            source={{ uri: post.posted_by.picture }}
             ImageComponent={FastImage}
           />
           <View style={{ paddingLeft: 10 }}>
-            <Text style={styles.username}>{post.uploader.username}</Text>
+            <View style={{ flexDirection: "row" }}>
+              <Text style={styles.username}>{post.posted_by.username}</Text>
+              <Text style={styles.bullet}>{"\u0387"}</Text>
+              <Text style={styles.date}>{dateDiff}</Text>
+            </View>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Avatar
                 rounded
@@ -109,18 +118,30 @@ class ClipPost extends React.Component {
         <View style={[styles.footer, { height: FOOTER_HEIGHT }]}>
           <Text style={styles.clipTitle}>{post.title}</Text>
           <View style={styles.clipIconSection}>
-            <View style={styles.footerIconSection}>
+            <TouchableOpacity
+              style={styles.footerIconSection}
+              onPress={this.onPressLike}
+            >
               <Ionicons
                 name={post.me_like ? "heart" : "heart-outline"}
                 size={FOOTER_ICON_SIZE}
-                color={ICON_COLOR}
-                onPress={this.onPressLike}
+                color={post.me_like ? "red" : ICON_COLOR}
                 style={styles.icon}
               />
-              <Text style={styles.iconText}>
-                {post.likes} {post.likes === 1 ? "like" : "likes"}
-              </Text>
-            </View>
+              <Text style={styles.iconText}>{prettyNumber(post.likes)}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.footerIconSection}
+              onPress={this.onPressRepost}
+            >
+              <Ionicons
+                name={"refresh-outline"}
+                size={FOOTER_ICON_SIZE}
+                color={ICON_COLOR}
+                style={styles.icon}
+              />
+              <Text style={styles.iconText}>{prettyNumber(post.reposts)}</Text>
+            </TouchableOpacity>
             <TouchableOpacity
               style={styles.footerIconSection}
               onPress={this.onPressShare}
@@ -131,9 +152,10 @@ class ClipPost extends React.Component {
                 color={ICON_COLOR}
                 style={styles.icon}
               />
-              <Text style={styles.iconText}>Share</Text>
+              <Text style={styles.iconText}>{prettyNumber(post.shares)}</Text>
             </TouchableOpacity>
-            {this.props.username === post.uploader.username ? (
+
+            {/* {this.props.username === post.posted_by.username ? (
               <TouchableOpacity
                 style={styles.footerIconSection}
                 onPress={this.onPressDelete}
@@ -159,7 +181,7 @@ class ClipPost extends React.Component {
                 />
                 <Text style={styles.iconText}>Report</Text>
               </TouchableOpacity>
-            )}
+            )} */}
           </View>
         </View>
       </View>
@@ -169,6 +191,8 @@ class ClipPost extends React.Component {
 
 const styles = StyleSheet.create({
   username: { color: darkTheme.on_primary, fontWeight: "bold" },
+  bullet: { marginHorizontal: 5 },
+  date: { color: darkTheme.on_primary },
   game_name: { paddingLeft: 5, color: darkTheme.on_primary },
   footer: {
     width: "100%",
@@ -197,7 +221,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   icon: { marginRight: 5 },
-  iconText: { fontSize: 15, color: ICON_COLOR },
+  iconText: { fontSize: FOOTER_ICON_SIZE - 1, color: ICON_COLOR },
   touchable: {
     flexDirection: "row",
     alignItems: "center",
@@ -211,5 +235,20 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 });
+
+const prettyNumber = (number) => {
+  if (number < 10 * 1000) {
+    // Less than 10K
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+  if (number < 1000 * 1000) {
+    // 10K, 1M
+    return `${((number * 1.0) / 1000).toFixed(1)}K`;
+  }
+  if (number < 1000 * 1000 * 1000) {
+    // 1M, 1B
+    return `${((number * 1.0) / (1000 * 1000)).toFixed(1)}M`;
+  }
+};
 
 export default ClipPost;
