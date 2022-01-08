@@ -66,7 +66,7 @@ const DeleteOverlay = ({
         Deleting a post also deletes the clip permanently
       </Text>
 
-      <View style={{ width: 200, height: 150 }}>
+      <View style={{ width: 200, height: 150, alignSelf: "center" }}>
         <TouchableOpacity
           style={[styles.button, styles.delete]}
           disabled={disabled}
@@ -121,7 +121,6 @@ const styles = StyleSheet.create({
   },
   overlaySubtitle: {
     fontSize: 16,
-    marginHorizontal: 5,
     marginTop: 5,
     color: darkTheme.on_surface_subtitle,
     fontWeight: "500",
@@ -131,11 +130,12 @@ const styles = StyleSheet.create({
     borderWidth: 0,
   },
   container: {
-    height: 350,
+    height: 250,
     width: Math.min(300, screenDimensions.width - 100),
+    paddingHorizontal: 20,
     backgroundColor: darkTheme.background,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "flex-start",
     borderRadius: 10,
     borderWidth: 1,
     borderColor: darkTheme.on_background,

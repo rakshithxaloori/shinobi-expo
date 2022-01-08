@@ -84,7 +84,7 @@ const ReportOverlay = ({ post_id, hideReportOverlay }) => {
           containerStyle={styles.checkBox}
         />
       </View>
-      <View style={{ width: 200, height: 150 }}>
+      <View style={{ width: 200, height: 150, alignSelf: "center" }}>
         <TouchableOpacity
           style={[styles.button, styles.report]}
           disabled={disabled}
@@ -139,7 +139,6 @@ const styles = StyleSheet.create({
   },
   overlaySubtitle: {
     fontSize: 16,
-    marginHorizontal: 5,
     marginTop: 5,
     color: darkTheme.on_surface_subtitle,
     fontWeight: "500",
@@ -151,9 +150,10 @@ const styles = StyleSheet.create({
   container: {
     height: 350,
     width: Math.min(300, screenDimensions.width - 100),
+    paddingHorizontal: 20,
     backgroundColor: darkTheme.background,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "flex-start",
     borderRadius: 10,
     borderWidth: 1,
     borderColor: darkTheme.on_background,
