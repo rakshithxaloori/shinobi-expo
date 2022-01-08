@@ -10,7 +10,10 @@ import VideoPlayer from "../../utils/feedPlayer";
 import { shareClip } from "../../utils/share";
 
 const FOOTER_ICON_SIZE = 18;
-const ICON_COLOR = darkTheme.on_surface_subtitle;
+const FOOTER_ICON_COLOR = darkTheme.on_surface_subtitle;
+
+const HEADER_ICON_SIZE = 22;
+const HEADER_ICON_COLOR = darkTheme.on_primary;
 
 class ClipPost extends React.Component {
   shouldComponentUpdate = (nextProps) => {
@@ -80,7 +83,10 @@ class ClipPost extends React.Component {
         ]}
       >
         <TouchableOpacity
-          style={[styles.touchable, { height: TITLE_HEIGHT }]}
+          style={[
+            styles.touchable,
+            { height: TITLE_HEIGHT, flexDirection: "row" },
+          ]}
           disabled={type === "Profile"}
           onPress={this.navigateProfile}
         >
@@ -106,6 +112,23 @@ class ClipPost extends React.Component {
               <Text style={styles.game_name}>{post.game.name}</Text>
             </View>
           </View>
+          {this.props.username === post.posted_by.username ? (
+            <Ionicons
+              name={"trash-outline"}
+              size={HEADER_ICON_SIZE}
+              color={HEADER_ICON_COLOR}
+              style={styles.headerIcon}
+              onPress={this.onPressDelete}
+            />
+          ) : (
+            <Ionicons
+              name={"flag-outline"}
+              size={HEADER_ICON_SIZE}
+              color={HEADER_ICON_COLOR}
+              style={styles.headerIcon}
+              onPress={this.onPressReport}
+            />
+          )}
         </TouchableOpacity>
 
         <VideoPlayer
@@ -125,8 +148,8 @@ class ClipPost extends React.Component {
               <Ionicons
                 name={post.me_like ? "heart" : "heart-outline"}
                 size={FOOTER_ICON_SIZE}
-                color={post.me_like ? "red" : ICON_COLOR}
-                style={styles.icon}
+                color={post.me_like ? "red" : FOOTER_ICON_COLOR}
+                style={styles.footerIcon}
               />
               <Text style={styles.iconText}>{prettyNumber(post.likes)}</Text>
             </TouchableOpacity>
@@ -137,8 +160,8 @@ class ClipPost extends React.Component {
               <Ionicons
                 name={"refresh-outline"}
                 size={FOOTER_ICON_SIZE}
-                color={ICON_COLOR}
-                style={styles.icon}
+                color={FOOTER_ICON_COLOR}
+                style={styles.footerIcon}
               />
               <Text style={styles.iconText}>{prettyNumber(post.reposts)}</Text>
             </TouchableOpacity>
@@ -149,8 +172,8 @@ class ClipPost extends React.Component {
               <Ionicons
                 name={"share-social-outline"}
                 size={FOOTER_ICON_SIZE}
-                color={ICON_COLOR}
-                style={styles.icon}
+                color={FOOTER_ICON_COLOR}
+                style={styles.footerIcon}
               />
               <Text style={styles.iconText}>{prettyNumber(post.shares)}</Text>
             </TouchableOpacity>
@@ -193,6 +216,7 @@ const styles = StyleSheet.create({
   username: { color: darkTheme.on_primary, fontWeight: "bold" },
   bullet: { marginHorizontal: 5 },
   date: { color: darkTheme.on_primary },
+  headerIcon: { position: "absolute", right: 20 },
   game_name: { paddingLeft: 5, color: darkTheme.on_primary },
   footer: {
     width: "100%",
@@ -220,8 +244,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  icon: { marginRight: 5 },
-  iconText: { fontSize: FOOTER_ICON_SIZE - 1, color: ICON_COLOR },
+  footerIcon: { marginRight: 5 },
+  iconText: { fontSize: FOOTER_ICON_SIZE - 1, color: FOOTER_ICON_COLOR },
   touchable: {
     flexDirection: "row",
     alignItems: "center",

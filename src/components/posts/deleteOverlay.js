@@ -63,7 +63,7 @@ const DeleteOverlay = ({
     >
       <Text style={styles.overlayTitle}>Delete the post?</Text>
       <Text style={styles.overlaySubtitle}>
-        Deleting a post is irreversible and can't be undone
+        Deleting a post also deletes the clip permanently
       </Text>
 
       <View style={{ width: 200, height: 150 }}>
