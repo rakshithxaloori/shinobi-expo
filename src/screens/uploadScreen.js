@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Text,
   Platform,
+  Keyboard,
 } from "react-native";
 import { CommonActions } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
@@ -18,6 +19,7 @@ import { createAPIKit, uploadFileToS3 } from "../utils/APIKit";
 import { handleAPIError } from "../utils";
 import SelectVideo from "../components/upload/selectVideo";
 import TitleGame from "../components/upload/titleGame";
+import ShnSocials from "../components/socials";
 
 const VIDEO_MIN_LENGTH = 5;
 const VIDEO_MAX_LENGTH = 61;
@@ -39,10 +41,26 @@ class UploadScreen extends Component {
     file_key: null,
     disable: true,
     loaded: false,
+    isKeyboardVisible: false,
   };
   cancelTokenSource = axios.CancelToken.source();
+  keyboardDidShowListener = null;
+  keyboardDidHideListener = null;
 
   componentDidMount = async () => {
+    this.keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => {
+        this.setState({ isKeyboardVisible: true }); // or some other action
+      }
+    );
+    this.keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        this.setState({ isKeyboardVisible: false }); // or some other action
+      }
+    );
+
     const APIKit = await createAPIKit();
     const onSuccess = (response) => {
       const { quota, time_left } = response.data?.payload;
@@ -72,6 +90,8 @@ class UploadScreen extends Component {
 
   componentWillUnmount = () => {
     this.cancelTokenSource.cancel();
+    this.keyboardDidHideListener.remove();
+    this.keyboardDidShowListener.remove();
   };
 
   selectVideo = async () => {
@@ -234,7 +254,6 @@ class UploadScreen extends Component {
             {VIDEO_MAX_LENGTH - 1} seconds long{" "}
           </Text>
         )}
-
         {this.state.screenNum === 0
           ? this.state.videoQuota > 0 && (
               <SelectVideo
@@ -267,30 +286,34 @@ class UploadScreen extends Component {
               />
             )
           : null}
-        <View
-          style={{
-            flexDirection: "row",
-            flexWrap: "wrap",
-            justifyContent: "center",
-            alignItems: "center",
-            paddingTop: 20,
-          }}
-        >
-          <Text style={styles.subTitle}>
-            Did you know you can also upload clips at
-          </Text>
-          <TouchableOpacity
-            onPress={() => {
-              this.linkURL(UPLOAD_SITE_URL);
+
+        <View style={{ alignSelf: "flex-end" }}>
+          <View
+            style={{
+              flexDirection: "row",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              alignItems: "center",
+              paddingTop: 20,
             }}
           >
-            <Text
-              style={[styles.subTitle, { textDecorationLine: "underline" }]}
-            >
-              {UPLOAD_SITE_URL}
+            <Text style={styles.subTitle}>
+              Did you know you can also upload clips at
             </Text>
-          </TouchableOpacity>
-          <Text style={styles.subTitle}> from your PC?</Text>
+            <TouchableOpacity
+              onPress={() => {
+                this.linkURL(UPLOAD_SITE_URL);
+              }}
+            >
+              <Text
+                style={[styles.subTitle, { textDecorationLine: "underline" }]}
+              >
+                {UPLOAD_SITE_URL}
+              </Text>
+            </TouchableOpacity>
+            <Text style={styles.subTitle}> from your PC?</Text>
+          </View>
+          <ShnSocials />
         </View>
       </View>
     ) : (

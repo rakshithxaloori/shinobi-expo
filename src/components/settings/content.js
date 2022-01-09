@@ -1,42 +1,18 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/core";
-import { LinearGradient } from "expo-linear-gradient";
-import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import * as Linking from "expo-linking";
-
-const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
 import SocialsSettings from "./socials";
 import LogOut from "./logout";
 import { darkTheme } from "../../utils/theme";
-import { shareApp } from "../../utils/share";
-import { shimmerColors } from "../../utils/styles";
+import ShnSocials from "../socials";
 
 const Content = () => {
   const navigation = useNavigation();
-  const linkURL = async (URL) => {
-    try {
-      Linking.openURL(URL);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const [socialsLoaded, setSocialsLoaded] = React.useState(false);
-
-  const openSubReddit = () => {
-    linkURL("https://www.reddit.com/r/ShinobiApp/");
-  };
-
-  const openDiscord = () => {
-    linkURL(process.env.DISCORD_INVITE_LINK);
-  };
-
-  const shareAppLink = () => {
-    shareApp();
-  };
 
   return (
     <View style={styles.container}>
@@ -120,35 +96,7 @@ const Content = () => {
           paddingTop: 20,
         }}
       >
-        <View
-          style={{
-            flexDirection: "row",
-            alignContent: "center",
-            justifyContent: "center",
-          }}
-        >
-          <TouchableOpacity style={styles.socialIcon} onPress={openSubReddit}>
-            <Ionicons
-              name="logo-reddit"
-              size={33}
-              color={darkTheme.on_surface_title}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.socialIcon} onPress={openDiscord}>
-            <MaterialCommunityIcons
-              name="discord"
-              size={33}
-              color={darkTheme.on_surface_title}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.socialIcon} onPress={shareAppLink}>
-            <Ionicons
-              name="share-social"
-              size={33}
-              color={darkTheme.on_surface_title}
-            />
-          </TouchableOpacity>
-        </View>
+        <ShnSocials />
         <Text style={styles.helpText}>
           Post on our subreddit or discord server to report bugs or request new
           features.
@@ -196,7 +144,7 @@ const styles = StyleSheet.create({
     marginRight: 0,
     borderRadius: 10,
   },
-  socialIcon: { alignItems: "center", paddingHorizontal: 10 },
+
   container: {
     flex: 6,
     backgroundColor: darkTheme.background,

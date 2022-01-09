@@ -15,7 +15,6 @@ import FastImage from "react-native-fast-image";
 import axios from "axios";
 
 import { darkTheme } from "../../utils/theme";
-import { flashAlert } from "../../utils/flash_message";
 import { handleAPIError } from "../../utils";
 import { createAPIKit } from "../../utils/APIKit";
 import { avatarDefaultStyling } from "../../utils/styles";
@@ -55,6 +54,7 @@ const TitleGame = ({
   const [showSearchBar, setShowSearchBar] = React.useState(true);
   const [games, setGames] = React.useState([]);
   const [searchText, setSearchText] = React.useState("");
+  const [error, setError] = React.useState("");
 
   React.useEffect(() => {
     return () => {
@@ -64,6 +64,7 @@ const TitleGame = ({
 
   onChangeSearch = async (searchText) => {
     if (searchText == "") {
+      setError("");
       setSearchText("");
       setGames([]);
       return;
@@ -73,11 +74,8 @@ const TitleGame = ({
         const { games } = response.data?.payload;
         setGames(games);
         if (games.length === 0) {
-          flashAlert(
-            "Sorry, we don't have that game",
-            "Let us know on Discord or Reddit",
-            undefined,
-            5000
+          setError(
+            "Sorry, we don't have that game. Let us know on Discord or Reddit"
           );
         }
       };
@@ -90,11 +88,12 @@ const TitleGame = ({
       )
         .then(onSuccess)
         .catch((e) => {
-          flashAlert(handleAPIError(e));
+          setError(handleAPIError(e));
         });
     };
 
     setSearchText(searchText);
+    setError("");
     callback();
   };
 
@@ -138,6 +137,9 @@ const TitleGame = ({
         onChangeText={onChangeText}
         style={styles.clipLabel}
       />
+      <View style={{ height: 40 }}>
+        {error !== "" && <Text style={styles.error}>{error}</Text>}
+      </View>
       {selectedGame && (
         <View>
           <Text style={[styles.gameName, { fontWeight: "bold" }]}>
@@ -205,6 +207,7 @@ const styles = StyleSheet.create({
     height: height / 2,
     marginVertical: 20,
   },
+  error: { color: "red", flexShrink: 1 },
   searchBar: {
     marginVertical: 10,
     width: "100%",
