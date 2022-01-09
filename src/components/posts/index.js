@@ -38,20 +38,24 @@ const SHEET_ICON_COLOR = darkTheme.on_surface_title;
 const SHEET_ICON_SIZE = 22;
 const SHEET_ITEM_MARGIN = 5;
 
+const INITIAL_STATE = {
+  posts: [],
+  viewable: null,
+  mute: true,
+  initLoaded: false,
+  isLoading: true,
+  endReached: false,
+  selectedPost: null,
+  showReportOverlay: false,
+  showDeleteOverlay: false,
+  showRepostOverlay: false,
+};
+
 class Posts extends Component {
   static contextType = AuthContext;
 
   state = {
-    posts: [],
-    viewable: null,
-    mute: true,
-    initLoaded: false,
-    isLoading: true,
-    endReached: false,
-    selectedPost: null,
-    showReportOverlay: false,
-    showDeleteOverlay: false,
-    showRepostOverlay: false,
+    ...INITIAL_STATE,
   };
 
   fetchCount = 10;
@@ -67,6 +71,15 @@ class Posts extends Component {
       this.pauseViewableVideo
     );
     await this.fetchPosts();
+  };
+
+  componentDidUpdate = async (prevProps) => {
+    if (prevProps.feedType !== this.props.feedType) {
+      // Reset state
+      this.setState({ ...INITIAL_STATE }, async () => {
+        await this.fetchPosts();
+      });
+    }
   };
 
   componentWillUnmount = async () => {
@@ -135,7 +148,8 @@ class Posts extends Component {
     let url = undefined;
     let postData = undefined;
     if (this.props.type === "Feed") {
-      url = "/feed/posts/following/";
+      if (this.props.feedType === 1) url = "feed/posts/world/";
+      else url = "/feed/posts/following/";
       postData = {
         datetime:
           this.state.posts[this.state.posts.length - 1]?.created_datetime ||

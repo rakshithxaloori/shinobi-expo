@@ -16,11 +16,13 @@ import { createAPIKit } from "../utils/APIKit";
 import { flashAlert } from "../utils/flash_message";
 import { handleAPIError } from "../utils";
 import UpdatesOverlay from "../components/feed/updatesOverlay";
+import Switch from "../components/switch";
 
 const FeedScreen = (props) => {
   let cancelTokenSource = axios.CancelToken.source();
   const [isVisible, setIsVisible] = React.useState(false);
   const [updates, setUpdates] = React.useState([]);
+  const [feedType, setFeedType] = React.useState(1);
 
   React.useEffect(() => {
     const checkAppUpdate = async () => {
@@ -118,8 +120,26 @@ const FeedScreen = (props) => {
           </TouchableOpacity>
         </View>
       </View>
-      <Text style={styles.header}>Feed</Text>
-      <PostsFeed type="Feed" />
+      <View
+        style={{
+          flexDirection: "row",
+          marginTop: 30,
+          alignItems: "center",
+        }}
+      >
+        <Text style={styles.header}>
+          {feedType === 1 ? "World" : "Following"} Feed
+        </Text>
+        <Switch
+          icon1_name={"planet"}
+          icon2_name={"heart"}
+          value={feedType}
+          toggler={() => {
+            setFeedType(feedType === 1 ? 2 : 1);
+          }}
+        />
+      </View>
+      <PostsFeed type="Feed" feedType={feedType} />
       <UpdatesOverlay
         isVisible={isVisible}
         updates={updates}
@@ -160,11 +180,11 @@ const styles = StyleSheet.create({
 
   header: {
     color: darkTheme.on_background,
-    fontWeight: "600",
-    fontSize: 18,
+    fontWeight: "bold",
+    fontSize: 20,
     marginLeft: 20,
-    marginTop: 50,
-    textTransform: "uppercase",
+    textTransform: "lowercase",
+    textDecorationLine: "underline",
   },
 
   container: {
