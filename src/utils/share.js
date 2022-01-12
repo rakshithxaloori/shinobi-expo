@@ -7,7 +7,13 @@ import { darkTheme } from "./theme";
 import { createAPIKit } from "./APIKit";
 import { handleAPIError } from ".";
 
-export const DEEP_LINK_TYPES = { PROFILE: "p", CLIP: "c", FOLLOW: "f" };
+export const DEEP_LINK_TYPES = {
+  PROFILE: "p",
+  CLIP: "c",
+  FOLLOW: "f",
+  LIKE: "l",
+  REPOST: "rp",
+};
 
 export const getDeepLink = (type, params) => {
   const baseURL = "https://www.shinobi.cc/";
@@ -21,6 +27,12 @@ export const getDeepLink = (type, params) => {
       return baseURL + `clip/${post_id}`;
 
     case DEEP_LINK_TYPES.FOLLOW:
+      return baseURL + "notifications";
+
+    case DEEP_LINK_TYPES.LIKE:
+      return baseURL + "notifications";
+
+    case DEEP_LINK_TYPES.REPOST:
       return baseURL + "notifications";
 
     default:

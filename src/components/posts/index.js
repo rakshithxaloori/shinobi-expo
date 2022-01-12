@@ -453,7 +453,9 @@ class Posts extends Component {
                   color={SHEET_ICON_COLOR}
                   style={styles.sheetIcon}
                 />
-                <Text style={styles.sheetText}>Delete Post</Text>
+                <Text style={styles.sheetText}>
+                  Delete {this.state.selectedPost.is_repost ? "Repost" : "Post"}
+                </Text>
               </TouchableOpacity>
             ) : (
               <TouchableOpacity

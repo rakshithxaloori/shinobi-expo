@@ -61,9 +61,13 @@ const DeleteOverlay = ({
       onBackdropPress={hideDeleteOverlay}
       overlayStyle={styles.container}
     >
-      <Text style={styles.overlayTitle}>Delete the post?</Text>
+      <Text style={styles.overlayTitle}>
+        Delete the {post.is_repost ? "repost" : "post"}?
+      </Text>
       <Text style={styles.overlaySubtitle}>
-        Deleting a post also deletes the clip permanently
+        {post.is_repost
+          ? "Deleting a repost removes it from your feed and your follwers' feed"
+          : "Deleting a post also deletes the clip permanently"}
       </Text>
 
       <View style={{ width: 200, height: 150, alignSelf: "center" }}>

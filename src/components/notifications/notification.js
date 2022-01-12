@@ -10,6 +10,7 @@ import { Avatar } from "react-native-elements";
 import FastImage from "react-native-fast-image";
 
 import { dateTimeDiff } from "../../utils";
+import { DEEP_LINK_TYPES } from "../../utils/share";
 import { avatarDefaultStyling } from "../../utils/styles";
 import { darkTheme } from "../../utils/theme";
 
@@ -20,6 +21,28 @@ const Notification = ({ avatarSize, notification, navigateProfile }) => {
 
   const dateThen = new Date(sent_at);
   const dateDiff = dateTimeDiff(dateThen);
+
+  let textString = "";
+  switch (type) {
+    case DEEP_LINK_TYPES.FOLLOW:
+      textString = "follows you";
+      break;
+
+    case DEEP_LINK_TYPES.LIKE:
+      textString = "liked your clip";
+      break;
+
+    case DEEP_LINK_TYPES.REPOST:
+      textString = "reposted your clip";
+      break;
+
+    case DEEP_LINK_TYPES.CLIP:
+      textString = "uploaded a clip";
+      break;
+  }
+
+  if (textString == "") return null;
+
   return (
     <TouchableOpacity
       style={styles.container}
@@ -39,7 +62,7 @@ const Notification = ({ avatarSize, notification, navigateProfile }) => {
         <Text style={[styles.text, { fontWeight: "bold" }]}>
           {sender.username}
         </Text>
-        <Text style={styles.text}> follows you</Text>
+        <Text style={styles.text}> {textString}</Text>
         <Text style={[styles.text, styles.date]}> {dateDiff}</Text>
       </View>
     </TouchableOpacity>
