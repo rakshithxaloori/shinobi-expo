@@ -1,26 +1,18 @@
 import React from "react";
 import { View, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import * as Linking from "expo-linking";
 
 import { darkTheme } from "../utils/theme";
 import { shareApp } from "../utils/share";
+import { openURL } from "../utils/link";
 
 const ShnSocials = () => {
-  const linkURL = async (URL) => {
-    try {
-      Linking.openURL(URL);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const openSubReddit = () => {
-    linkURL("https://www.reddit.com/r/ShinobiApp/");
+    openURL("https://www.reddit.com/r/ShinobiApp/");
   };
 
   const openDiscord = () => {
-    linkURL(process.env.DISCORD_INVITE_LINK);
+    openURL(process.env.DISCORD_INVITE_LINK);
   };
 
   return (

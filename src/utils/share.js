@@ -52,6 +52,9 @@ export const ShareIcon = ({ onPress }) => (
 
 const styles = StyleSheet.create({ shareHeader: { marginRight: 16 } });
 
+export const PLAY_STORE_LINK =
+  "https://play.google.com/store/apps/details?id=cc.shinobi.android";
+
 const _handleShare = async (message, urlPath = null, postData = null) => {
   try {
     const result = await Share.share({
@@ -91,7 +94,7 @@ export const shareMatch = async (match) => {
 };
 
 export const shareApp = async () => {
-  const message = `Upload a game clip! Shinobi app on Play Store https://play.google.com/store/apps/details?id=cc.shinobi.android`;
+  const message = `Upload a game clip! Shinobi app on Play Store ${PLAY_STORE_LINK}`;
   await _handleShare(message);
 };
 

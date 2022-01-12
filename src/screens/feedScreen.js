@@ -22,19 +22,46 @@ const FeedScreen = (props) => {
   let cancelTokenSource = axios.CancelToken.source();
   const [isVisible, setIsVisible] = React.useState(false);
   const [updates, setUpdates] = React.useState([]);
+  const [updateAvailable, setUpdateAvailable] = React.useState(false);
   const [feedType, setFeedType] = React.useState(1);
 
   React.useEffect(() => {
     const checkAppUpdate = async () => {
       const fetchUpdates = async () => {
         const onSuccess = async (response) => {
-          const { updates } = response.data?.payload?.updates;
-          setUpdates(updates);
-          setIsVisible(true);
-          await SecureStore.setItemAsync("update", Constants.manifest.version);
+          const _showUpdates = async () => {
+            setUpdates(updates);
+            setIsVisible(true);
+            await SecureStore.setItemAsync(
+              "update",
+              Constants.manifest.version
+            );
+          };
+          const { updates, update_available } = response.data?.payload;
+          console.log(updates, update_available);
+
+          if (update_available === false) {
+            try {
+              const updateVersion = await SecureStore.getItemAsync("update");
+              if (
+                updateVersion === undefined ||
+                updateVersion === null ||
+                updateVersion !== Constants.manifest.version
+              ) {
+                await _showUpdates();
+              }
+            } catch (e) {
+              await _showUpdates();
+            }
+          } else {
+            // Show that update is available
+            setUpdateAvailable(update_available);
+            setIsVisible(true);
+          }
         };
 
         const APIKit = await createAPIKit();
+        console.log(Constants.manifest.version);
         APIKit.post(
           "ux/updates/",
           { version: Constants.manifest.version },
@@ -46,20 +73,7 @@ const FeedScreen = (props) => {
           });
       };
 
-      try {
-        const updateVersion = await SecureStore.getItemAsync("update");
-        if (
-          updateVersion === undefined ||
-          updateVersion === null ||
-          updateVersion !== Constants.manifest.version
-        ) {
-          // Fetch updates
-          await fetchUpdates();
-        }
-      } catch (e) {
-        // Fetch updates
-        await fetchUpdates();
-      }
+      await fetchUpdates();
     };
     checkAppUpdate();
   }, []);
@@ -142,6 +156,7 @@ const FeedScreen = (props) => {
       <PostsFeed type="Feed" feedType={feedType} />
       <UpdatesOverlay
         isVisible={isVisible}
+        updateAvailable={updateAvailable}
         updates={updates}
         setVisible={setIsVisible}
       />

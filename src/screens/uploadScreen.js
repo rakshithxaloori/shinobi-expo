@@ -20,6 +20,7 @@ import { handleAPIError } from "../utils";
 import SelectVideo from "../components/upload/selectVideo";
 import TitleGame from "../components/upload/titleGame";
 import ShnSocials from "../components/socials";
+import { openURL } from "../utils/link";
 
 const VIDEO_MIN_LENGTH = 5;
 const VIDEO_MAX_LENGTH = 61;
@@ -233,14 +234,6 @@ class UploadScreen extends Component {
       videoWidth: null,
     });
 
-  linkURL = async (URL) => {
-    try {
-      Linking.openURL(URL);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   render = () =>
     this.state.loaded ? (
       <View style={styles.container}>
@@ -302,7 +295,7 @@ class UploadScreen extends Component {
             </Text>
             <TouchableOpacity
               onPress={() => {
-                this.linkURL(UPLOAD_SITE_URL);
+                openURL(UPLOAD_SITE_URL);
               }}
             >
               <Text

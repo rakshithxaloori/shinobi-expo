@@ -7,6 +7,7 @@ import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import { darkTheme } from "../../utils/theme";
 import { flashAlert } from "../../utils/flash_message";
 import { shimmerColors } from "../../utils/styles";
+import { openURL } from "../../utils/link";
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -18,13 +19,6 @@ const Socials = ({
 }) => {
   const iconSize = 22;
   const iconColor = darkTheme.on_surface_subtitle;
-  const linkURL = async (URL) => {
-    try {
-      Linking.openURL(URL);
-    } catch (error) {
-      flashAlert(error);
-    }
-  };
 
   return (
     <View style={styles.container}>
@@ -34,7 +28,7 @@ const Socials = ({
             <TouchableOpacity
               style={styles.socialIcon}
               onPress={() =>
-                linkURL(`https://instagram.com/${instagram_username}`)
+                openURL(`https://instagram.com/${instagram_username}`)
               }
             >
               <Ionicons
@@ -48,7 +42,7 @@ const Socials = ({
             <TouchableOpacity
               style={styles.socialIcon}
               onPress={() =>
-                linkURL(`https://twitch.tv/${twitch_profile?.login}`)
+                openURL(`https://twitch.tv/${twitch_profile?.login}`)
               }
             >
               <Ionicons name="logo-twitch" size={iconSize} color={iconColor} />
@@ -59,7 +53,7 @@ const Socials = ({
             <TouchableOpacity
               style={styles.socialIcon}
               onPress={() =>
-                linkURL(`https://youtube.com/channel/${youtube_channel_id}`)
+                openURL(`https://youtube.com/channel/${youtube_channel_id}`)
               }
             >
               <Ionicons name="logo-youtube" size={iconSize} color={iconColor} />
