@@ -166,6 +166,19 @@ class Post extends React.Component {
               />
               <Text style={styles.iconText}>{prettyNumber(post.likes)}</Text>
             </TouchableOpacity>
+            {post.clip.view_count !== null && (
+              <View style={styles.footerIconSection} onPress={this.onPressLike}>
+                <Ionicons
+                  name={"play"}
+                  size={FOOTER_ICON_SIZE}
+                  color={FOOTER_ICON_COLOR}
+                  style={styles.footerIcon}
+                />
+                <Text style={styles.iconText}>
+                  {prettyNumber(post.clip.view_count)}
+                </Text>
+              </View>
+            )}
             <TouchableOpacity
               style={styles.footerIconSection}
               onPress={this.onPressRepost}
