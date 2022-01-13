@@ -82,10 +82,6 @@ const FeedScreen = (props) => {
 
   const { user } = useContext(AuthContext);
 
-  const navigateUpload = () => {
-    navigation.navigate("Upload");
-  };
-
   const navigateProfile = () => {
     navigation.navigate("Profile");
   };
@@ -113,16 +109,6 @@ const FeedScreen = (props) => {
         <Text style={styles.title}>Welcome back,</Text>
         <Text style={styles.name}>{user?.username}</Text>
         <View style={styles.options}>
-          <TouchableOpacity
-            onPress={navigateUpload}
-            style={{ marginRight: 10 }}
-          >
-            <Ionicons
-              name="cloud-upload-outline"
-              size={32}
-              color={darkTheme.primary}
-            />
-          </TouchableOpacity>
           <TouchableOpacity
             onPress={navigateSearch}
             style={{ marginRight: 10 }}

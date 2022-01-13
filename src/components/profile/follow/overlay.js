@@ -59,7 +59,7 @@ const UnfollowOverlay = ({
     >
       <Text style={styles.overlayTitle}>Unfollow {username}?</Text>
       <Text style={styles.overlaySubtitle}>
-        You will no longer be able to chat. You can still view their profile.
+        You will no longer be able to see {username}'s posts on your feed.
       </Text>
       <View style={{ width: 200, height: 150 }}>
         <TouchableOpacity

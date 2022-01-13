@@ -15,10 +15,8 @@ import FlashMessage from "react-native-flash-message";
 import { Ionicons } from "@expo/vector-icons";
 
 import FeedScreen from "../screens/feedScreen";
-import InboxScreen from "../screens/inboxScreen";
 import NotificationsScreen from "../screens/notificationsScreen";
 
-import Chat from "../screens/chatScreen";
 import Settings from "../screens/settingsScreen";
 import Profile from "../screens/profileScreen";
 import Search from "../screens/searchScreen";
@@ -65,25 +63,9 @@ Notifications.setNotificationHandler({
 const TabNavigatorComponent = () => {
   let cancelTokenSource = axios.CancelToken.source();
 
-  const [unreadChats, setUnreadChats] = React.useState(false);
   const [newNotifs, setNewNotifs] = React.useState(false);
 
   React.useEffect(() => {
-    const fetchNotiChats = async () => {
-      const onSuccess = (response) => {
-        setUnreadChats(response.data?.payload?.unread);
-      };
-
-      const APIKit = await createAPIKit();
-      APIKit.get("/chat/unread/", { cancelToken: cancelTokenSource.token })
-        .then(onSuccess)
-        .catch((e) => {
-          flashAlert(handleAPIError(e));
-        });
-    };
-
-    fetchNotiChats();
-
     return () => {
       cancelTokenSource.cancel();
     };
@@ -118,14 +100,12 @@ const TabNavigatorComponent = () => {
         }}
       />
       <Tab.Screen
-        name="Inbox"
-        component={InboxScreen}
+        name="Upload"
+        component={UploadScreen}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused, color }) => {
-            let iconName = focused
-              ? "chatbubble-ellipses"
-              : "chatbubble-ellipses-outline";
+            let iconName = focused ? "cloud-upload" : "cloud-upload-outline";
             return (
               <Ionicons name={iconName} size={TAB_ICON_SIZE} color={color} />
             );
@@ -186,7 +166,6 @@ const StackNavigatorComponent = () => {
             : { headerShown: false };
         }}
       />
-      <Stack.Screen name="Chat" component={Chat} />
       <Stack.Screen name="Clip" component={PostScreen} />
       <Stack.Screen
         name="Profile"
@@ -209,11 +188,6 @@ const StackNavigatorComponent = () => {
       />
       <Stack.Screen name="Followers" component={Followers} />
       <Stack.Screen name="Following" component={Followings} />
-      <Stack.Screen
-        name="Upload"
-        component={UploadScreen}
-        options={{ title: "Upload Clip" }}
-      />
       <Stack.Screen
         name="Settings"
         component={Settings}
