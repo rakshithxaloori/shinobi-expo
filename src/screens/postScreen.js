@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
+import { View, StyleSheet, Dimensions, Text } from "react-native";
 import axios from "axios";
 import LottieView from "lottie-react-native";
 
@@ -9,9 +9,11 @@ import { dateTimeDiff, handleAPIError } from "../utils";
 import ClipPost from "../components/posts/post";
 import ReportOverlay from "../components/posts/reportOverlay";
 import { clipUrlByNetSpeed, getVideoHeight } from "../utils/clipUtils";
+import { darkTheme } from "../utils/theme";
 
 const screenWidth = Dimensions.get("window").width;
 
+const REPOST_HEIGHT = 40;
 const TITLE_HEIGHT = 60;
 const FOOTER_HEIGHT = 80;
 const ITEM_MARGIN = 15;
@@ -119,9 +121,11 @@ class PostScreen extends Component {
       );
       return (
         <View style={styles.container}>
+          <Text style={styles.share}>Share the post with your friends?</Text>
           <ClipPost
             type={"Feed"}
             post={this.state.post}
+            REPOST_HEIGHT={REPOST_HEIGHT}
             TITLE_HEIGHT={TITLE_HEIGHT}
             VIDEO_HEIGHT={video_height}
             FOOTER_HEIGHT={FOOTER_HEIGHT}
@@ -162,6 +166,12 @@ class PostScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+  share: {
+    color: darkTheme.on_background,
+    fontSize: 18,
+    marginHorizontal: 20,
+    marginVertical: 10,
+  },
   container: { flex: 1 },
 });
 
