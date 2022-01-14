@@ -23,8 +23,6 @@ import Search from "../screens/searchScreen";
 import Followers from "../screens/followersScreen";
 import Followings from "../screens/followingScreen";
 
-import { createAPIKit } from "../utils/APIKit";
-import { handleAPIError } from "../utils";
 import { darkTheme } from "../utils/theme";
 
 import { getDeepLink, ShareIcon, shareProfile } from "../utils/share";
@@ -32,9 +30,9 @@ import AuthContext from "../authContext";
 import UploadScreen from "../screens/uploadScreen";
 import PostScreen from "../screens/postScreen";
 import ChangeGamesScreen from "../screens/gamesScreen";
-import { flashAlert } from "../utils/flash_message";
 import TermsScreen from "../screens/termsScreen";
 import PolicyScreen from "../screens/policyScreen";
+import SocialsScreen from "../screens/socialsScreen";
 
 const NavigationContext = React.createContext();
 
@@ -185,6 +183,11 @@ const StackNavigatorComponent = () => {
         name="Games"
         component={ChangeGamesScreen}
         options={{ title: "Games I Play" }}
+      />
+      <Stack.Screen
+        name="Connect Socials"
+        component={SocialsScreen}
+        options={{ title: "My Socials" }}
       />
       <Stack.Screen name="Followers" component={Followers} />
       <Stack.Screen name="Following" component={Followings} />

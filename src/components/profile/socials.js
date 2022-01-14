@@ -1,22 +1,16 @@
 import React from "react";
 import { View, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import * as Linking from "expo-linking";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
+
 import { darkTheme } from "../../utils/theme";
-import { flashAlert } from "../../utils/flash_message";
 import { shimmerColors } from "../../utils/styles";
 import { openURL } from "../../utils/link";
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
-const Socials = ({
-  profile_loaded,
-  instagram_username,
-  twitch_profile,
-  youtube_channel_id,
-}) => {
+const Socials = ({ profile_loaded, socials }) => {
   const iconSize = 22;
   const iconColor = darkTheme.on_surface_subtitle;
 
@@ -24,11 +18,11 @@ const Socials = ({
     <View style={styles.container}>
       {profile_loaded ? (
         <View style={{ flexDirection: "row" }}>
-          {instagram_username && (
+          {socials?.instagram && (
             <TouchableOpacity
               style={styles.socialIcon}
               onPress={() =>
-                openURL(`https://instagram.com/${instagram_username}`)
+                openURL(`https://instagram.com/${socials.instagram}`)
               }
             >
               <Ionicons
@@ -38,22 +32,20 @@ const Socials = ({
               />
             </TouchableOpacity>
           )}
-          {twitch_profile && (
+          {socials?.twitch && (
             <TouchableOpacity
               style={styles.socialIcon}
-              onPress={() =>
-                openURL(`https://twitch.tv/${twitch_profile?.login}`)
-              }
+              onPress={() => openURL(`https://twitch.tv/${socials.twitch}`)}
             >
               <Ionicons name="logo-twitch" size={iconSize} color={iconColor} />
             </TouchableOpacity>
           )}
 
-          {youtube_channel_id && (
+          {socials?.youtube && (
             <TouchableOpacity
               style={styles.socialIcon}
               onPress={() =>
-                openURL(`https://youtube.com/channel/${youtube_channel_id}`)
+                openURL(`https://youtube.com/channel/${socials.youtube}`)
               }
             >
               <Ionicons name="logo-youtube" size={iconSize} color={iconColor} />
@@ -74,7 +66,7 @@ const Socials = ({
 
 const styles = StyleSheet.create({
   socialIcon: {
-    // marginRight: 10,
+    marginHorizontal: 3,
   },
   container: {
     position: "absolute",

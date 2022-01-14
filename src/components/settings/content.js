@@ -11,8 +11,6 @@ import ShnSocials from "../socials";
 const Content = () => {
   const navigation = useNavigation();
 
-  const [socialsLoaded, setSocialsLoaded] = React.useState(false);
-
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -41,7 +39,7 @@ const Content = () => {
         }}
       >
         <Ionicons
-          name="footsteps"
+          name="earth-outline"
           style={styles.icon}
           size={32}
           color={darkTheme.on_background}

@@ -32,9 +32,7 @@ class Profile extends Component {
     following_count: undefined,
     me_following: undefined,
     bio: undefined,
-    instagram: undefined,
-    twitch: undefined,
-    youtube: undefined,
+    socials: undefined,
     profile_loaded: false,
     error: "",
   };
@@ -52,17 +50,13 @@ class Profile extends Component {
         saveUser(user);
       }
 
-      const { instagram, twitch_profile, youtube } = socials;
-
       this.setState({
         user,
         followers_count: followers,
         following_count: following,
         me_following,
         bio,
-        instagram,
-        twitch: twitch_profile,
-        youtube,
+        socials,
         profile_loaded: true,
       });
     };
@@ -139,9 +133,7 @@ class Profile extends Component {
             profile_loaded={this.state.profile_loaded}
           />
           <Socials
-            instagram_username={this.state.instagram?.username}
-            twitch_profile={this.state.twitch}
-            youtube_channel_id={this.state.youtube?.channel_id}
+            socials={this.state.socials}
             profile_loaded={this.state.profile_loaded}
           />
           {this.state.profile_loaded && (

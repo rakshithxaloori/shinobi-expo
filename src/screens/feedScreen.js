@@ -38,7 +38,6 @@ const FeedScreen = (props) => {
             );
           };
           const { updates, update_available } = response.data?.payload;
-          console.log(updates, update_available);
 
           if (update_available === false) {
             try {
@@ -61,7 +60,7 @@ const FeedScreen = (props) => {
         };
 
         const APIKit = await createAPIKit();
-        console.log(Constants.manifest.version);
+
         APIKit.post(
           "ux/updates/",
           { version: Constants.manifest.version },
