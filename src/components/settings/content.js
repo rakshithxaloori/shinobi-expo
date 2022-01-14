@@ -4,7 +4,6 @@ import { useNavigation } from "@react-navigation/core";
 import { Ionicons } from "@expo/vector-icons";
 import * as Linking from "expo-linking";
 
-import SocialsSettings from "./socials";
 import LogOut from "./logout";
 import { darkTheme } from "../../utils/theme";
 import ShnSocials from "../socials";
@@ -35,7 +34,25 @@ const Content = () => {
           </Text>
         </View>
       </TouchableOpacity>
-      <SocialsSettings setSocialsLoaded={setSocialsLoaded} />
+      <TouchableOpacity
+        style={styles.row}
+        onPress={() => {
+          navigation.navigate("Connect Socials");
+        }}
+      >
+        <Ionicons
+          name="footsteps"
+          style={styles.icon}
+          size={32}
+          color={darkTheme.on_background}
+        />
+        <View style={styles.content}>
+          <Text style={styles.title}>Connect Socials</Text>
+          <Text style={styles.text}>
+            Let others know where else you are on 📺
+          </Text>
+        </View>
+      </TouchableOpacity>
       <TouchableOpacity
         style={styles.row}
         onPress={() => {
@@ -50,7 +67,7 @@ const Content = () => {
         />
         <View style={styles.content}>
           <Text style={styles.title}>Terms and Conditions</Text>
-          <Text style={styles.text}>In case, you want to read it!</Text>
+          <Text style={styles.text}>In case, you want to read it! 🙀</Text>
         </View>
       </TouchableOpacity>
       <TouchableOpacity
@@ -67,7 +84,7 @@ const Content = () => {
         />
         <View style={styles.content}>
           <Text style={styles.title}>Privacy Policy</Text>
-          <Text style={styles.text}>Wait, are you bored?</Text>
+          <Text style={styles.text}>Wait, are you bored?! 👽</Text>
         </View>
       </TouchableOpacity>
       <TouchableOpacity
@@ -84,7 +101,7 @@ const Content = () => {
         />
         <View style={styles.content}>
           <Text style={styles.title}>Contact Us</Text>
-          <Text style={styles.text}>Here, whenever you need</Text>
+          <Text style={styles.text}>Here, whenever you need 👀</Text>
         </View>
       </TouchableOpacity>
       <LogOut />
@@ -104,6 +121,25 @@ const Content = () => {
         <Text style={styles.helpText}>
           Tell your friends about Shinobi! Click the share icon to share.
         </Text>
+        <View
+          style={{
+            flexDirection: "row",
+            flexWrap: "wrap",
+            justifyContent: "center",
+          }}
+        >
+          <Text style={styles.madeby}>Made by </Text>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Profile", { username: "leo_uchiha" });
+            }}
+          >
+            <Text style={[styles.madeby, { textDecorationLine: "underline" }]}>
+              rakshith.aloori
+            </Text>
+          </TouchableOpacity>
+          <Text style={styles.madeby}>💥</Text>
+        </View>
       </View>
     </View>
   );
@@ -133,6 +169,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginRight: 0,
   },
+  madeby: { color: darkTheme.on_surface_title, fontSize: 12, paddingTop: 10 },
   helpText: {
     color: darkTheme.on_surface_title,
     fontSize: 12,

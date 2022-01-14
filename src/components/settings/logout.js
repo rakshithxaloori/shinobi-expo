@@ -19,7 +19,7 @@ const LogOut = ({ icon, title, text }) => {
       />
       <View style={styles.content}>
         <Text style={styles.title}>Log out</Text>
-        <Text style={styles.text}>Hasta la vista, baby!</Text>
+        <Text style={styles.text}>Hasta la vista, baby! 👋</Text>
       </View>
     </TouchableOpacity>
   );
