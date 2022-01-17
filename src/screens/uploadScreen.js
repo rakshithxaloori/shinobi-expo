@@ -34,6 +34,7 @@ class UploadScreen extends Component {
     videoQuota: 0,
     timeLeft: null,
     videoUri: null,
+    duration: null,
     videoHeight: null,
     videoWidth: null,
     selectText: "Select",
@@ -137,6 +138,7 @@ class UploadScreen extends Component {
                 videoWidth = result.height;
               }
               this.setState({
+                duration: result.duration / 1000,
                 videoUri: result.uri,
                 videoHeight,
                 videoWidth,
