@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { View, Dimensions } from "react-native";
+import { View, StyleSheet, Dimensions } from "react-native";
 import {
   NavigationContainer,
   DefaultTheme,
@@ -33,8 +33,6 @@ import ChangeGamesScreen from "../screens/gamesScreen";
 import TermsScreen from "../screens/termsScreen";
 import PolicyScreen from "../screens/policyScreen";
 import SocialsScreen from "../screens/socialsScreen";
-
-const NavigationContext = React.createContext();
 
 const fullScreenWidth = Dimensions.get("window").width;
 const TAB_ICON_SIZE = 22;
@@ -72,12 +70,7 @@ const TabNavigatorComponent = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarStyle: {
-          borderTopWidth: 0,
-          backgroundColor: darkTheme.background,
-          elevation: 0,
-          shadowOpacity: 0,
-        },
+        tabBarStyle: tabBarStyles.tabBarStyle,
         tabBarActiveTintColor: darkTheme.primary,
         tabBarInactiveTintColor: "grey",
         tabBarShowLabel: false,
@@ -277,5 +270,14 @@ const NavigatorWithContext = () => {
     </View>
   );
 };
+
+export const tabBarStyles = StyleSheet.create({
+  tabBarStyle: {
+    borderTopWidth: 0,
+    backgroundColor: darkTheme.background,
+    elevation: 0,
+    shadowOpacity: 0,
+  },
+});
 
 export default NavigatorWithContext;
