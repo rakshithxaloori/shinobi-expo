@@ -6,11 +6,11 @@ import {
   Text,
   Platform,
   Keyboard,
+  SafeAreaView,
 } from "react-native";
 import { CommonActions } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
-import * as Linking from "expo-linking";
 import axios from "axios";
 
 import { flashAlert } from "../utils/flash_message";
@@ -208,6 +208,7 @@ class UploadScreen extends Component {
           clip_type: splitList[splitList.length - 1],
           game_code: this.state.selectedGame.id,
           title: this.state.title,
+          duration: this.state.duration,
           clip_height: this.state.videoHeight,
           clip_width: this.state.videoWidth,
         },
@@ -238,7 +239,7 @@ class UploadScreen extends Component {
 
   render = () =>
     this.state.loaded ? (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         {this.state.videoQuota <= 0 ? (
           <Text style={styles.subTitle}>
             {this.state.timeLeft} until you can upload more clips
@@ -289,7 +290,7 @@ class UploadScreen extends Component {
               flexWrap: "wrap",
               justifyContent: "center",
               alignItems: "center",
-              paddingTop: 20,
+              paddingTop: 10,
             }}
           >
             <Text style={styles.subTitle}>
@@ -308,9 +309,9 @@ class UploadScreen extends Component {
             </TouchableOpacity>
             <Text style={styles.subTitle}> from your PC?</Text>
           </View>
-          <ShnSocials />
+          {/* <ShnSocials /> */}
         </View>
-      </View>
+      </SafeAreaView>
     ) : (
       <View style={styles.container} />
     );

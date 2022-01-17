@@ -6,7 +6,10 @@ import {
   ScrollView,
   StyleSheet,
   Dimensions,
+  Keyboard,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+
 import { Avatar } from "react-native-elements";
 import { Searchbar } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
@@ -18,6 +21,7 @@ import { darkTheme } from "../../utils/theme";
 import { handleAPIError } from "../../utils";
 import { createAPIKit } from "../../utils/APIKit";
 import { avatarDefaultStyling } from "../../utils/styles";
+import { tabBarStyles } from "../home";
 
 const { width, height } = Dimensions.get("window");
 const ICON_SIZE = 25;
@@ -49,6 +53,7 @@ const TitleGame = ({
   selectedGame,
   setSelectedGame,
 }) => {
+  const navigation = useNavigation();
   const cancelTokenSource = axios.CancelToken.source();
 
   const [showSearchBar, setShowSearchBar] = React.useState(true);
@@ -56,11 +61,40 @@ const TitleGame = ({
   const [searchText, setSearchText] = React.useState("");
   const [error, setError] = React.useState("");
 
+  const _keyboardDidShow = React.useCallback(() => {
+    navigation.setOptions({
+      tabBarStyle: { display: "none" },
+    });
+  }, [navigation]);
+
+  const _keyboardDidHide = React.useCallback(() => {
+    navigation.setOptions({
+      tabBarStyle: { display: "flex", ...tabBarStyles.tabBarStyle },
+    });
+  }, [navigation]);
+
   React.useEffect(() => {
     return () => {
       cancelTokenSource.cancel();
     };
   }, []);
+
+  React.useEffect(() => {
+    const showListener = Keyboard.addListener(
+      "keyboardDidShow",
+      _keyboardDidShow
+    );
+    const hideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      _keyboardDidHide
+    );
+
+    // cleanup function
+    return () => {
+      showListener.remove();
+      hideListener.remove();
+    };
+  }, [_keyboardDidHide, _keyboardDidShow]);
 
   onChangeSearch = async (searchText) => {
     if (searchText == "") {
@@ -111,14 +145,13 @@ const TitleGame = ({
   };
 
   let searchStyle = null;
-  let scrollStyle = { marginTop: (2 - games.length) * 50 };
+  let scrollStyle = {
+    marginTop: (2 - games.length) * 50,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+  };
   if (games.length > 0) {
-    searchStyle = {
-      borderTopWidth: 2,
-      borderLeftWidth: 2,
-      borderRightWidth: 2,
-      borderColor: darkTheme.on_background,
-    };
+    searchStyle = styles.searchGame;
   }
 
   return (
@@ -137,9 +170,6 @@ const TitleGame = ({
         onChangeText={onChangeText}
         style={styles.clipLabel}
       />
-      <View style={{ height: 40 }}>
-        {error !== "" && <Text style={styles.error}>{error}</Text>}
-      </View>
       {selectedGame && (
         <View>
           <Text style={[styles.gameName, { fontWeight: "bold" }]}>
@@ -165,21 +195,41 @@ const TitleGame = ({
           </View>
         </View>
       )}
+
       {showSearchBar && (
         <View style={[styles.searchBar, searchStyle]}>
-          <ScrollView keyboardShouldPersistTaps="handled" style={scrollStyle}>
-            {games.map((game) => (
-              <SearchGame game={game} key={game.id} onSelect={onSelectGame} />
-            ))}
-          </ScrollView>
           <Searchbar
             placeholder="Choose game"
+            placeholderTextColor={darkTheme.on_surface_subtitle}
             onChangeText={onChangeSearch}
             value={searchText}
-            icon={() => <Ionicons name="search" size={20} />}
+            style={{
+              backgroundColor: darkTheme.surface,
+              color: darkTheme.on_surface_title,
+            }}
+            inputStyle={{ color: darkTheme.on_surface_title }}
+            icon={() => (
+              <Ionicons
+                name="search"
+                size={20}
+                color={darkTheme.on_surface_subtitle}
+              />
+            )}
           />
+          {games.length > 0 ? (
+            <ScrollView keyboardShouldPersistTaps="handled" style={scrollStyle}>
+              {games.map((game) => (
+                <SearchGame game={game} key={game.id} onSelect={onSelectGame} />
+              ))}
+            </ScrollView>
+          ) : (
+            <View style={{ height: 40 }}>
+              {error !== "" && <Text style={styles.error}>{error}</Text>}
+            </View>
+          )}
         </View>
       )}
+
       {is_uploading ? (
         <Text style={styles.uploadingText}>Uploading clip...</Text>
       ) : (
@@ -204,16 +254,15 @@ const TitleGame = ({
 const styles = StyleSheet.create({
   container: {
     width: width - 40,
-    height: height / 2,
+    height: height - 300,
     marginVertical: 20,
+    justifyContent: "center",
   },
   error: { color: "red", flexShrink: 1 },
   searchBar: {
     marginVertical: 10,
     width: "100%",
     backgroundColor: darkTheme.background,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
   },
   clipLabel: {
     width: "100%",
@@ -225,6 +274,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginLeft: 8,
     color: darkTheme.on_surface_subtitle,
+  },
+  searchGame: {
+    // borderBottomWidth: 2,
+    // borderLeftWidth: 2,
+    // borderRightWidth: 2,
+    borderRadius: 10,
+    // borderColor: darkTheme.on_background,
   },
   game: {
     flexDirection: "row",
