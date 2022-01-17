@@ -117,7 +117,7 @@ const Content = () => {
           features.
         </Text>
         <Text style={styles.helpText}>
-          Tell your friends about Shinobi! Click the share icon to share.
+          Tell your friends about Shinobi! Click the Play Store icon to share.
         </Text>
         <View
           style={{

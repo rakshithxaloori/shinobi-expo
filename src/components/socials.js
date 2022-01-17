@@ -33,7 +33,7 @@ const ShnSocials = () => {
       </TouchableOpacity>
       <TouchableOpacity style={styles.socialIcon} onPress={shareApp}>
         <Ionicons
-          name="share-social"
+          name="logo-google-playstore"
           size={33}
           color={darkTheme.on_surface_title}
         />
