@@ -127,6 +127,12 @@ const App = () => {
       }
     };
 
+    const getLocale = async () => {
+      const locale = await Localization.getLocalizationAsync();
+      console.log(locale);
+    };
+
+    getLocale();
     bootstrapAsync();
 
     AppState.addEventListener("change", handleAppStateChange);
