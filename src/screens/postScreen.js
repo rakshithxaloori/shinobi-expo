@@ -1,7 +1,14 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Dimensions, Text } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import axios from "axios";
 import LottieView from "lottie-react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 import { createAPIKit } from "../utils/APIKit";
 import { flashAlert } from "../utils/flash_message";
@@ -10,6 +17,7 @@ import ClipPost from "../components/posts/post";
 import ReportOverlay from "../components/posts/reportOverlay";
 import { clipUrlByNetSpeed, getVideoHeight } from "../utils/clipUtils";
 import { darkTheme } from "../utils/theme";
+import { shareClip } from "../utils/share";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -119,9 +127,18 @@ class PostScreen extends Component {
         this.state.post?.clip.height,
         this.state.post?.clip.width
       );
+
+      let post_id = this.state.post.id;
+      let username = this.state.post?.posted_by?.username;
+      let game_name = this.state.post?.posted_by?.game?.name;
+
+      if (this.state.post.is_repost) {
+        username = this.state.post.reposted_by.username;
+        game_name = this.state.post.game.name;
+      }
+
       return (
         <View style={styles.container}>
-          <Text style={styles.share}>Share the post with your friends?</Text>
           <ClipPost
             type={"Feed"}
             post={this.state.post}
@@ -138,6 +155,20 @@ class PostScreen extends Component {
             toggleMute={this.toggleMute}
             toggleLike={this.toggleLike}
           />
+          <TouchableOpacity
+            onPress={() => {
+              shareClip(post_id, username, game_name);
+            }}
+            style={styles.button}
+          >
+            <Ionicons
+              style={styles.icon}
+              name="share-social-outline"
+              size={25}
+              color={darkTheme.on_background}
+            />
+            <Text style={styles.buttonText}>Share Clip</Text>
+          </TouchableOpacity>
           {this.state.reportClipId && (
             <ReportOverlay
               post_id={this.state.reportClipId}
@@ -166,13 +197,23 @@ class PostScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-  share: {
+  icon: { marginRight: 8 },
+  buttonText: {
+    fontSize: 20,
+    fontWeight: "bold",
     color: darkTheme.on_background,
-    fontSize: 18,
-    marginHorizontal: 20,
-    marginVertical: 10,
   },
-  container: { flex: 1 },
+  button: {
+    borderRadius: 30,
+    padding: 15,
+    margin: 10,
+    flexDirection: "row",
+    backgroundColor: darkTheme.primary,
+    width: "50%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  container: { flex: 1, alignItems: "center" },
 });
 
 export default PostScreen;
