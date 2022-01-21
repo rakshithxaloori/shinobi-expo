@@ -33,6 +33,9 @@ import ChangeGamesScreen from "../screens/gamesScreen";
 import TermsScreen from "../screens/termsScreen";
 import PolicyScreen from "../screens/policyScreen";
 import SocialsScreen from "../screens/socialsScreen";
+import { createAPIKit } from "../utils/APIKit";
+import { flashAlert } from "../utils/flash_message";
+import { handleAPIError } from "../utils";
 
 const fullScreenWidth = Dimensions.get("window").width;
 const TAB_ICON_SIZE = 22;
@@ -59,9 +62,28 @@ Notifications.setNotificationHandler({
 const TabNavigatorComponent = () => {
   let cancelTokenSource = axios.CancelToken.source();
 
-  const [newNotifs, setNewNotifs] = React.useState(false);
+  const updateCountry = async (country_code) => {
+    const APIKit = await createAPIKit();
+    APIKit.post("auth/update/country/", { country_code }).catch((e) => {
+      flashAlert(handleAPIError(e));
+    });
+  };
 
   React.useEffect(() => {
+    const getCountryCode = async () => {
+      let publicIpAddress = await axios.get("https://api.ipify.org");
+      publicIpAddress = publicIpAddress?.data;
+      let geoResponse = await axios.get(
+        `http://www.geoplugin.net/json.gp?ip=${publicIpAddress}`
+      );
+
+      if (geoResponse.status === 200) {
+        await updateCountry(geoResponse.data.geoplugin_countryCode);
+      }
+    };
+
+    getCountryCode();
+
     return () => {
       cancelTokenSource.cancel();
     };

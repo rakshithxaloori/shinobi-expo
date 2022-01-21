@@ -119,7 +119,7 @@ class Post extends React.Component {
             ImageComponent={FastImage}
           />
           <View style={{ paddingLeft: 10 }}>
-            <View style={{ flexDirection: "row" }}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Text style={styles.username}>{post.posted_by.username}</Text>
               <Text style={styles.bullet}>{"\u0387"}</Text>
               <Text style={styles.date}>{dateDiff}</Text>

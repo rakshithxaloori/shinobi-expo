@@ -123,7 +123,7 @@ class Profile extends Component {
             )}
           </View>
           <Username
-            username={this.state.user?.username}
+            user={this.state.user}
             profile_loaded={this.state.profile_loaded}
           />
           <FollowStats
