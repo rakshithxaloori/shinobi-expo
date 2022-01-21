@@ -13,7 +13,6 @@ import { darkTheme } from "../utils/theme";
 import PostsFeed from "../components/posts";
 import VirtualizedList from "../utils/virtualizedList";
 import { createAPIKit } from "../utils/APIKit";
-import { flashAlert } from "../utils/flash_message";
 import { handleAPIError } from "../utils";
 import UpdatesOverlay from "../components/feed/updatesOverlay";
 import Switch from "../components/switch";
@@ -68,7 +67,7 @@ const FeedScreen = (props) => {
         )
           .then(onSuccess)
           .catch((e) => {
-            flashAlert(handleAPIError(e));
+            console.log(handleAPIError(e, false));
           });
       };
 

@@ -41,10 +41,12 @@ const createErrorStr = (error) => {
   }
 };
 
-export const handleAPIError = (error) => {
+export const handleAPIError = (error, flash = true) => {
   if (!axios.isCancel(error)) {
     const errorStr = createErrorStr(error);
-    flashAlert(errorStr);
+    if (flash) {
+      flashAlert(errorStr);
+    }
     return errorStr;
   }
 };
