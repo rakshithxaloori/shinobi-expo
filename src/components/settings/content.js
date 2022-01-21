@@ -113,8 +113,7 @@ const Content = () => {
       >
         <ShnSocials />
         <Text style={styles.helpText}>
-          Post on our subreddit or discord server to report bugs or request new
-          features.
+          Join us on our subreddit or discord server.
         </Text>
         <Text style={styles.helpText}>
           Tell your friends about Shinobi! Click the Play Store icon to share.
