@@ -40,6 +40,7 @@ const SHEET_ITEM_MARGIN = 5;
 
 const INITIAL_STATE = {
   posts: [],
+  is_upload: false,
   viewable: null,
   mute: true,
   initLoaded: false,
@@ -114,33 +115,20 @@ class Posts extends Component {
   fetchPosts = async () => {
     if (this.state.endReached) return;
     const onSuccess = (response) => {
-      const { posts } = response.data.payload;
+      const { posts, upload } = response.data.payload;
+      console.log("UPLOAD", upload);
       const clipsWithRef = posts.map((post) => ({
         ...post,
         videoRef: React.createRef(),
       }));
 
-      const callback = () => {
-        if (this.state.posts.length === 0) {
-          if (this.props.type === "Feed") {
-            this.feedAnimation.play();
-          } else {
-            if (this.props.type === "Profile") {
-              this.profileAnimation.play();
-            }
-          }
-        }
-      };
-
-      this.setState(
-        (prevState) => ({
-          initLoaded: true,
-          isLoading: false,
-          posts: [...prevState.posts, ...clipsWithRef],
-          endReached: posts.length < this.fetchCount,
-        }),
-        callback
-      );
+      this.setState((prevState) => ({
+        initLoaded: true,
+        isLoading: false,
+        posts: [...prevState.posts, ...clipsWithRef],
+        is_upload: upload,
+        endReached: posts.length < this.fetchCount,
+      }));
     };
 
     const APIKit = await createAPIKit();
@@ -344,7 +332,33 @@ class Posts extends Component {
   render = () =>
     this.state.initLoaded ? (
       <View style={styles.container}>
-        {this.state.posts.length > 0 ? (
+        {this.state.is_upload === true && (
+          <View style={{ alignItems: "center", justifyContent: "center" }}>
+            <LottieView
+              autoPlay
+              style={{
+                width: 0.5 * screenWidth,
+                height: 0.5 * screenWidth,
+              }}
+              source={require("../../../assets/9844-loading-40-paperplane.json")}
+            />
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate("Upload");
+              }}
+              style={styles.button}
+            >
+              <Ionicons
+                style={styles.icon}
+                name="cloud-upload-outline"
+                size={ICON_SIZE}
+                color={darkTheme.on_background}
+              />
+              <Text style={styles.buttonText}>Upload a Clip</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+        {this.state.posts.length > 0 && (
           <FlatList
             data={this.state.posts}
             onEndReached={this.fetchPosts}
@@ -367,43 +381,6 @@ class Posts extends Component {
               itemVisiblePercentThreshold: 60,
             }}
           />
-        ) : this.props.type === "Feed" ? (
-          <View style={{ alignItems: "center", justifyContent: "center" }}>
-            <LottieView
-              ref={(animation) => {
-                this.feedAnimation = animation;
-              }}
-              style={{
-                width: 0.8 * screenWidth,
-                height: 0.8 * screenWidth,
-              }}
-              source={require("../../../assets/9844-loading-40-paperplane.json")}
-            />
-            <TouchableOpacity
-              onPress={() => {
-                this.props.navigation.navigate("Upload");
-              }}
-              style={styles.button}
-            >
-              <Ionicons
-                style={styles.icon}
-                name="cloud-upload-outline"
-                size={ICON_SIZE}
-                color={darkTheme.on_background}
-              />
-              <Text style={styles.buttonText}>Upload a Clip</Text>
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <View style={styles.lottieParent}>
-            <LottieView
-              ref={(animation) => {
-                this.profileAnimation = animation;
-              }}
-              style={styles.lottie}
-              source={require("../../../assets/51382-astronaut-light-theme.json")}
-            />
-          </View>
         )}
         {this.state.showReportOverlay && (
           <ReportOverlay
@@ -479,9 +456,6 @@ class Posts extends Component {
     ) : (
       <View style={styles.lottieParent}>
         <LottieView
-          ref={(animation) => {
-            this.profileAnimation = animation;
-          }}
           style={styles.lottie}
           autoPlay
           source={require("../../../assets/1049-hourglass.json")}
