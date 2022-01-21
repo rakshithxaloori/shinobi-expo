@@ -18,7 +18,7 @@ const Socials = ({ profile_loaded, socials }) => {
     <View style={styles.container}>
       {profile_loaded ? (
         <View style={{ flexDirection: "row" }}>
-          {socials?.instagram && (
+          {typeof socials?.instagram === "string" && (
             <TouchableOpacity
               style={styles.socialIcon}
               onPress={() =>
@@ -32,7 +32,7 @@ const Socials = ({ profile_loaded, socials }) => {
               />
             </TouchableOpacity>
           )}
-          {socials?.twitch && (
+          {typeof socials?.twitch === "string" && (
             <TouchableOpacity
               style={styles.socialIcon}
               onPress={() => openURL(`https://twitch.tv/${socials.twitch}`)}
@@ -41,7 +41,7 @@ const Socials = ({ profile_loaded, socials }) => {
             </TouchableOpacity>
           )}
 
-          {socials?.youtube && (
+          {typeof socials?.youtube === "string" && (
             <TouchableOpacity
               style={styles.socialIcon}
               onPress={() =>
