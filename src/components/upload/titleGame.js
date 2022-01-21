@@ -2,6 +2,7 @@ import React from "react";
 import {
   View,
   Text,
+  TextInput,
   TouchableOpacity,
   ScrollView,
   StyleSheet,
@@ -11,9 +12,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 
 import { Avatar } from "react-native-elements";
-import { Searchbar } from "react-native-paper";
-import { Ionicons } from "@expo/vector-icons";
-import { Input } from "react-native-elements";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import FastImage from "react-native-fast-image";
 import axios from "axios";
 
@@ -24,7 +23,8 @@ import { avatarDefaultStyling } from "../../utils/styles";
 import { tabBarStyles } from "../home";
 
 const { width, height } = Dimensions.get("window");
-const ICON_SIZE = 25;
+const ICON_SIZE = 20;
+const MAX_TITLE_LENGTH = 80;
 
 const SearchGame = ({ game, onSelect }) => {
   const selectGame = () => {
@@ -48,7 +48,8 @@ const SearchGame = ({ game, onSelect }) => {
 const TitleGame = ({
   is_uploading,
   disable,
-  onChangeText,
+  title,
+  onChangeTitle,
   uploadVideo,
   selectedGame,
   setSelectedGame,
@@ -144,11 +145,9 @@ const TitleGame = ({
     setShowSearchBar(true);
   };
 
-  let searchStyle = null;
+  let searchStyle = {};
   let scrollStyle = {
-    marginTop: (2 - games.length) * 50,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
+    marginBottom: (2 - games.length) * 50,
   };
   if (games.length > 0) {
     searchStyle = styles.searchGame;
@@ -156,66 +155,87 @@ const TitleGame = ({
 
   return (
     <View style={styles.container}>
-      <Input
-        editable={!disable}
-        autoCapitalize="none"
-        autoCorrect={false}
-        maxLength={80}
-        placeholder="One tap headshots y'all!"
-        label="Clip title"
-        inputStyle={{ color: darkTheme.on_background, fontSize: 15 }}
-        leftIcon={() => (
-          <Ionicons name="film-outline" size={20} color={darkTheme.primary} />
-        )}
-        onChangeText={onChangeText}
-        style={styles.clipLabel}
-      />
+      <View style={[styles.inputParent, { marginBottom: 5 }]}>
+        <MaterialCommunityIcons
+          name="card-text"
+          size={ICON_SIZE}
+          color={darkTheme.on_background}
+        />
+        <TextInput
+          editable={!disable}
+          autoCapitalize="none"
+          autoCorrect={false}
+          style={[
+            styles.input,
+            {
+              color:
+                title.length > MAX_TITLE_LENGTH
+                  ? "red"
+                  : darkTheme.on_background,
+            },
+          ]}
+          placeholderTextColor={darkTheme.on_surface_subtitle}
+          multiline
+          placeholder="Clip Title"
+          value={title}
+          onChangeText={(value) => {
+            const newValue = value.replace(/\s+/g, " ");
+            onChangeTitle(newValue);
+          }}
+        />
+      </View>
+      <Text
+        style={[
+          styles.count,
+          {
+            color:
+              title.length > MAX_TITLE_LENGTH ? "red" : darkTheme.on_background,
+          },
+        ]}
+      >
+        {title.length}/{MAX_TITLE_LENGTH}
+      </Text>
       {selectedGame && (
-        <View>
-          <Text style={[styles.gameName, { fontWeight: "bold" }]}>
-            Game in the clip
-          </Text>
-          <View style={styles.game}>
-            <Avatar
-              rounded
-              size={24}
-              title={selectedGame.name[0]}
-              source={{ uri: selectedGame.logo_url }}
-              containerStyle={avatarDefaultStyling}
-              ImageComponent={FastImage}
-            />
-            <Text style={styles.gameName}>{selectedGame.name}</Text>
-            <Ionicons
-              name="close-circle"
-              style={styles.removeGame}
-              size={24}
-              color={darkTheme.on_background}
-              onPress={onRemoveGame}
-            />
-          </View>
+        <View style={styles.game}>
+          <Avatar
+            rounded
+            size={24}
+            title={selectedGame.name[0]}
+            source={{ uri: selectedGame.logo_url }}
+            containerStyle={avatarDefaultStyling}
+            ImageComponent={FastImage}
+          />
+          <Text style={styles.gameName}>{selectedGame.name}</Text>
+          <Ionicons
+            name="close-circle"
+            style={styles.removeGame}
+            size={24}
+            color={darkTheme.on_background}
+            onPress={onRemoveGame}
+          />
         </View>
       )}
 
       {showSearchBar && (
-        <View style={[styles.searchBar, searchStyle]}>
-          <Searchbar
-            placeholder="Choose game"
-            placeholderTextColor={darkTheme.on_surface_subtitle}
-            onChangeText={onChangeSearch}
-            value={searchText}
-            style={{
-              backgroundColor: darkTheme.surface,
-              color: darkTheme.on_surface_title,
-            }}
-            inputStyle={{ color: darkTheme.on_surface_title }}
-            icon={() => (
-              <Ionicons
-                name="search"
-                size={20}
-                color={darkTheme.on_surface_subtitle}
-              />
-            )}
-          />
+        <View style={searchStyle}>
+          <View style={styles.inputParent}>
+            <Ionicons
+              name="search"
+              size={20}
+              color={darkTheme.on_surface_subtitle}
+            />
+            <TextInput
+              editable={!disable}
+              autoCapitalize="none"
+              autoCorrect={false}
+              style={styles.input}
+              placeholderTextColor={darkTheme.on_surface_subtitle}
+              multiline
+              placeholder="Choose game"
+              value={searchText}
+              onChangeText={onChangeSearch}
+            />
+          </View>
           {games.length > 0 ? (
             <ScrollView keyboardShouldPersistTaps="handled" style={scrollStyle}>
               {games.map((game) => (
@@ -259,14 +279,27 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   error: { color: "red", flexShrink: 1 },
-  searchBar: {
-    marginVertical: 10,
-    width: "100%",
-    backgroundColor: darkTheme.background,
-  },
   clipLabel: {
     width: "100%",
     height: "20%",
+  },
+  inputParent: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: darkTheme.surface,
+    width: "100%",
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 10,
+  },
+  input: {
+    marginLeft: 5,
+    width: "90%",
+    height: "100%",
+    color: darkTheme.on_background,
+  },
+  count: {
+    alignSelf: "flex-end",
   },
   removeGame: { position: "absolute", right: 10 },
   gameName: {
@@ -276,20 +309,16 @@ const styles = StyleSheet.create({
     color: darkTheme.on_surface_subtitle,
   },
   searchGame: {
-    // borderBottomWidth: 2,
-    // borderLeftWidth: 2,
-    // borderRightWidth: 2,
     borderRadius: 10,
-    // borderColor: darkTheme.on_background,
   },
   game: {
     flexDirection: "row",
     height: 40,
+    width: "100%",
     backgroundColor: darkTheme.surface,
     paddingVertical: 5,
     paddingHorizontal: 10,
-    marginHorizontal: 8,
-    marginVertical: 5,
+    marginVertical: 10,
     borderRadius: 10,
     alignItems: "center",
   },
