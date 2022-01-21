@@ -269,7 +269,8 @@ class UploadScreen extends Component {
               <TitleGame
                 is_uploading={this.state.is_uploading}
                 disable={this.state.disable}
-                onChangeText={(value) => {
+                title={this.state.title}
+                onChangeTitle={(value) => {
                   this.setState({
                     title: value.trim(),
                   });
