@@ -18,10 +18,12 @@ const Username = ({ profile_loaded, user }) => (
     {profile_loaded ? (
       <>
         <Text style={styles.username}>{user?.username}</Text>
-        <FastImage
-          source={{ uri: getFlagLink(user?.country_code) }}
-          style={styles.flag}
-        />
+        {typeof user?.country_code === "string" && (
+          <FastImage
+            source={{ uri: getFlagLink(user?.country_code) }}
+            style={styles.flag}
+          />
+        )}
       </>
     ) : (
       <ShimmerPlaceHolder

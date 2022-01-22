@@ -29,9 +29,15 @@ class Post extends React.Component {
   };
 
   navigateProfile = async () => {
-    if (this.props.type === "Feed") {
-      await this.props.navigateProfile(this.props.post.posted_by.username);
-    }
+    const { type, post, navigateProfile } = this.props;
+    if (type === "Feed") {
+      if (post.is_repost) await navigateProfile(post.reposted_by.username);
+      else await navigateProfile(post.posted_by.username);
+    } else if (
+      type === "Profile" &&
+      post.posted_by.username !== post.reposted_by.username
+    )
+      await navigateProfile(post.posted_by.username);
   };
 
   onPressLike = () => {
@@ -110,7 +116,13 @@ class Post extends React.Component {
             styles.touchable,
             { height: TITLE_HEIGHT, flexDirection: "row" },
           ]}
-          disabled={type === "Profile"}
+          disabled={
+            !(
+              type === "Feed" ||
+              (post.is_repost &&
+                post.posted_by.username !== post.reposted_by.username)
+            )
+          }
           onPress={this.navigateProfile}
         >
           <Avatar
