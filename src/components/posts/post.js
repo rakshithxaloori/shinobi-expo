@@ -101,7 +101,7 @@ class Post extends React.Component {
                 fontSize: REPOST_FONT_SIZE,
               }}
             >
-              {post.reposted_by.username}
+              {post.reposted_by.username} Reposted
             </Text>
           </View>
         )}

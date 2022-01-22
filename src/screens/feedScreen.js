@@ -31,8 +31,10 @@ const FeedScreen = (props) => {
           const _showUpdates = async () => {
             setUpdates(updates);
             setIsVisible(true);
+
+            // Set that updates of Constants.manifest.version are shown
             await SecureStore.setItemAsync(
-              "update",
+              "updatesShownVersion",
               Constants.manifest.version
             );
           };
@@ -40,7 +42,9 @@ const FeedScreen = (props) => {
 
           if (update_available === false) {
             try {
-              const updateVersion = await SecureStore.getItemAsync("update");
+              const updateVersion = await SecureStore.getItemAsync(
+                "updatesShownVersion"
+              );
               if (
                 updateVersion === undefined ||
                 updateVersion === null ||
