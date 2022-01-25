@@ -14,7 +14,7 @@ import FastImage from "react-native-fast-image";
 import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
 
-import { uploadFile } from "../../../utils/APIKit";
+import { createAPIKit, uploadFile } from "../../../utils/APIKit";
 import { handleAPIError } from "../../../utils";
 import { avatarDefaultStyling } from "../../../utils/styles";
 import { flashAlert } from "../../../utils/flash_message";
@@ -84,13 +84,20 @@ const EditProfileOverlay = ({
       updatePictureProfile(newPicture);
       setVisible(false);
     };
-
-    uploadFile("/profile/update/", newPicture, "picture", { bio: newBio })
-      .then(onSuccess)
-      .catch((e) => {
-        flashAlert(handleAPIError(e));
-        setDisable(false);
-      });
+    try {
+      if (picture == newPicture) {
+        // Send a normal API post request
+        const APIKit = await createAPIKit();
+        APIKit.post("profile/update/", { bio: newBio }).then(onSuccess);
+      } else {
+        uploadFile("/profile/update/", newPicture, "picture", {
+          bio: newBio,
+        }).then(onSuccess);
+      }
+    } catch (e) {
+      flashAlert(handleAPIError(e));
+      setDisable(false);
+    }
   };
 
   return (
