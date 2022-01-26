@@ -5,78 +5,35 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Dimensions,
-  Keyboard,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { Avatar } from "react-native-elements";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import FastImage from "react-native-fast-image";
+import { Avatar } from "react-native-elements";
 import axios from "axios";
+import FastImage from "react-native-fast-image";
 
-import { darkTheme } from "../../utils/theme";
-import { handleAPIError, MAX_TITLE_LENGTH } from "../../utils";
-import { createAPIKit } from "../../utils/APIKit";
-import { avatarDefaultStyling } from "../../utils/styles";
-import { tabBarStyles } from "../home";
-import Game from "../posts/game";
+import { darkTheme } from "../utils/theme";
+import { handleAPIError, MAX_TITLE_LENGTH } from "../utils";
+import { avatarDefaultStyling } from "../utils/styles";
+import Game from "../components/posts/game";
+import { createAPIKit } from "../utils/APIKit";
+import { flashAlert } from "../utils/flash_message";
 
-const { width, height } = Dimensions.get("window");
 const ICON_SIZE = 20;
 
-const TitleGame = ({
-  is_uploading,
-  disable,
-  title,
-  onChangeTitle,
-  uploadVideo,
-  selectedGame,
-  setSelectedGame,
-}) => {
-  const navigation = useNavigation();
+const EditPostScreen = ({ navigation, route }) => {
+  const post = route?.params?.post;
   const cancelTokenSource = axios.CancelToken.source();
 
-  const [showSearchBar, setShowSearchBar] = React.useState(true);
+  const [disable, setDisable] = React.useState(false);
+  const [selectedGame, setSelectedGame] = React.useState(post.game);
+  const [title, setTitle] = React.useState(post.title);
+
+  const [showSearchBar, setShowSearchBar] = React.useState(false);
   const [games, setGames] = React.useState([]);
   const [searchText, setSearchText] = React.useState("");
   const [error, setError] = React.useState("");
 
-  const _keyboardDidShow = React.useCallback(() => {
-    navigation.setOptions({
-      tabBarStyle: { display: "none" },
-    });
-  }, [navigation]);
-
-  const _keyboardDidHide = React.useCallback(() => {
-    navigation.setOptions({
-      tabBarStyle: { display: "flex", ...tabBarStyles.tabBarStyle },
-    });
-  }, [navigation]);
-
-  React.useEffect(() => {
-    return () => {
-      cancelTokenSource.cancel();
-    };
-  }, []);
-
-  React.useEffect(() => {
-    const showListener = Keyboard.addListener(
-      "keyboardDidShow",
-      _keyboardDidShow
-    );
-    const hideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      _keyboardDidHide
-    );
-
-    // cleanup function
-    return () => {
-      showListener.remove();
-      hideListener.remove();
-    };
-  }, [_keyboardDidHide, _keyboardDidShow]);
-
-  onChangeSearch = async (searchText) => {
+  const onChangeSearch = async (searchText) => {
     if (searchText == "") {
       setError("");
       setSearchText("");
@@ -124,10 +81,32 @@ const TitleGame = ({
     setShowSearchBar(true);
   };
 
-  let searchStyle = {};
-  let scrollStyle = {
-    marginBottom: (2 - games.length) * 50,
+  const updatePost = async () => {
+    setDisable(true);
+    const onSuccess = () => {
+      navigation.navigate({
+        name: "Feed",
+        params: {
+          type: "update",
+          updatedPost: { id: post.id, game: selectedGame, title },
+        },
+      });
+    };
+    const APIKit = await createAPIKit();
+    APIKit.post("feed/post/update/", {
+      post_id: post.id,
+      title,
+      game_id: selectedGame.id,
+    })
+      .then(onSuccess)
+      .catch((e) => {
+        flashAlert(handleAPIError(e));
+        setDisable(false);
+      });
   };
+
+  let searchStyle = {};
+
   if (games.length > 0) {
     searchStyle = styles.searchGame;
   }
@@ -159,7 +138,7 @@ const TitleGame = ({
           value={title}
           onChangeText={(value) => {
             const newValue = value.replace(/\s+/g, " ");
-            onChangeTitle(newValue);
+            setTitle(newValue);
           }}
         />
       </View>
@@ -220,7 +199,7 @@ const TitleGame = ({
             />
           </View>
           {games.length > 0 ? (
-            <View keyboardShouldPersistTaps="handled" style={scrollStyle}>
+            <View keyboardShouldPersistTaps="handled">
               {games.map((game) => (
                 <Game game={game} key={game.id} onSelect={onSelectGame} />
               ))}
@@ -232,34 +211,29 @@ const TitleGame = ({
           )}
         </View>
       )}
-
-      {is_uploading ? (
-        <Text style={styles.uploadingText}>Uploading clip...</Text>
-      ) : (
-        <TouchableOpacity
-          disabled={disable}
-          onPress={uploadVideo}
-          style={styles.uploadButton}
-        >
-          <Ionicons
-            style={styles.icon}
-            name="cloud-upload"
-            size={ICON_SIZE}
-            color={darkTheme.primary}
-          />
-          <Text style={styles.uploadText}>Upload Video</Text>
-        </TouchableOpacity>
-      )}
+      <TouchableOpacity
+        disabled={disable}
+        onPress={updatePost}
+        style={styles.updateBtn}
+      >
+        <Ionicons
+          style={styles.icon}
+          name="heart-half"
+          size={ICON_SIZE}
+          color={darkTheme.on_primary}
+        />
+        <Text style={styles.updateTxt}>Update Post</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: width - 40,
-    height: height - 300,
-    marginVertical: 20,
+    flex: 1,
+    margin: 20,
     justifyContent: "center",
+    alignItems: "center",
   },
   error: { color: "red", flexShrink: 1 },
   clipLabel: {
@@ -306,18 +280,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   icon: { marginRight: 8 },
-  uploadingText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    backgroundColor: darkTheme.primary,
-    color: darkTheme.on_background,
-    borderRadius: 30,
-    padding: 15,
-    margin: 20,
-    alignSelf: "center",
-  },
-  uploadText: { fontSize: 18, fontWeight: "bold", color: darkTheme.primary },
-  uploadButton: {
+  updateTxt: { fontSize: 18, fontWeight: "bold", color: darkTheme.on_primary },
+  updateBtn: {
     flexDirection: "row",
     borderRadius: 30,
     padding: 15,
@@ -326,9 +290,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 2,
-    borderColor: darkTheme.primary,
-    backgroundColor: darkTheme.background,
+    backgroundColor: darkTheme.primary,
   },
 });
 
-export default TitleGame;
+export default EditPostScreen;

@@ -36,6 +36,7 @@ import SocialsScreen from "../screens/socialsScreen";
 import { createAPIKit } from "../utils/APIKit";
 import { flashAlert } from "../utils/flash_message";
 import { handleAPIError } from "../utils";
+import EditPostScreen from "../screens/editPostScreen";
 
 const fullScreenWidth = Dimensions.get("window").width;
 const TAB_ICON_SIZE = 22;
@@ -206,6 +207,7 @@ const StackNavigatorComponent = () => {
       />
       <Stack.Screen name="Followers" component={Followers} />
       <Stack.Screen name="Following" component={Followings} />
+      <Stack.Screen name="Edit Post" component={EditPostScreen} />
       <Stack.Screen
         name="Settings"
         component={Settings}

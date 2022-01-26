@@ -2,6 +2,7 @@ import axios from "axios";
 import { flashAlert } from "./flash_message";
 
 export const FLAG_ASPECT_RATIO = 1.4;
+export const MAX_TITLE_LENGTH = 80;
 
 export const dateTimeDiff = (dateThen) => {
   const dateNow = new Date();

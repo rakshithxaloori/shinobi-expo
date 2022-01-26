@@ -9,8 +9,12 @@ import {
   Dimensions,
 } from "react-native";
 import axios from "axios";
-import { CommonActions, useNavigation } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
+import {
+  CommonActions,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import LottieView from "lottie-react-native";
 import RBSheet from "react-native-raw-bottom-sheet";
 
@@ -62,11 +66,34 @@ class Posts extends Component {
   fetchCount = 10;
   cancelTokenSource = axios.CancelToken.source();
 
+  resetPosts = async () => {
+    this.setState({ ...INITIAL_STATE }, async () => {
+      await this.fetchPosts();
+    });
+  };
+
   componentDidMount = async () => {
-    this._unsubscribeFocus = this.props.navigation.addListener(
-      "focus",
-      this.playViewableVideo
-    );
+    this._unsubscribeFocus = this.props.navigation.addListener("focus", () => {
+      this.playViewableVideo();
+      if (this.props.route?.params?.type === "update") {
+        // Update selected post
+        const { updatedPost } = this.props.route?.params;
+        const post = this.state.posts.find((obj) => obj.id == updatedPost.id);
+
+        let newPost = {
+          ...post,
+          title: updatedPost.title,
+          game: updatedPost.game,
+        };
+        this.setState((prevState) => {
+          return {
+            posts: prevState.posts.map((item) =>
+              item.id === newPost.id ? newPost : item
+            ),
+          };
+        });
+      }
+    });
     this._unsubscribeBlur = this.props.navigation.addListener(
       "blur",
       this.pauseViewableVideo
@@ -77,9 +104,7 @@ class Posts extends Component {
   componentDidUpdate = async (prevProps) => {
     if (prevProps.feedType !== this.props.feedType) {
       // Reset state
-      this.setState({ ...INITIAL_STATE }, async () => {
-        await this.fetchPosts();
-      });
+      await this.resetPosts();
     }
   };
 
@@ -181,6 +206,7 @@ class Posts extends Component {
   };
 
   renderPost = ({ item }) => {
+    console.log("rendering", item.id, item.title);
     const dateThen = new Date(item.created_datetime);
     const dateDiff = dateTimeDiff(dateThen);
     const video_height = getVideoHeight(item.clip.height, item.clip.width);
@@ -409,7 +435,7 @@ class Posts extends Component {
           }}
           animationType="slide"
           closeOnDragDown
-          height={SHEET_ICON_SIZE + 2 * SHEET_ITEM_MARGIN + 50}
+          height={100}
           customStyles={{
             container: styles.sheetContainer,
           }}
@@ -417,23 +443,49 @@ class Posts extends Component {
           {this.state.selectedPost &&
             (this.state.selectedPost.posted_by.username ===
             this.context.user.username ? (
-              <TouchableOpacity
-                style={styles.sheetTouchable}
-                onPress={() => {
-                  this.setState({ showDeleteOverlay: true });
-                  this.RBSheet.close();
-                }}
-              >
-                <Ionicons
-                  name={"trash-outline"}
-                  size={SHEET_ICON_SIZE}
-                  color={SHEET_ICON_COLOR}
-                  style={styles.sheetIcon}
-                />
-                <Text style={styles.sheetText}>
-                  Delete {this.state.selectedPost.is_repost ? "Repost" : "Post"}
-                </Text>
-              </TouchableOpacity>
+              <>
+                {this.state.selectedPost.is_repost === false && (
+                  <TouchableOpacity
+                    style={styles.sheetTouchable}
+                    onPress={() => {
+                      this.RBSheet.close();
+                      this.props.navigation.navigate("Edit Post", {
+                        post: {
+                          id: this.state.selectedPost.id,
+                          title: this.state.selectedPost.title,
+                          game: this.state.selectedPost.game,
+                        },
+                      });
+                    }}
+                  >
+                    <MaterialCommunityIcons
+                      name={"circle-edit-outline"}
+                      size={SHEET_ICON_SIZE}
+                      color={SHEET_ICON_COLOR}
+                      style={styles.sheetIcon}
+                    />
+                    <Text style={styles.sheetText}>Edit Post</Text>
+                  </TouchableOpacity>
+                )}
+                <TouchableOpacity
+                  style={styles.sheetTouchable}
+                  onPress={() => {
+                    this.setState({ showDeleteOverlay: true });
+                    this.RBSheet.close();
+                  }}
+                >
+                  <Ionicons
+                    name={"trash-outline"}
+                    size={SHEET_ICON_SIZE}
+                    color={SHEET_ICON_COLOR}
+                    style={styles.sheetIcon}
+                  />
+                  <Text style={styles.sheetText}>
+                    Delete{" "}
+                    {this.state.selectedPost.is_repost ? "Repost" : "Post"}
+                  </Text>
+                </TouchableOpacity>
+              </>
             ) : (
               <TouchableOpacity
                 style={styles.sheetTouchable}
@@ -514,5 +566,6 @@ const styles = StyleSheet.create({
 
 export default function (props) {
   const navigation = useNavigation();
-  return <Posts {...props} navigation={navigation} />;
+  const route = useRoute();
+  return <Posts {...props} navigation={navigation} route={route} />;
 }

@@ -19,16 +19,28 @@ const HEADER_ICON_COLOR = darkTheme.on_primary;
 
 class Post extends React.Component {
   shouldComponentUpdate = (nextProps) => {
-    const { me_like, likes } = nextProps.post;
+    const { me_like, likes, title, game } = nextProps.post;
     const { mute } = nextProps;
-    const { me_like: prevMe_like, likes: prevLikes } = this.props.post;
+    const {
+      me_like: prevMe_like,
+      likes: prevLikes,
+      title: prevTitle,
+      game: prevGame,
+    } = this.props.post;
     const { mute: prevMute } = this.props;
 
     // If "me_like" or "likes" is different, then update
-    return me_like !== prevMe_like || likes !== prevLikes || mute !== prevMute;
+    const shouldUpdate =
+      me_like !== prevMe_like ||
+      likes !== prevLikes ||
+      mute !== prevMute ||
+      title !== prevTitle ||
+      game !== prevGame;
+
+    return shouldUpdate;
   };
 
-  navigateProfile = async () => {
+  goToProfile = async () => {
     const { type, post, navigateProfile } = this.props;
     if (type === "Feed") {
       if (post.is_repost) await navigateProfile(post.reposted_by.username);
@@ -123,7 +135,7 @@ class Post extends React.Component {
                 post.posted_by.username !== post.reposted_by.username)
             )
           }
-          onPress={this.navigateProfile}
+          onPress={this.goToProfile}
         >
           <Avatar
             rounded
