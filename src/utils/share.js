@@ -98,8 +98,8 @@ export const shareApp = async () => {
   await _handleShare(message);
 };
 
-export const shareClip = async (post_id, username, game_name) => {
+export const shareClip = async (post_id, title, username, game_name) => {
   const deepLinkURL = getDeepLink(DEEP_LINK_TYPES.CLIP, { post_id });
-  const message = `${game_name} clip by ${username} ${deepLinkURL}`;
+  const message = `"${title}", ${game_name} clip by ${username}\n${deepLinkURL}`;
   await _handleShare(message, "/feed/post/share/", { post_id });
 };

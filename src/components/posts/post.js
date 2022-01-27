@@ -64,7 +64,7 @@ class Post extends React.Component {
 
   onPressShare = () => {
     const { post } = this.props;
-    shareClip(post.id, post.posted_by.username, post.game.name);
+    shareClip(post.id, post.title, post.posted_by.username, post.game.name);
   };
 
   setSelectedPost = () => {

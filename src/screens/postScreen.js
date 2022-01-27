@@ -129,12 +129,12 @@ class PostScreen extends Component {
       );
 
       let post_id = this.state.post.id;
+      let title = this.state.post?.title;
       let username = this.state.post?.posted_by?.username;
-      let game_name = this.state.post?.posted_by?.game?.name;
+      let game_name = this.state.post?.game?.name;
 
       if (this.state.post.is_repost) {
         username = this.state.post.reposted_by.username;
-        game_name = this.state.post.game.name;
       }
 
       return (
@@ -157,7 +157,7 @@ class PostScreen extends Component {
           />
           <TouchableOpacity
             onPress={() => {
-              shareClip(post_id, username, game_name);
+              shareClip(post_id, title, username, game_name);
             }}
             style={styles.button}
           >
