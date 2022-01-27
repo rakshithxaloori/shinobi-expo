@@ -41,6 +41,7 @@ const ICON_SIZE = 25;
 const SHEET_ICON_COLOR = darkTheme.on_surface_title;
 const SHEET_ICON_SIZE = 22;
 const SHEET_ITEM_MARGIN = 5;
+const SHEET_ITEM_HEIGHT = 40;
 
 const INITIAL_STATE = {
   posts: [],
@@ -141,7 +142,6 @@ class Posts extends Component {
     if (this.state.endReached) return;
     const onSuccess = (response) => {
       const { posts, upload } = response.data.payload;
-      console.log("UPLOAD", upload);
       const clipsWithRef = posts.map((post) => ({
         ...post,
         videoRef: React.createRef(),
@@ -186,8 +186,15 @@ class Posts extends Component {
   };
 
   setSelectedPost = (post) => {
-    this.setState({ selectedPost: post });
-    this.RBSheet.open();
+    const callback = () => {
+      this.state.selectedPost.is_repost
+        ? this.RBSheetOther.open() // Report or Delete
+        : this.state.selectedPost.posted_by.username ===
+          this.context.user.username
+        ? this.RBSheetSelf.open() // Edit, Delete
+        : this.RBSheetOther.open(); // Report
+    };
+    this.setState({ selectedPost: post }, callback);
   };
 
   repostPost = (post) => {
@@ -206,7 +213,6 @@ class Posts extends Component {
   };
 
   renderPost = ({ item }) => {
-    console.log("rendering", item.id, item.title);
     const dateThen = new Date(item.created_datetime);
     const dateDiff = dateTimeDiff(dateThen);
     const video_height = getVideoHeight(item.clip.height, item.clip.width);
@@ -429,80 +435,108 @@ class Posts extends Component {
             hideRepostOverlay={this.hideRepostOverlay}
           />
         )}
+
         <RBSheet
           ref={(ref) => {
-            this.RBSheet = ref;
+            this.RBSheetSelf = ref;
           }}
           animationType="slide"
           closeOnDragDown
-          height={100}
+          height={
+            SHEET_ICON_SIZE + 3 * SHEET_ITEM_MARGIN + 2 * SHEET_ITEM_HEIGHT
+          }
           customStyles={{
             container: styles.sheetContainer,
           }}
         >
-          {this.state.selectedPost &&
-            (this.state.selectedPost.posted_by.username ===
-            this.context.user.username ? (
-              <>
-                {this.state.selectedPost.is_repost === false && (
-                  <TouchableOpacity
-                    style={styles.sheetTouchable}
-                    onPress={() => {
-                      this.RBSheet.close();
-                      this.props.navigation.navigate("Edit Post", {
-                        post: {
-                          id: this.state.selectedPost.id,
-                          title: this.state.selectedPost.title,
-                          game: this.state.selectedPost.game,
-                        },
-                      });
-                    }}
-                  >
-                    <MaterialCommunityIcons
-                      name={"circle-edit-outline"}
-                      size={SHEET_ICON_SIZE}
-                      color={SHEET_ICON_COLOR}
-                      style={styles.sheetIcon}
-                    />
-                    <Text style={styles.sheetText}>Edit Post</Text>
-                  </TouchableOpacity>
-                )}
-                <TouchableOpacity
-                  style={styles.sheetTouchable}
-                  onPress={() => {
-                    this.setState({ showDeleteOverlay: true });
-                    this.RBSheet.close();
-                  }}
-                >
-                  <Ionicons
-                    name={"trash-outline"}
-                    size={SHEET_ICON_SIZE}
-                    color={SHEET_ICON_COLOR}
-                    style={styles.sheetIcon}
-                  />
-                  <Text style={styles.sheetText}>
-                    Delete{" "}
-                    {this.state.selectedPost.is_repost ? "Repost" : "Post"}
-                  </Text>
-                </TouchableOpacity>
-              </>
-            ) : (
+          <>
+            {this.state.selectedPost?.is_repost === false && (
               <TouchableOpacity
                 style={styles.sheetTouchable}
                 onPress={() => {
-                  this.setState({ showReportOverlay: true });
-                  this.RBSheet.close();
+                  this.RBSheetSelf.close();
+                  this.props.navigation.navigate("Edit Post", {
+                    post: {
+                      id: this.state.selectedPost.id,
+                      title: this.state.selectedPost.title,
+                      game: this.state.selectedPost.game,
+                    },
+                  });
                 }}
               >
-                <Ionicons
-                  name={"flag-outline"}
+                <MaterialCommunityIcons
+                  name={"circle-edit-outline"}
                   size={SHEET_ICON_SIZE}
                   color={SHEET_ICON_COLOR}
                   style={styles.sheetIcon}
                 />
-                <Text style={styles.sheetText}>Report Post</Text>
+                <Text style={styles.sheetText}>Edit Post</Text>
               </TouchableOpacity>
-            ))}
+            )}
+            <TouchableOpacity
+              style={styles.sheetTouchable}
+              onPress={() => {
+                this.setState({ showDeleteOverlay: true });
+                this.RBSheetSelf.close();
+              }}
+            >
+              <Ionicons
+                name={"trash-outline"}
+                size={SHEET_ICON_SIZE}
+                color={SHEET_ICON_COLOR}
+                style={styles.sheetIcon}
+              />
+              <Text style={styles.sheetText}>Delete Post</Text>
+            </TouchableOpacity>
+          </>
+        </RBSheet>
+
+        <RBSheet
+          ref={(ref) => {
+            this.RBSheetOther = ref;
+          }}
+          animationType="slide"
+          closeOnDragDown
+          height={SHEET_ICON_SIZE + 2 * SHEET_ITEM_MARGIN + SHEET_ITEM_HEIGHT}
+          customStyles={{
+            container: styles.sheetContainer,
+          }}
+        >
+          {this.state.selectedPost?.is_repost === true &&
+          this.state.selectedPost?.reposted_by?.username ===
+            this.context.user.username ? (
+            <TouchableOpacity
+              style={styles.sheetTouchable}
+              onPress={() => {
+                this.setState({ showDeleteOverlay: true });
+                this.RBSheetOther.close();
+              }}
+            >
+              <Ionicons
+                name={"trash-outline"}
+                size={SHEET_ICON_SIZE}
+                color={SHEET_ICON_COLOR}
+                style={styles.sheetIcon}
+              />
+              <Text style={styles.sheetText}>Delete Repost</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={styles.sheetTouchable}
+              onPress={() => {
+                this.setState({ showReportOverlay: true });
+                this.RBSheetOther.close();
+              }}
+            >
+              <Ionicons
+                name={"flag-outline"}
+                size={SHEET_ICON_SIZE}
+                color={SHEET_ICON_COLOR}
+                style={styles.sheetIcon}
+              />
+              <Text style={styles.sheetText}>Report Post</Text>
+            </TouchableOpacity>
+          )}
         </RBSheet>
       </View>
     ) : (
