@@ -3,7 +3,7 @@
     "name": "Shinobi",
     "slug": "Shinobi",
     "description": "Upload a video-game clip",
-    "version": "1.4.4",
+    "version": "1.4.5",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "notification": {
@@ -17,7 +17,7 @@
       "package": "cc.shinobi.android",
       "permissions": ["CAMERA"],
       "googleServicesFile": "./google-services.json",
-      "versionCode": 49,
+      "versionCode": 50,
       "intentFilters": [
         {
           "action": "VIEW",

@@ -73,7 +73,7 @@ class PrivacySettingsScreen extends Component {
     return (
       <View style={styles.container}>
         <Setting
-          text="Show flag on profile 🏳️"
+          text="Show the country flag on Profile 🏴‍☠️"
           value={this.state.showFlag}
           toggleValue={this.toggleFlag}
         />
