@@ -4,119 +4,103 @@ import { useNavigation } from "@react-navigation/core";
 import { Ionicons } from "@expo/vector-icons";
 import * as Linking from "expo-linking";
 
-import LogOut from "./logout";
 import { darkTheme } from "../../utils/theme";
 import ShnSocials from "../socials";
+import AuthContext from "../../authContext";
+
+const Setting = ({ onPress, iconName, title, subtitle }) => (
+  <TouchableOpacity style={styles.row} onPress={onPress}>
+    <Ionicons
+      name={iconName}
+      style={styles.icon}
+      size={32}
+      color={darkTheme.on_background}
+    />
+    <View style={styles.content}>
+      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.text}>{subtitle}</Text>
+    </View>
+  </TouchableOpacity>
+);
 
 const Content = () => {
   const navigation = useNavigation();
+  const { signOut } = React.useContext(AuthContext);
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.row}
+      <Setting
         onPress={() => {
           navigation.navigate("Games");
         }}
-      >
-        <Ionicons
-          name="game-controller"
-          style={styles.icon}
-          size={32}
-          color={darkTheme.on_background}
-        />
-        <View style={styles.content}>
-          <Text style={styles.title}>Change games I play</Text>
-          <Text style={styles.text}>
-            Shows the games you play on your profile
-          </Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.row}
+        iconName="game-controller"
+        title="Games I play"
+        subtitle="Shows the games you play on your profile"
+      />
+      <Setting
         onPress={() => {
           navigation.navigate("Connect Socials");
         }}
-      >
-        <Ionicons
-          name="earth-outline"
-          style={styles.icon}
-          size={32}
-          color={darkTheme.on_background}
-        />
-        <View style={styles.content}>
-          <Text style={styles.title}>Connect Socials</Text>
-          <Text style={styles.text}>
-            Let others know where else you are on 📺
-          </Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.row}
+        iconName="earth-outline"
+        title="Connect Socials"
+        subtitle="📺 Let others know where else you are on"
+      />
+      <Setting
+        onPress={() => {
+          navigation.navigate("Privacy Settings");
+        }}
+        iconName="lock-open"
+        title="Privacy Settings"
+        subtitle="🤫 Things that must remain secret"
+      />
+      <Setting
         onPress={() => {
           navigation.navigate("Terms");
         }}
-      >
-        <Ionicons
-          name="document-text"
-          style={styles.icon}
-          size={32}
-          color={darkTheme.on_background}
-        />
-        <View style={styles.content}>
-          <Text style={styles.title}>Terms and Conditions</Text>
-          <Text style={styles.text}>In case, you want to read it! 🙀</Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.row}
+        iconName="document-text"
+        title="Terms and Conditions"
+        subtitle="🙀 In case, you want to read it!"
+      />
+      <Setting
         onPress={() => {
           navigation.navigate("Privacy Policy");
         }}
-      >
-        <Ionicons
-          name="file-tray-full"
-          style={styles.icon}
-          size={32}
-          color={darkTheme.on_background}
-        />
-        <View style={styles.content}>
-          <Text style={styles.title}>Privacy Policy</Text>
-          <Text style={styles.text}>Wait, are you bored?! 👽</Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.row}
+        iconName="file-tray-full"
+        title="Privacy Policy"
+        subtitle="👽 Hold on, are you bored?!"
+      />
+      <Setting
         onPress={() => {
           Linking.openURL("mailto:hello@shinobi.cc");
         }}
-      >
-        <Ionicons
-          name="mail"
-          style={styles.icon}
-          size={32}
-          color={darkTheme.on_background}
-        />
-        <View style={styles.content}>
-          <Text style={styles.title}>Contact Us</Text>
-          <Text style={styles.text}>Here, whenever you need 👀</Text>
-        </View>
-      </TouchableOpacity>
-      <LogOut />
+        iconName="mail"
+        title="Contact Us"
+        subtitle="👀 Here, whenever you need"
+      />
+      <Setting
+        onPress={signOut}
+        iconName="log-out-outline"
+        title="Log out"
+        subtitle="👋 Hasta la vista, baby!"
+      />
       <View
         style={{
-          alignSelf: "flex-end",
-          alignContent: "center",
+          alignItems: "center",
           justifyContent: "center",
-          paddingTop: 20,
         }}
       >
+        <View
+          style={{
+            backgroundColor: darkTheme.on_surface_subtitle,
+            width: "80%",
+            height: 4,
+            borderRadius: 2,
+            marginVertical: 20,
+          }}
+        />
         <ShnSocials />
         <Text style={styles.helpText}>
           Join us on our subreddit or discord server.
-        </Text>
-        <Text style={styles.helpText}>
-          Tell your friends about Shinobi! Click the Play Store icon to share.
         </Text>
         <View
           style={{
@@ -125,6 +109,7 @@ const Content = () => {
             justifyContent: "center",
           }}
         >
+          <Text style={styles.madeby}>💥 </Text>
           <Text style={styles.madeby}>Made by </Text>
           <TouchableOpacity
             onPress={() => {
@@ -135,7 +120,6 @@ const Content = () => {
               rakshith.aloori
             </Text>
           </TouchableOpacity>
-          <Text style={styles.madeby}>💥</Text>
         </View>
       </View>
     </View>

@@ -22,21 +22,23 @@ import Profile from "../screens/profileScreen";
 import Search from "../screens/searchScreen";
 import Followers from "../screens/followersScreen";
 import Followings from "../screens/followingScreen";
-
-import { darkTheme } from "../utils/theme";
-
-import { getDeepLink, ShareIcon, shareProfile } from "../utils/share";
-import AuthContext from "../authContext";
 import UploadScreen from "../screens/uploadScreen";
 import PostScreen from "../screens/postScreen";
 import ChangeGamesScreen from "../screens/gamesScreen";
 import TermsScreen from "../screens/termsScreen";
 import PolicyScreen from "../screens/policyScreen";
 import SocialsScreen from "../screens/socialsScreen";
+import EditPostScreen from "../screens/editPostScreen";
+import PrivacySettingsScreen from "../screens/privacySettingsScreen";
+
+import { darkTheme } from "../utils/theme";
+
+import { getDeepLink, ShareIcon, shareProfile } from "../utils/share";
+import AuthContext from "../authContext";
+
 import { createAPIKit } from "../utils/APIKit";
 import { flashAlert } from "../utils/flash_message";
 import { handleAPIError } from "../utils";
-import EditPostScreen from "../screens/editPostScreen";
 
 const fullScreenWidth = Dimensions.get("window").width;
 const TAB_ICON_SIZE = 22;
@@ -215,6 +217,7 @@ const StackNavigatorComponent = () => {
           headerShown: false,
         }}
       />
+      <Stack.Screen name="Privacy Settings" component={PrivacySettingsScreen} />
       <Stack.Screen name="Terms" component={TermsScreen} />
       <Stack.Screen name="Privacy Policy" component={PolicyScreen} />
       <Stack.Screen name="Search" component={Search} />
