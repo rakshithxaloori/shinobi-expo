@@ -84,17 +84,12 @@ const _handleShare = async (message, urlPath = null, postData = null) => {
 
 export const shareProfile = async (username) => {
   const deepLinkURL = getDeepLink(DEEP_LINK_TYPES.PROFILE, { username });
-  const message = `${username}'s a Shinobi profile ${deepLinkURL}`;
+  const message = `${username}'s a Shinobi profile\n${deepLinkURL}`;
   await _handleShare(message);
 };
 
-export const shareMatch = async (match) => {
-  // TODO generalised
-  // Here's a {game_name} match https://www.shinobi.cc/match/?g={game_code}&m={match_id}
-};
-
 export const shareApp = async () => {
-  const message = `Upload a game clip! Shinobi app on Play Store ${PLAY_STORE_LINK}`;
+  const message = `Share gaming clips with me on Shinobi App!\n${PLAY_STORE_LINK}`;
   await _handleShare(message);
 };
 
