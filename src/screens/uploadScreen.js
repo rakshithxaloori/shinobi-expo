@@ -19,7 +19,6 @@ import { createAPIKit, uploadFileToS3 } from "../utils/APIKit";
 import { handleAPIError } from "../utils";
 import SelectVideo from "../components/upload/selectVideo";
 import TitleGame from "../components/upload/titleGame";
-import ShnSocials from "../components/socials";
 import { openURL } from "../utils/link";
 
 const VIDEO_MIN_LENGTH = 5;
@@ -310,7 +309,6 @@ class UploadScreen extends Component {
             </TouchableOpacity>
             <Text style={styles.subTitle}> from your PC?</Text>
           </View>
-          {/* <ShnSocials /> */}
         </View>
       </SafeAreaView>
     ) : (
