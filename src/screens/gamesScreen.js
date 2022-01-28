@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import {
   View,
   Text,
+  TextInput,
   StyleSheet,
   FlatList,
   TouchableOpacity,
   ScrollView,
   Keyboard,
 } from "react-native";
-import { Searchbar } from "react-native-paper";
 import { Avatar } from "react-native-elements";
 import FastImage from "react-native-fast-image";
 import { Ionicons } from "@expo/vector-icons";
@@ -200,14 +200,6 @@ class ChangeGamesScreen extends Component {
   };
 
   render = () => {
-    let searchStyle = null;
-    if (this.state.searchGames.length > 0)
-      searchStyle = {
-        borderTopWidth: 2,
-        borderLeftWidth: 2,
-        borderRightWidth: 2,
-        borderColor: darkTheme.on_background,
-      };
     return (
       <View style={styles.container}>
         <Text style={styles.title}>You can add upto 5 games</Text>
@@ -225,7 +217,7 @@ class ChangeGamesScreen extends Component {
                 Add games to show on your profile!
               </Text>
             )}
-            <View style={[styles.searchBar, searchStyle]}>
+            <View style={styles.searchBar}>
               <ScrollView keyboardShouldPersistTaps="handled">
                 {this.state.searchGames.map((game) => (
                   <SearchGame
@@ -235,12 +227,23 @@ class ChangeGamesScreen extends Component {
                   />
                 ))}
               </ScrollView>
-              <Searchbar
-                placeholder="Search Games"
-                onChangeText={this.onChangeSearch}
-                value={this.state.search}
-                icon={() => <Ionicons name="search" size={20} />}
-              />
+              <View style={styles.inputParent}>
+                <Ionicons
+                  name="search"
+                  size={20}
+                  color={darkTheme.on_surface_subtitle}
+                />
+                <TextInput
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  style={styles.input}
+                  placeholderTextColor={darkTheme.on_surface_subtitle}
+                  multiline
+                  placeholder="Search Games"
+                  value={this.state.search}
+                  onChangeText={this.onChangeSearch}
+                />
+              </View>
             </View>
           </>
         )}
@@ -257,14 +260,27 @@ const styles = StyleSheet.create({
     color: darkTheme.on_surface_subtitle,
   },
   removeGame: { position: "absolute", right: 10 },
-  searchBar: {
+  inputParent: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: darkTheme.surface,
+    width: "100%",
+    padding: 10,
+    borderRadius: 5,
     marginTop: 10,
+  },
+  input: {
+    marginLeft: 5,
+    width: "90%",
+    height: "100%",
+    color: darkTheme.on_background,
+  },
+  searchBar: {
+    paddingHorizontal: 10,
+    width: "100%",
     position: "absolute",
     bottom: 10,
-    width: "100%",
     backgroundColor: darkTheme.background,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
   },
   game: {
     flexDirection: "row",
