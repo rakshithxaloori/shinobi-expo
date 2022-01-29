@@ -39,7 +39,7 @@ import AuthContext from "../authContext";
 import { createAPIKit } from "../utils/APIKit";
 import { flashAlert } from "../utils/flash_message";
 import { handleAPIError } from "../utils";
-import WorldPostsScreen from "../screens/worldPostsScreen";
+import ExploreScreen from "../screens/exploreScreen";
 
 const fullScreenWidth = Dimensions.get("window").width;
 const TAB_ICON_SIZE = 22;
@@ -118,7 +118,7 @@ const TabNavigatorComponent = () => {
       />
       <Tab.Screen
         name="World Posts"
-        component={WorldPostsScreen}
+        component={ExploreScreen}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused, color }) => {

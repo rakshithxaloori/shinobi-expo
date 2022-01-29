@@ -5,24 +5,29 @@ import { Ionicons } from "@expo/vector-icons";
 
 import Posts from "../components/posts";
 import { darkTheme } from "../utils/theme";
+import FilterOverlay from "../components/game/filterOverlay";
 
 const ICON_SIZE = 25;
 
-class WorldPostsScreen extends Component {
+class ExploreScreen extends Component {
   state = {
+    overlay_visible: false,
     game_id: null,
+  };
+
+  toggleOverlay = () => {
+    this.setState((prevState) => ({
+      overlay_visible: prevState.overlay_visible,
+    }));
+  };
+
+  onSelectGame = (game) => {
+    this.setState({ overlay_visible: false, game_id: game.id });
   };
 
   renderHeader = () => (
     <View style={styles.header}>
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          //   borderWidth: 2,
-          //   borderColor: "white",
-        }}
-      >
+      <View style={styles.titleParent}>
         <Ionicons
           name="rocket"
           size={ICON_SIZE - 5}
@@ -30,7 +35,12 @@ class WorldPostsScreen extends Component {
         />
         <Text style={styles.title}>Explore</Text>
       </View>
-      <TouchableOpacity style={styles.filterIcon} onPress={() => {}}>
+      <TouchableOpacity
+        style={styles.filterIcon}
+        onPress={() => {
+          this.setState({ overlay_visible: true });
+        }}
+      >
         <Ionicons
           name="options"
           size={ICON_SIZE}
@@ -47,7 +57,12 @@ class WorldPostsScreen extends Component {
           type="Feed"
           feedType={1}
           renderHeader={this.renderHeader}
-          //  game={{ id: "30035" }}
+          game_id={this.state.game_id}
+        />
+        <FilterOverlay
+          onSelectGame={this.onSelectGame}
+          isVisible={this.state.overlay_visible}
+          toggleOverlay={this.toggleOverlay}
         />
       </SafeAreaProvider>
     );
@@ -62,6 +77,10 @@ const styles = StyleSheet.create({
     borderRadius: ICON_SIZE,
     backgroundColor: darkTheme.surface,
     justifyContent: "center",
+    alignItems: "center",
+  },
+  titleParent: {
+    flexDirection: "row",
     alignItems: "center",
   },
   title: {
@@ -79,4 +98,4 @@ const styles = StyleSheet.create({
   container: { flex: 1, marginTop: 40 },
 });
 
-export default WorldPostsScreen;
+export default ExploreScreen;

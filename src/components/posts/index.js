@@ -103,7 +103,10 @@ class Posts extends Component {
   };
 
   componentDidUpdate = async (prevProps) => {
-    if (prevProps.feedType !== this.props.feedType) {
+    if (
+      prevProps.feedType !== this.props.feedType ||
+      prevProps.game_id !== this.props.game_id
+    ) {
       // Reset state
       await this.resetPosts();
     }
@@ -178,8 +181,8 @@ class Posts extends Component {
       };
     }
 
-    if (typeof this.props.game?.id == "string") {
-      postData = { ...postData, game_id: this.props.game.id };
+    if (typeof this.props.game_id == "string") {
+      postData = { ...postData, game_id: this.props.game_id };
     }
 
     APIKit.post(url, postData, { cancelToken: this.cancelTokenSource.token })
