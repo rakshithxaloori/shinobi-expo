@@ -91,7 +91,8 @@ class Post extends React.Component {
 
     let containerStyle = {
       height: VIDEO_HEIGHT + TITLE_HEIGHT + FOOTER_HEIGHT,
-      margin: MARGIN,
+      marginBottom: MARGIN,
+      marginHorizontal: MARGIN,
     };
     if (post.is_repost) {
       containerStyle.height += REPOST_HEIGHT;

@@ -39,6 +39,7 @@ import AuthContext from "../authContext";
 import { createAPIKit } from "../utils/APIKit";
 import { flashAlert } from "../utils/flash_message";
 import { handleAPIError } from "../utils";
+import WorldPostsScreen from "../screens/worldPostsScreen";
 
 const fullScreenWidth = Dimensions.get("window").width;
 const TAB_ICON_SIZE = 22;
@@ -108,7 +109,20 @@ const TabNavigatorComponent = () => {
         options={{
           headerShown: false,
           tabBarIcon: ({ focused, color }) => {
-            let iconName = focused ? "home" : "home-outline";
+            let iconName = focused ? "heart" : "heart-outline";
+            return (
+              <Ionicons name={iconName} size={TAB_ICON_SIZE} color={color} />
+            );
+          },
+        }}
+      />
+      <Tab.Screen
+        name="World Posts"
+        component={WorldPostsScreen}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused, color }) => {
+            let iconName = focused ? "planet" : "planet-outline";
             return (
               <Ionicons name={iconName} size={TAB_ICON_SIZE} color={color} />
             );
@@ -175,7 +189,9 @@ const StackNavigatorComponent = () => {
         component={TabNavigatorComponent}
         options={({ route }) => {
           const routeName = getFocusedRouteNameFromRoute(route) || "Feed";
-          return routeName && routeName !== "Feed"
+          return routeName &&
+            routeName !== "Feed" &&
+            routeName !== "World Posts"
             ? {
                 headerTitle: routeName,
               }

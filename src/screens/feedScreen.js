@@ -11,18 +11,17 @@ import AuthContext from "../authContext";
 import { avatarDefaultStyling } from "../utils/styles";
 import { darkTheme } from "../utils/theme";
 import PostsFeed from "../components/posts";
-import VirtualizedList from "../utils/virtualizedList";
 import { createAPIKit } from "../utils/APIKit";
 import { handleAPIError } from "../utils";
 import UpdatesOverlay from "../components/feed/updatesOverlay";
-import Switch from "../components/switch";
+
+const PADDING_TOP = Constants.statusBarHeight;
 
 const FeedScreen = (props) => {
   let cancelTokenSource = axios.CancelToken.source();
   const [isVisible, setIsVisible] = React.useState(false);
   const [updates, setUpdates] = React.useState([]);
   const [updateAvailable, setUpdateAvailable] = React.useState(false);
-  const [feedType, setFeedType] = React.useState(1);
 
   React.useEffect(() => {
     const checkAppUpdate = async () => {
@@ -96,9 +95,9 @@ const FeedScreen = (props) => {
     navigation.navigate("Settings");
   };
 
-  return (
-    <VirtualizedList style={styles.container}>
-      <View style={styles.titleBar}>
+  const renderHeader = () => (
+    <View style={styles.titleBar}>
+      <View style={{ flexDirection: "row" }}>
         <Avatar
           rounded
           size={55}
@@ -108,56 +107,38 @@ const FeedScreen = (props) => {
           onPress={navigateProfile}
           ImageComponent={FastImage}
         />
-        <Text style={styles.title}>Welcome back,</Text>
-        <Text style={styles.name}>{user?.username}</Text>
-        <View style={styles.options}>
-          <TouchableOpacity
-            onPress={navigateSearch}
-            style={{ marginRight: 10 }}
-          >
-            <Ionicons name="search-sharp" size={32} color={darkTheme.primary} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={navigateSettings}>
-            <Ionicons name="settings" size={32} color={darkTheme.primary} />
-          </TouchableOpacity>
+        <View>
+          <Text style={styles.title}>Welcome back,</Text>
+          <Text style={styles.name}>{user?.username}</Text>
         </View>
       </View>
-      <View
-        style={{
-          flexDirection: "row",
-          marginTop: 30,
-          alignItems: "center",
-        }}
-      >
-        <Text style={styles.header}>
-          {feedType === 1 ? "World" : "Following"} Feed
-        </Text>
-        <Switch
-          icon1_name={"planet"}
-          icon2_name={"heart"}
-          value={feedType}
-          toggler={() => {
-            setFeedType(feedType === 1 ? 2 : 1);
-          }}
-        />
+      <View style={styles.options}>
+        <TouchableOpacity onPress={navigateSearch} style={{ marginRight: 10 }}>
+          <Ionicons name="search-sharp" size={32} color={darkTheme.primary} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={navigateSettings}>
+          <Ionicons name="settings" size={32} color={darkTheme.primary} />
+        </TouchableOpacity>
       </View>
-      <PostsFeed type="Feed" feedType={feedType} />
+    </View>
+  );
+
+  return (
+    <View style={styles.container}>
+      <PostsFeed type="Feed" feedType={2} renderHeader={renderHeader} />
       <UpdatesOverlay
         isVisible={isVisible}
         updateAvailable={updateAvailable}
         updates={updates}
         setVisible={setIsVisible}
       />
-    </VirtualizedList>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   avatar: {
-    marginLeft: 20,
-    position: "absolute",
-    top: 0,
-    left: 0,
+    marginHorizontal: 20,
   },
   title: {
     fontSize: 16,
@@ -173,12 +154,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     position: "absolute",
     right: 20,
-    top: 5,
+    top: PADDING_TOP,
   },
   titleBar: {
     width: "100%",
-    marginTop: 50,
-    paddingLeft: 90,
+    paddingTop: PADDING_TOP,
+    paddingBottom: 10,
+    backgroundColor: darkTheme.background,
   },
 
   header: {

@@ -178,6 +178,10 @@ class Posts extends Component {
       };
     }
 
+    if (typeof this.props.game?.id == "string") {
+      postData = { ...postData, game_id: this.props.game.id };
+    }
+
     APIKit.post(url, postData, { cancelToken: this.cancelTokenSource.token })
       .then(onSuccess)
       .catch((e) => {
@@ -253,6 +257,8 @@ class Posts extends Component {
     if (data[index].is_repost == true) item_height += REPOST_HEIGHT;
     return {
       length: item_height,
+      // TODO how to calculate offset value when items have different heights
+      // The below formula doesn't work
       offset: (item_height + ITEM_MARGIN) * index,
       index,
     };
@@ -392,6 +398,7 @@ class Posts extends Component {
         )}
         {this.state.posts.length > 0 && (
           <FlatList
+            decelerationRate={0.5}
             data={this.state.posts}
             onEndReached={this.fetchPosts}
             onEndReachedThreshold={1}
@@ -404,9 +411,11 @@ class Posts extends Component {
                 color={darkTheme.on_background}
               />
             }
+            ListHeaderComponent={this.props.renderHeader}
+            stickyHeaderIndices={[0]}
             // Optimizations
             maxToRenderPerBatch={10}
-            getItemLayout={this.getItemLayout}
+            // getItemLayout={this.getItemLayout}
             // View controls
             onViewableItemsChanged={this.onViewableItemsChanged}
             viewabilityConfig={{
