@@ -12,7 +12,7 @@ const ICON_SIZE = 25;
 class ExploreScreen extends Component {
   state = {
     overlay_visible: false,
-    game_id: null,
+    game: null,
   };
 
   toggleOverlay = () => {
@@ -22,7 +22,10 @@ class ExploreScreen extends Component {
   };
 
   onSelectGame = (game) => {
-    this.setState({ overlay_visible: false, game_id: game.id });
+    this.setState({ overlay_visible: false, game: game });
+  };
+  onRemoveGame = () => {
+    this.setState({ game: null });
   };
 
   renderHeader = () => (
@@ -57,9 +60,11 @@ class ExploreScreen extends Component {
           type="Feed"
           feedType={1}
           renderHeader={this.renderHeader}
-          game_id={this.state.game_id}
+          game_id={this.state.game?.id}
         />
         <FilterOverlay
+          game={this.state.game}
+          onRemoveGame={this.onRemoveGame}
           onSelectGame={this.onSelectGame}
           isVisible={this.state.overlay_visible}
           toggleOverlay={this.toggleOverlay}

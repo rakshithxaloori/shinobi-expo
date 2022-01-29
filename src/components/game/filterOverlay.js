@@ -4,10 +4,17 @@ import { Overlay } from "react-native-elements";
 
 import { darkTheme } from "../../utils/theme";
 import SearchGame from "./searchGame";
+import SelectedGame from "./selectedGame";
 
 const screenDimensions = Dimensions.get("screen");
 
-const FilterOverlay = ({ onSelectGame, isVisible, toggleOverlay }) => {
+const FilterOverlay = ({
+  game,
+  onRemoveGame,
+  onSelectGame,
+  isVisible,
+  toggleOverlay,
+}) => {
   return (
     <Overlay
       isVisible={isVisible}
@@ -15,7 +22,11 @@ const FilterOverlay = ({ onSelectGame, isVisible, toggleOverlay }) => {
       overlayStyle={styles.container}
     >
       <Text style={styles.overlayTitle}>Filter clips by game</Text>
-      <SearchGame onSelectGame={onSelectGame} disable={false} />
+      {game === null ? (
+        <SearchGame onSelectGame={onSelectGame} disable={false} />
+      ) : (
+        <SelectedGame selectedGame={game} onRemoveGame={onRemoveGame} />
+      )}
     </Overlay>
   );
 };
