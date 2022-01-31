@@ -373,33 +373,7 @@ class Posts extends Component {
   render = () =>
     this.state.initLoaded ? (
       <View style={styles.container}>
-        {this.state.is_upload === true && (
-          <View style={{ alignItems: "center", justifyContent: "center" }}>
-            <LottieView
-              autoPlay
-              style={{
-                width: 0.5 * screenWidth,
-                height: 0.5 * screenWidth,
-              }}
-              source={require("../../../assets/9844-loading-40-paperplane.json")}
-            />
-            <TouchableOpacity
-              onPress={() => {
-                this.props.navigation.navigate("Upload");
-              }}
-              style={styles.button}
-            >
-              <Ionicons
-                style={styles.icon}
-                name="cloud-upload-outline"
-                size={ICON_SIZE}
-                color={darkTheme.on_background}
-              />
-              <Text style={styles.buttonText}>Upload a Clip</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-        {this.state.posts.length > 0 && (
+        {this.state.posts.length > 0 ? (
           <FlatList
             decelerationRate={0.5}
             data={this.state.posts}
@@ -425,6 +399,33 @@ class Posts extends Component {
               itemVisiblePercentThreshold: 60,
             }}
           />
+        ) : (
+          <View style={{ alignItems: "center", justifyContent: "center" }}>
+            {typeof this.props.renderHeader == "function" &&
+              this.props.renderHeader()}
+            <LottieView
+              autoPlay
+              style={{
+                width: 0.5 * screenWidth,
+                height: 0.5 * screenWidth,
+              }}
+              source={require("../../../assets/9844-loading-40-paperplane.json")}
+            />
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate("Upload");
+              }}
+              style={styles.button}
+            >
+              <Ionicons
+                style={styles.icon}
+                name="cloud-upload-outline"
+                size={ICON_SIZE}
+                color={darkTheme.on_background}
+              />
+              <Text style={styles.buttonText}>Upload a Clip</Text>
+            </TouchableOpacity>
+          </View>
         )}
         {this.state.showReportOverlay && (
           <ReportOverlay
