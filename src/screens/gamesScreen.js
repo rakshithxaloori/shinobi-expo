@@ -1,14 +1,5 @@
 import React, { Component } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  ScrollView,
-  Keyboard,
-} from "react-native";
+import { View, Text, StyleSheet, FlatList, Keyboard } from "react-native";
 import { Avatar } from "react-native-elements";
 import FastImage from "react-native-fast-image";
 import { Ionicons } from "@expo/vector-icons";
@@ -20,6 +11,7 @@ import { darkTheme } from "../utils/theme";
 import { avatarDefaultStyling } from "../utils/styles";
 import { flashAlert } from "../utils/flash_message";
 import AuthContext from "../authContext";
+import SearchGame from "../components/game/searchGame";
 
 const PlaysGame = ({ game, removeGame }) => {
   const rmGame = () => {
@@ -44,25 +36,6 @@ const PlaysGame = ({ game, removeGame }) => {
         onPress={rmGame}
       />
     </View>
-  );
-};
-
-const SearchGame = ({ game, chooseGame }) => {
-  const selectGame = () => {
-    chooseGame(game);
-  };
-  return (
-    <TouchableOpacity style={styles.game} onPress={selectGame}>
-      <Avatar
-        rounded
-        size={24}
-        title={game.name[0]}
-        source={{ uri: game.logo_url }}
-        containerStyle={avatarDefaultStyling}
-        ImageComponent={FastImage}
-      />
-      <Text style={styles.gameName}>{game.name}</Text>
-    </TouchableOpacity>
   );
 };
 
@@ -140,14 +113,6 @@ class ChangeGamesScreen extends Component {
       const onSuccess = (response) => {
         const { games } = response.data?.payload;
         this.setState({ searchGames: games });
-        if (games.length === 0) {
-          flashAlert(
-            "Sorry, we don't have that game",
-            "Let us know on Discord or Reddit",
-            undefined,
-            5000
-          );
-        }
       };
 
       const APIKit = await createAPIKit();
@@ -217,33 +182,17 @@ class ChangeGamesScreen extends Component {
                 Add games to show on your profile!
               </Text>
             )}
+
             <View style={styles.searchBar}>
-              <ScrollView keyboardShouldPersistTaps="handled">
-                {this.state.searchGames.map((game) => (
-                  <SearchGame
-                    game={game}
-                    chooseGame={this.addGameToPlays}
-                    key={game.id}
-                  />
-                ))}
-              </ScrollView>
-              <View style={styles.inputParent}>
-                <Ionicons
-                  name="search"
-                  size={20}
-                  color={darkTheme.on_surface_subtitle}
-                />
-                <TextInput
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  style={styles.input}
-                  placeholderTextColor={darkTheme.on_surface_subtitle}
-                  multiline
-                  placeholder="Search Games"
-                  value={this.state.search}
-                  onChangeText={this.onChangeSearch}
-                />
-              </View>
+              <Text
+                style={styles.requestGameText}
+                onPress={() => {
+                  this.props.navigation.navigate("Request Game");
+                }}
+              >
+                Request a game
+              </Text>
+              <SearchGame onSelectGame={this.addGameToPlays} disable={false} />
             </View>
           </>
         )}
@@ -253,6 +202,12 @@ class ChangeGamesScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+  requestGameText: {
+    marginTop: 20,
+    color: darkTheme.on_surface_title,
+    textDecorationLine: "underline",
+    alignSelf: "center",
+  },
   gameName: {
     fontWeight: "600",
     fontSize: 14,
@@ -260,23 +215,7 @@ const styles = StyleSheet.create({
     color: darkTheme.on_surface_subtitle,
   },
   removeGame: { position: "absolute", right: 10 },
-  inputParent: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: darkTheme.surface,
-    width: "100%",
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 10,
-  },
-  input: {
-    marginLeft: 5,
-    width: "90%",
-    height: "100%",
-    color: darkTheme.on_background,
-  },
   searchBar: {
-    paddingHorizontal: 10,
     width: "100%",
     position: "absolute",
     bottom: 10,

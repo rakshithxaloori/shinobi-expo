@@ -30,6 +30,8 @@ import PolicyScreen from "../screens/policyScreen";
 import SocialsScreen from "../screens/socialsScreen";
 import EditPostScreen from "../screens/editPostScreen";
 import PrivacySettingsScreen from "../screens/privacySettingsScreen";
+import ExploreScreen from "../screens/exploreScreen";
+import RequestGameScreen from "../screens/requestGameScreen";
 
 import { darkTheme } from "../utils/theme";
 
@@ -39,7 +41,6 @@ import AuthContext from "../authContext";
 import { createAPIKit } from "../utils/APIKit";
 import { flashAlert } from "../utils/flash_message";
 import { handleAPIError } from "../utils";
-import ExploreScreen from "../screens/exploreScreen";
 
 const fullScreenWidth = Dimensions.get("window").width;
 const TAB_ICON_SIZE = 22;
@@ -226,6 +227,11 @@ const StackNavigatorComponent = () => {
       <Stack.Screen name="Followers" component={Followers} />
       <Stack.Screen name="Following" component={Followings} />
       <Stack.Screen name="Edit Post" component={EditPostScreen} />
+      <Stack.Screen
+        name="Request Game"
+        component={RequestGameScreen}
+        options={{ headerTitle: "" }}
+      />
       <Stack.Screen
         name="Settings"
         component={Settings}

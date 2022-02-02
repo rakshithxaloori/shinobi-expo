@@ -114,6 +114,14 @@ const TitleGame = ({
           <Text style={styles.uploadText}>Upload Video</Text>
         </TouchableOpacity>
       )}
+      <Text
+        style={styles.requestGameText}
+        onPress={() => {
+          navigation.navigate("Request Game");
+        }}
+      >
+        Request a game
+      </Text>
     </View>
   );
 };
@@ -148,6 +156,12 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: darkTheme.primary,
     backgroundColor: darkTheme.background,
+  },
+  requestGameText: {
+    marginTop: 20,
+    color: darkTheme.on_surface_title,
+    textDecorationLine: "underline",
+    alignSelf: "center",
   },
 });
 

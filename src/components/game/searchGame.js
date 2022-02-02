@@ -28,7 +28,7 @@ const SearchGame = ({ onSelectGame, disable }) => {
         setGames(games);
         if (games.length === 0) {
           setError(
-            "Sorry, we don't have that game. Let us know on Discord or Reddit"
+            "Sorry, we don't have that game. Click on 'Request a game' to let us know"
           );
         }
       };
@@ -89,7 +89,7 @@ const SearchGame = ({ onSelectGame, disable }) => {
 };
 
 const styles = StyleSheet.create({
-  error: { color: "red", flexShrink: 1 },
+  error: { color: "red", flexShrink: 1, paddingHorizontal: 10 },
   inputParent: {
     flexDirection: "row",
     alignItems: "center",
