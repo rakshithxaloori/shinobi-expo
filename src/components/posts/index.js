@@ -342,13 +342,11 @@ class Posts extends Component {
   };
 
   unloadClip = async (item) => {
-    // TODO check item
     if (item?.videoRef?.current == undefined) return;
     const status = await item.videoRef.current.getStatusAsync();
     const positionMillis = status.positionMillis;
     item?.videoRef?.current && (await item.videoRef.current.unloadAsync());
     if (typeof positionMillis != "number") return;
-    console.log("UNLOADING P", positionMillis);
     let newPost = {
       ...item,
       positionMillis: positionMillis,
@@ -376,7 +374,6 @@ class Posts extends Component {
       console.log("Loading", currentViewable.index);
       const videoUri = clipUrlByNetSpeed(currentViewable.item.clip.url);
       console.log(videoUri);
-      console.log("LOADING P", currentViewable.item.positionMillis);
 
       await currentViewable.item.videoRef.current.loadAsync(
         { uri: videoUri },
@@ -392,10 +389,9 @@ class Posts extends Component {
 
     if (viewableItems.length > 0) {
       const viewable = viewableItems[0];
-
-      if (this.state.viewable === null) {
+      if (this.state.viewable === null || this.state.viewable === undefined) {
         await loadCurrentViewable(viewable);
-      } else if (viewable != this.state.viewable) {
+      } else if (viewable.item?.id !== this.state.viewable?.item?.id) {
         await this.unloadClip(this.state.viewable);
         await loadCurrentViewable(viewable);
       }
