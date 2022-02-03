@@ -20,19 +20,19 @@ const HEADER_ICON_COLOR = darkTheme.on_primary;
 class Post extends React.Component {
   shouldComponentUpdate = (nextProps) => {
     const { me_like, likes, title, game } = nextProps.post;
-    const { mute } = nextProps;
+    const { mute, play } = nextProps;
     const {
       me_like: prevMe_like,
       likes: prevLikes,
       title: prevTitle,
       game: prevGame,
     } = this.props.post;
-    const { mute: prevMute } = this.props;
+    const { mute: prevMute, play: prevPlay } = this.props;
 
-    // If "me_like" or "likes" is different, then update
     const shouldUpdate =
       me_like !== prevMe_like ||
       likes !== prevLikes ||
+      play !== prevPlay ||
       mute !== prevMute ||
       title !== prevTitle ||
       game !== prevGame;
@@ -85,7 +85,9 @@ class Post extends React.Component {
       FOOTER_HEIGHT,
       MARGIN,
       dateDiff,
+      play,
       mute,
+      togglePlay,
       toggleMute,
     } = this.props;
 
@@ -173,6 +175,8 @@ class Post extends React.Component {
           onViewedClip={this.onViewedClip}
           videoRef={post.videoRef}
           VIDEO_HEIGHT={VIDEO_HEIGHT}
+          globalPlay={play}
+          globalTogglePlay={togglePlay}
           globalMute={mute}
           globalToggleMute={toggleMute}
         />

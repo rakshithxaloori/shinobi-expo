@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, TouchableOpacity, StyleSheet, Dimensions } from "react-native";
 import { Video } from "expo-av";
 import { Asset } from "expo-asset";
 import { Ionicons } from "@expo/vector-icons";
@@ -8,19 +8,18 @@ import { darkTheme } from "./theme";
 
 const ICON_SIZE = 20;
 const POSTER_SIZE = 88;
+const SCREEN_WIDTH = Dimensions.get("screen").width;
 
 const VideoPlayer = ({
   videoRef,
   onViewedClip,
   VIDEO_HEIGHT,
+  globalPlay,
+  globalTogglePlay,
   globalMute,
   globalToggleMute,
 }) => {
-  React.useEffect(() => {
-    return () => {
-      videoRef.current && videoRef.current.unloadAsync();
-    };
-  }, []);
+  const PLAY_PAUSE_SIZE = (VIDEO_HEIGHT * 6) / 10;
 
   const toggleMute = async () => {
     const status = await videoRef.current.getStatusAsync();
@@ -28,15 +27,26 @@ const VideoPlayer = ({
     globalToggleMute();
   };
 
+  const togglePlay = async () => {
+    const status = await videoRef.current.getStatusAsync();
+    status.isPlaying
+      ? await videoRef.current.pauseAsync()
+      : await videoRef.current.playAsync();
+    globalTogglePlay();
+  };
+
+  const playPauseStyle = {
+    top: (VIDEO_HEIGHT * 2) / 10,
+    height: PLAY_PAUSE_SIZE,
+    width: PLAY_PAUSE_SIZE,
+  };
+
   return (
     <View style={[styles.container, { height: VIDEO_HEIGHT }]}>
       <Video
         ref={videoRef}
-        usePoster
-        posterSource={{
-          uri: Asset.fromModule(require("../../assets/notification-icon.png"))
-            .uri,
-        }}
+        usePoster={globalPlay}
+        posterSource={require("../../assets/notification-icon.png")}
         posterStyle={[
           styles.poster,
           { marginTop: (VIDEO_HEIGHT - POSTER_SIZE) / 2 },
@@ -55,10 +65,23 @@ const VideoPlayer = ({
           }
         }}
       />
+      <TouchableOpacity
+        style={[styles.play_pause, playPauseStyle]}
+        onPress={togglePlay}
+      >
+        {globalPlay === false && (
+          <Ionicons
+            name="play"
+            size={SCREEN_WIDTH / 4}
+            color={darkTheme.on_surface_title}
+            style={styles.icon}
+          />
+        )}
+      </TouchableOpacity>
       <Ionicons
         name={globalMute ? "volume-mute" : "volume-high"}
         size={ICON_SIZE}
-        style={[styles.icon, styles.mute]}
+        style={[styles.icon, styles.mute, styles.smallIcon]}
         color={darkTheme.on_surface_title}
         onPress={toggleMute}
       />
@@ -77,9 +100,16 @@ const styles = StyleSheet.create({
   },
   icon: {
     borderRadius: ICON_SIZE / 2,
-    backgroundColor: darkTheme.surface,
+
     zIndex: 1,
     padding: 5,
+  },
+  smallIcon: { backgroundColor: darkTheme.surface },
+  play_pause: {
+    position: "absolute",
+    alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "center",
   },
   mute: { position: "absolute", bottom: 10, right: 10 },
 });

@@ -47,6 +47,7 @@ const INITIAL_STATE = {
   posts: [],
   is_upload: false,
   viewable: null,
+  play: false,
   mute: true,
   initLoaded: false,
   isLoading: true,
@@ -147,6 +148,7 @@ class Posts extends Component {
       const { posts, upload } = response.data.payload;
       const clipsWithRef = posts.map((post) => ({
         ...post,
+        positionMillis: 0,
         videoRef: React.createRef(),
       }));
 
@@ -238,7 +240,9 @@ class Posts extends Component {
         setSelectedPost={this.setSelectedPost}
         repostPost={this.repostPost}
         onViewedClip={this.onViewedClip}
+        play={this.state.play}
         mute={this.state.mute}
+        togglePlay={this.togglePlay}
         toggleMute={this.toggleMute}
         toggleLike={this.toggleLike}
         username={this.context.user.username}
@@ -275,6 +279,10 @@ class Posts extends Component {
     });
 
     this.props.navigation.dispatch(resetAction);
+  };
+
+  togglePlay = () => {
+    this.setState((prevState) => ({ play: !prevState.play }));
   };
 
   toggleMute = () => {
@@ -333,13 +341,33 @@ class Posts extends Component {
     });
   };
 
+  unloadClip = async (item) => {
+    // TODO check item
+    if (item?.videoRef?.current == undefined) return;
+    const status = await item.videoRef.current.getStatusAsync();
+    const positionMillis = status.positionMillis;
+    item?.videoRef?.current && (await item.videoRef.current.unloadAsync());
+    if (typeof positionMillis != "number") return;
+    console.log("UNLOADING P", positionMillis);
+    let newPost = {
+      ...item,
+      positionMillis: positionMillis,
+    };
+    this.setState((prevState) => {
+      return {
+        posts: prevState.posts.map((item) =>
+          item.id === newPost.id ? newPost : item
+        ),
+      };
+    });
+  };
+
   onViewableItemsChanged = async ({ viewableItems, changed }) => {
     // Unload changed but not viewable
     for (const changedItem of changed) {
-      if (!changedItem.isViewable) {
+      if (changedItem.isViewable === false) {
         console.log("Unloading", changedItem.index);
-        const { item } = changedItem;
-        item?.videoRef?.current && (await item.videoRef.current.unloadAsync());
+        await this.unloadClip(changedItem.item);
       }
     }
 
@@ -348,11 +376,16 @@ class Posts extends Component {
       console.log("Loading", currentViewable.index);
       const videoUri = clipUrlByNetSpeed(currentViewable.item.clip.url);
       console.log(videoUri);
+      console.log("LOADING P", currentViewable.item.positionMillis);
 
       await currentViewable.item.videoRef.current.loadAsync(
         { uri: videoUri },
         // { shouldPlay: true, isLooping: true, isMuted: this.state.mute }
-        { shouldPlay: true, isMuted: this.state.mute }
+        {
+          shouldPlay: this.state.play,
+          isMuted: this.state.mute,
+          positionMillis: currentViewable.item?.positionMillis || 0,
+        }
       );
       this.setState({ viewable: currentViewable.item });
     };
@@ -363,8 +396,7 @@ class Posts extends Component {
       if (this.state.viewable === null) {
         await loadCurrentViewable(viewable);
       } else if (viewable != this.state.viewable) {
-        this.state.viewable?.videoRef?.current &&
-          (await this.state.viewable.videoRef.current.unloadAsync());
+        await this.unloadClip(this.state.viewable);
         await loadCurrentViewable(viewable);
       }
     }
@@ -396,7 +428,7 @@ class Posts extends Component {
             // View controls
             onViewableItemsChanged={this.onViewableItemsChanged}
             viewabilityConfig={{
-              itemVisiblePercentThreshold: 60,
+              itemVisiblePercentThreshold: 80,
             }}
           />
         ) : (
