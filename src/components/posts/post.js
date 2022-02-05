@@ -170,7 +170,7 @@ class Post extends React.Component {
             onPress={this.setSelectedPost}
           />
         </TouchableOpacity>
-
+        <Text style={styles.clipTitle}>{post.title}</Text>
         <VideoPlayer
           onViewedClip={this.onViewedClip}
           videoRef={post.videoRef}
@@ -180,11 +180,10 @@ class Post extends React.Component {
           globalMute={mute}
           globalToggleMute={toggleMute}
         />
-        <View style={[styles.footer, { height: FOOTER_HEIGHT }]}>
-          <Text style={styles.clipTitle}>{post.title}</Text>
+        <View style={styles.footer}>
           <View style={styles.clipIconSection}>
             <TouchableOpacity
-              style={styles.footerIconSection}
+              style={styles.footerIconTouchable}
               onPress={this.onPressLike}
             >
               <Ionicons
@@ -196,7 +195,10 @@ class Post extends React.Component {
               <Text style={styles.iconText}>{prettyNumber(post.likes)}</Text>
             </TouchableOpacity>
             {post.clip.view_count !== null && (
-              <View style={styles.footerIconSection} onPress={this.onPressLike}>
+              <View
+                style={styles.footerIconTouchable}
+                onPress={this.onPressLike}
+              >
                 <Ionicons
                   name={"play"}
                   size={FOOTER_ICON_SIZE}
@@ -209,7 +211,7 @@ class Post extends React.Component {
               </View>
             )}
             <TouchableOpacity
-              style={styles.footerIconSection}
+              style={styles.footerIconTouchable}
               onPress={this.onPressRepost}
             >
               <Ionicons
@@ -221,7 +223,7 @@ class Post extends React.Component {
               <Text style={styles.iconText}>{prettyNumber(post.reposts)}</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.footerIconSection}
+              style={styles.footerIconTouchable}
               onPress={this.onPressShare}
             >
               <Ionicons
@@ -253,19 +255,17 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 10,
   },
   clipTitle: {
-    flex: 1,
-    marginHorizontal: 15,
+    margin: 8,
     fontSize: 15,
     color: darkTheme.on_surface_title,
   },
   clipIconSection: {
-    flex: 2,
     flexDirection: "row",
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
   },
-  footerIconSection: {
+  footerIconTouchable: {
     flex: 1,
     flexDirection: "row",
     alignItems: "center",

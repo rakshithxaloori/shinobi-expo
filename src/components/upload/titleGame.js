@@ -13,10 +13,7 @@ import axios from "axios";
 
 import { darkTheme } from "../../utils/theme";
 import { tabBarStyles } from "../home";
-
-import SearchGame from "../game/searchGame";
-import SelectedGame from "../game/selectedGame";
-import PostTitle from "../posts/postTitle";
+import PostDetails from "../posts/postDetails";
 
 const { width, height } = Dimensions.get("window");
 const ICON_SIZE = 20;
@@ -32,8 +29,6 @@ const TitleGame = ({
 }) => {
   const navigation = useNavigation();
   const cancelTokenSource = axios.CancelToken.source();
-
-  const [showSearchBar, setShowSearchBar] = React.useState(true);
 
   const _keyboardDidShow = React.useCallback(() => {
     navigation.setOptions({
@@ -70,33 +65,17 @@ const TitleGame = ({
     };
   }, [_keyboardDidHide, _keyboardDidShow]);
 
-  const onSelectGame = (newSelectedGame) => {
-    setSelectedGame(newSelectedGame);
-    setShowSearchBar(false);
-  };
-
-  const onRemoveGame = () => {
-    if (disable) return;
-    setSelectedGame(null);
-    setShowSearchBar(true);
-  };
-
   return (
     <View style={styles.container}>
-      <PostTitle
+      <PostDetails
         title={title}
-        onChangeTitle={onChangeTitle}
+        setTitle={onChangeTitle}
+        game={selectedGame}
+        setGame={setSelectedGame}
+        tags={[]}
+        setTags={() => {}}
         disable={disable}
       />
-
-      {selectedGame && (
-        <SelectedGame selectedGame={selectedGame} onRemoveGame={onRemoveGame} />
-      )}
-
-      {showSearchBar && (
-        <SearchGame onSelectGame={onSelectGame} disable={disable} />
-      )}
-
       {is_uploading ? (
         <Text style={styles.uploadingText}>Uploading clip...</Text>
       ) : (

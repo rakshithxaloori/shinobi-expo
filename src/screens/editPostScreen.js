@@ -6,9 +6,7 @@ import { darkTheme } from "../utils/theme";
 import { handleAPIError } from "../utils";
 import { createAPIKit } from "../utils/APIKit";
 import { flashAlert } from "../utils/flash_message";
-import SearchGame from "../components/game/searchGame";
-import SelectedGame from "../components/game/selectedGame";
-import PostTitle from "../components/posts/postTitle";
+import PostDetails from "../components/posts/postDetails";
 
 const ICON_SIZE = 20;
 
@@ -18,19 +16,6 @@ const EditPostScreen = ({ navigation, route }) => {
   const [disable, setDisable] = React.useState(false);
   const [selectedGame, setSelectedGame] = React.useState(post.game);
   const [title, setTitle] = React.useState(post.title);
-
-  const [showSearchBar, setShowSearchBar] = React.useState(false);
-
-  const onSelectGame = (newSelectedGame) => {
-    setSelectedGame(newSelectedGame);
-    setShowSearchBar(false);
-  };
-
-  const onRemoveGame = () => {
-    if (disable) return;
-    setSelectedGame(null);
-    setShowSearchBar(true);
-  };
 
   const updatePost = async () => {
     setDisable(true);
@@ -58,14 +43,15 @@ const EditPostScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <PostTitle title={title} onChangeTitle={setTitle} disable={disable} />
-      {selectedGame && (
-        <SelectedGame selectedGame={selectedGame} onRemoveGame={onRemoveGame} />
-      )}
-
-      {showSearchBar && (
-        <SearchGame onSelectGame={onSelectGame} disable={disable} />
-      )}
+      <PostDetails
+        title={title}
+        setTitle={setTitle}
+        game={selectedGame}
+        setGame={setSelectedGame}
+        tags={[]}
+        setTags={() => {}}
+        disable={disable}
+      />
       <TouchableOpacity
         disabled={disable}
         onPress={updatePost}

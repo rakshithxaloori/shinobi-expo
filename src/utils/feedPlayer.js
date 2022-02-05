@@ -91,8 +91,7 @@ const VideoPlayer = ({
 
 const styles = StyleSheet.create({
   container: {
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
+    backgroundColor: "black",
   },
   poster: {
     height: POSTER_SIZE,
