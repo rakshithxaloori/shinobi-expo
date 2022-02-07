@@ -19,13 +19,14 @@ const HEADER_ICON_COLOR = darkTheme.on_primary;
 
 class Post extends React.Component {
   shouldComponentUpdate = (nextProps) => {
-    const { me_like, likes, title, game } = nextProps.post;
+    const { me_like, likes, title, game, tags } = nextProps.post;
     const { mute, play } = nextProps;
     const {
       me_like: prevMe_like,
       likes: prevLikes,
       title: prevTitle,
       game: prevGame,
+      tags: prevTags,
     } = this.props.post;
     const { mute: prevMute, play: prevPlay } = this.props;
 
@@ -35,7 +36,8 @@ class Post extends React.Component {
       play !== prevPlay ||
       mute !== prevMute ||
       title !== prevTitle ||
-      game !== prevGame;
+      game !== prevGame ||
+      !areEqual(tags, prevTags);
 
     return shouldUpdate;
   };
@@ -50,6 +52,11 @@ class Post extends React.Component {
       post.posted_by.username !== post.reposted_by.username
     )
       await navigateProfile(post.posted_by.username);
+  };
+
+  onPressTags = () => {
+    const { post, toggleTagsOverlay } = this.props;
+    toggleTagsOverlay(post);
   };
 
   onPressLike = () => {
@@ -79,11 +86,7 @@ class Post extends React.Component {
     const {
       type,
       post,
-      REPOST_HEIGHT,
-      TITLE_HEIGHT,
-      VIDEO_HEIGHT,
-      FOOTER_HEIGHT,
-      MARGIN,
+      hToWRatio,
       dateDiff,
       play,
       mute,
@@ -91,25 +94,10 @@ class Post extends React.Component {
       toggleMute,
     } = this.props;
 
-    let containerStyle = {
-      height: VIDEO_HEIGHT + TITLE_HEIGHT + FOOTER_HEIGHT,
-      marginBottom: MARGIN,
-      marginHorizontal: MARGIN,
-    };
-    if (post.is_repost) {
-      containerStyle.height += REPOST_HEIGHT;
-    }
     return (
-      <View style={[styles.container, containerStyle]}>
+      <View style={styles.container}>
         {post.is_repost && (
-          <View
-            style={{
-              flexDirection: "row",
-              backgroundColor: darkTheme.background,
-              height: REPOST_HEIGHT,
-              alignItems: "center",
-            }}
-          >
+          <View style={styles.repost}>
             <Ionicons
               name={"refresh-outline"}
               size={FOOTER_ICON_SIZE}
@@ -127,10 +115,7 @@ class Post extends React.Component {
           </View>
         )}
         <TouchableOpacity
-          style={[
-            styles.touchable,
-            { height: TITLE_HEIGHT, flexDirection: "row" },
-          ]}
+          style={styles.titleBar}
           disabled={
             !(
               type === "Feed" ||
@@ -170,11 +155,30 @@ class Post extends React.Component {
             onPress={this.setSelectedPost}
           />
         </TouchableOpacity>
-        <Text style={styles.clipTitle}>{post.title}</Text>
+        <View
+          style={{
+            margin: 10,
+            justifyContent: "center",
+          }}
+        >
+          <Text style={styles.clipTitle}>{post.title}</Text>
+          {post.tags.length > 0 && (
+            <TouchableOpacity style={styles.tags} onPress={this.onPressTags}>
+              <Text style={styles.tagsText}>
+                - with{" "}
+                {post.tags.length > 1
+                  ? `${post.tags[0].username} and ${
+                      post.tags.length - 1
+                    } others`
+                  : `${post.tags[0].username}`}{" "}
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
         <VideoPlayer
           onViewedClip={this.onViewedClip}
           videoRef={post.videoRef}
-          VIDEO_HEIGHT={VIDEO_HEIGHT}
+          hToWRatio={hToWRatio}
           globalPlay={play}
           globalTogglePlay={togglePlay}
           globalMute={mute}
@@ -250,12 +254,12 @@ const styles = StyleSheet.create({
   footer: {
     width: "100%",
     justifyContent: "center",
-    marginTop: 5,
+    marginVertical: 10,
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
   },
   clipTitle: {
-    margin: 8,
+    marginBottom: 5,
     fontSize: 15,
     color: darkTheme.on_surface_title,
   },
@@ -273,18 +277,25 @@ const styles = StyleSheet.create({
   },
   footerIcon: { marginRight: 5 },
   iconText: { fontSize: FOOTER_ICON_SIZE - 1, color: FOOTER_ICON_COLOR },
-  touchable: {
+  titleBar: {
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 10,
     backgroundColor: darkTheme.primary,
-    borderTopRightRadius: 10,
-    borderTopLeftRadius: 10,
+    paddingVertical: 10,
   },
+  repost: {
+    flexDirection: "row",
+    backgroundColor: darkTheme.background,
+    alignItems: "center",
+    marginBottom: 5,
+    marginLeft: 5,
+  },
+  tags: { marginLeft: 5 },
+  tagsText: { color: darkTheme.on_surface_subtitle },
   container: {
     backgroundColor: darkTheme.surface,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
+    marginBottom: 15,
   },
 });
 
@@ -302,5 +313,19 @@ const prettyNumber = (number) => {
     return `${((number * 1.0) / (1000 * 1000)).toFixed(1)}M`;
   }
 };
+
+function areEqual(array1, array2) {
+  if (array1.length === array2.length) {
+    return array1.every((element) => {
+      if (array2.includes(element)) {
+        return true;
+      }
+
+      return false;
+    });
+  }
+
+  return false;
+}
 
 export default Post;

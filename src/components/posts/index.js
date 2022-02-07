@@ -25,16 +25,12 @@ import { darkTheme } from "../../utils/theme";
 import Post from "./post";
 import ReportOverlay from "./reportOverlay";
 import DeleteOverlay from "./deleteOverlay";
-import { clipUrlByNetSpeed, getVideoHeight } from "../../utils/clipUtils";
+import { clipUrlByNetSpeed } from "../../utils/clipUtils";
 import AuthContext from "../../authContext";
 import RepostOverlay from "./repostOverlay";
+import TagsOverlay from "./tagsOverlay";
 
 const screenWidth = Dimensions.get("window").width;
-
-const TITLE_HEIGHT = 60;
-const FOOTER_HEIGHT = 80;
-const ITEM_MARGIN = 15;
-const REPOST_HEIGHT = 40;
 
 const ICON_SIZE = 25;
 
@@ -53,6 +49,7 @@ const INITIAL_STATE = {
   isLoading: true,
   endReached: false,
   selectedPost: null,
+  showTagsOverlay: false,
   showReportOverlay: false,
   showDeleteOverlay: false,
   showRepostOverlay: false,
@@ -86,6 +83,7 @@ class Posts extends Component {
           ...post,
           title: updatedPost.title,
           game: updatedPost.game,
+          tags: updatedPost.tags,
         };
         this.setState((prevState) => {
           return {
@@ -146,6 +144,7 @@ class Posts extends Component {
     if (this.state.endReached) return;
     const onSuccess = (response) => {
       const { posts, upload } = response.data.payload;
+
       const clipsWithRef = posts.map((post) => ({
         ...post,
         positionMillis: 0,
@@ -224,17 +223,17 @@ class Posts extends Component {
   renderPost = ({ item }) => {
     const dateThen = new Date(item.created_datetime);
     const dateDiff = dateTimeDiff(dateThen);
-    const video_height = getVideoHeight(item.clip.height, item.clip.width);
 
     return (
       <Post
         type={this.props.type}
         post={item}
-        REPOST_HEIGHT={REPOST_HEIGHT}
-        TITLE_HEIGHT={TITLE_HEIGHT}
-        VIDEO_HEIGHT={video_height}
-        FOOTER_HEIGHT={FOOTER_HEIGHT}
-        MARGIN={ITEM_MARGIN}
+        hToWRatio={item.clip.height / item.clip.width}
+        // REPOST_HEIGHT={REPOST_HEIGHT}
+        // TITLE_HEIGHT={TITLE_HEIGHT}
+        // VIDEO_HEIGHT={video_height}
+        // FOOTER_HEIGHT={FOOTER_HEIGHT}
+        // MARGIN={ITEM_MARGIN}
         dateDiff={dateDiff}
         navigateProfile={this.navigateProfile}
         setSelectedPost={this.setSelectedPost}
@@ -242,6 +241,7 @@ class Posts extends Component {
         onViewedClip={this.onViewedClip}
         play={this.state.play}
         mute={this.state.mute}
+        toggleTagsOverlay={this.toggleTags}
         togglePlay={this.togglePlay}
         toggleMute={this.toggleMute}
         toggleLike={this.toggleLike}
@@ -254,22 +254,22 @@ class Posts extends Component {
     return post.id;
   };
 
-  getItemLayout = (data, index) => {
-    const video_height = getVideoHeight(
-      data[index].clip.height,
-      data[index].clip.width
-    );
+  // getItemLayout = (data, index) => {
+  //   const video_height = getVideoHeight(
+  //     data[index].clip.height,
+  //     data[index].clip.width
+  //   );
 
-    let item_height = video_height + TITLE_HEIGHT + FOOTER_HEIGHT;
-    if (data[index].is_repost == true) item_height += REPOST_HEIGHT;
-    return {
-      length: item_height,
-      // TODO how to calculate offset value when items have different heights
-      // The below formula doesn't work
-      offset: (item_height + ITEM_MARGIN) * index,
-      index,
-    };
-  };
+  //   let item_height = video_height + TITLE_HEIGHT + FOOTER_HEIGHT;
+  //   if (data[index].is_repost == true) item_height += REPOST_HEIGHT;
+  //   return {
+  //     length: item_height,
+  //     // TODO how to calculate offset value when items have different heights
+  //     // The below formula doesn't work
+  //     offset: (item_height + ITEM_MARGIN) * index,
+  //     index,
+  //   };
+  // };
 
   navigateProfile = async (username) => {
     await this.unmountViewableVideo();
@@ -279,6 +279,10 @@ class Posts extends Component {
     });
 
     this.props.navigation.dispatch(resetAction);
+  };
+
+  toggleTags = (post) => {
+    this.setState({ selectedPost: post, showTagsOverlay: true });
   };
 
   togglePlay = () => {
@@ -318,6 +322,10 @@ class Posts extends Component {
       .catch((e) => {
         flashAlert(handleAPIError(e));
       });
+  };
+
+  hideTagsOverlay = () => {
+    this.setState({ selectedPost: null, showTagsOverlay: false });
   };
 
   hideDeleteOverlay = () => {
@@ -455,6 +463,13 @@ class Posts extends Component {
             </TouchableOpacity>
           </View>
         )}
+        {this.state.showTagsOverlay && (
+          <TagsOverlay
+            post={this.state.selectedPost}
+            showOverlay={this.state.showTagsOverlay}
+            hideTagsOverlay={this.hideTagsOverlay}
+          />
+        )}
         {this.state.showReportOverlay && (
           <ReportOverlay
             post_id={this.state.selectedPost.id}
@@ -501,7 +516,9 @@ class Posts extends Component {
                       id: this.state.selectedPost.id,
                       title: this.state.selectedPost.title,
                       game: this.state.selectedPost.game,
+                      tags: this.state.selectedPost.tags,
                     },
+                    routeName: this.props.route.name,
                   });
                 }}
               >
@@ -597,6 +614,7 @@ const styles = StyleSheet.create({
     height: 0.9 * screenWidth,
   },
   lottieParent: {
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
     marginTop: 20,
@@ -634,7 +652,7 @@ const styles = StyleSheet.create({
     color: darkTheme.on_surface_title,
   },
   container: {
-    width: "100%",
+    flex: 1,
     marginTop: 10,
   },
 });
@@ -642,5 +660,6 @@ const styles = StyleSheet.create({
 export default function (props) {
   const navigation = useNavigation();
   const route = useRoute();
+  console.log(route.name);
   return <Posts {...props} navigation={navigation} route={route} />;
 }

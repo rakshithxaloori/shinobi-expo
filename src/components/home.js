@@ -118,7 +118,7 @@ const TabNavigatorComponent = () => {
         }}
       />
       <Tab.Screen
-        name="World Posts"
+        name="Explore"
         component={ExploreScreen}
         options={{
           headerShown: false,
@@ -190,9 +190,7 @@ const StackNavigatorComponent = () => {
         component={TabNavigatorComponent}
         options={({ route }) => {
           const routeName = getFocusedRouteNameFromRoute(route) || "Feed";
-          return routeName &&
-            routeName !== "Feed" &&
-            routeName !== "World Posts"
+          return routeName && routeName !== "Feed" && routeName !== "Explore"
             ? {
                 headerTitle: routeName,
               }
