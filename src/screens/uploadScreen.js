@@ -20,6 +20,7 @@ import { handleAPIError } from "../utils";
 import SelectVideo from "../components/upload/selectVideo";
 import TitleGame from "../components/upload/titleGame";
 import { openURL } from "../utils/link";
+import { checkGame, checkTitle } from "../utils/post";
 
 const VIDEO_MIN_LENGTH = 5;
 const VIDEO_MAX_LENGTH = 61;
@@ -154,14 +155,9 @@ class UploadScreen extends Component {
 
   uploadVideo = async () => {
     if (this.state.videoUri === null) return;
-    if (this.state.title == "") {
-      flashAlert("Clip title can't be empty");
-      return;
-    }
-    if (this.state.selectedGame === null) {
-      flashAlert("Choose a game");
-      return;
-    }
+    if (!checkTitle(this.state.title)) return;
+    if (!checkGame(this.state.selectedGame)) return;
+
     this.setState({ disable: true, is_uploading: true });
 
     const splitList = this.state.videoUri.split(".");
