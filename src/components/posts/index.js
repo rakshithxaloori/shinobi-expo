@@ -73,7 +73,7 @@ class Posts extends Component {
 
   componentDidMount = async () => {
     this._unsubscribeFocus = this.props.navigation.addListener("focus", () => {
-      this.playViewableVideo();
+      if (this.state.play) this.playViewableVideo();
       if (this.props.route?.params?.type === "update") {
         // Update selected post
         const { updatedPost } = this.props.route?.params;
