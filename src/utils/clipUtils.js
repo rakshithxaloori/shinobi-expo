@@ -9,12 +9,3 @@ export const clipUrlByNetSpeed = (templateUrl) => {
   videoUri = videoUri.replace("{}", "3");
   return videoUri;
 };
-
-export const getVideoHeight = (video_height, video_width) => {
-  const min_height = Math.min(
-    (video_height * screenWidth) / video_width,
-    0.6 * screenHeight,
-    450
-  );
-  return min_height;
-};

@@ -1,10 +1,18 @@
 import React from "react";
 import { View, TouchableOpacity, StyleSheet, Dimensions } from "react-native";
 import { Video } from "expo-av";
-import { Asset } from "expo-asset";
 import { Ionicons } from "@expo/vector-icons";
 
 import { darkTheme } from "./theme";
+
+const getVideoHeight = (hToWRatio) => {
+  // Return min
+  const SCREEN_DIMENSIONS = Dimensions.get("screen");
+  return Math.min(
+    SCREEN_DIMENSIONS.width * hToWRatio,
+    0.7 * SCREEN_DIMENSIONS.height
+  );
+};
 
 const ICON_SIZE = 20;
 const POSTER_SIZE = 88;
@@ -13,12 +21,13 @@ const SCREEN_WIDTH = Dimensions.get("screen").width;
 const VideoPlayer = ({
   videoRef,
   onViewedClip,
-  VIDEO_HEIGHT,
+  hToWRatio,
   globalPlay,
   globalTogglePlay,
   globalMute,
   globalToggleMute,
 }) => {
+  const VIDEO_HEIGHT = getVideoHeight(hToWRatio);
   const PLAY_PAUSE_SIZE = (VIDEO_HEIGHT * 6) / 10;
 
   const toggleMute = async () => {
