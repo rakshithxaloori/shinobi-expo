@@ -18,16 +18,12 @@ import ReportOverlay from "../components/posts/reportOverlay";
 import { clipUrlByNetSpeed, getVideoHeight } from "../utils/clipUtils";
 import { darkTheme } from "../utils/theme";
 import { shareClip } from "../utils/share";
+import TagsOverlay from "../components/posts/tagsOverlay";
 
 const screenWidth = Dimensions.get("window").width;
 
-const REPOST_HEIGHT = 40;
-const TITLE_HEIGHT = 60;
-const FOOTER_HEIGHT = 80;
-const ITEM_MARGIN = 15;
-
 class PostScreen extends Component {
-  state = { post: null, mute: false };
+  state = { post: null, mute: false, play: true, showTagsOverlay: false };
   cancelTokenSource = axios.CancelToken.source();
 
   componentDidMount = async () => {
@@ -90,6 +86,16 @@ class PostScreen extends Component {
     });
   };
 
+  toggleTags = () => {
+    this.setState((prevState) => ({
+      showTagsOverlay: !prevState.showTagsOverlay,
+    }));
+  };
+
+  togglePlay = () => {
+    this.setState((prevState) => ({ play: !prevState.play }));
+  };
+
   toggleMute = () => {
     this.setState((prevState) => ({ mute: !prevState.mute }));
   };
@@ -123,11 +129,6 @@ class PostScreen extends Component {
       const dateThen = new Date(this.state.post?.created_datetime);
       const dateDiff = dateTimeDiff(dateThen);
 
-      const video_height = getVideoHeight(
-        this.state.post?.clip.height,
-        this.state.post?.clip.width
-      );
-
       let post_id = this.state.post.id;
       let title = this.state.post?.title;
       let username = this.state.post?.posted_by?.username;
@@ -142,16 +143,14 @@ class PostScreen extends Component {
           <ClipPost
             type={"Feed"}
             post={this.state.post}
-            REPOST_HEIGHT={REPOST_HEIGHT}
-            TITLE_HEIGHT={TITLE_HEIGHT}
-            VIDEO_HEIGHT={video_height}
-            FOOTER_HEIGHT={FOOTER_HEIGHT}
-            MARGIN={ITEM_MARGIN}
             dateDiff={dateDiff}
             navigateProfile={this.navigateProfile}
             reportPost={this.reportPost}
             onViewedClip={this.onViewedClip}
             mute={this.state.mute}
+            play={this.state.play}
+            toggleTagsOverlay={this.toggleTags}
+            togglePlay={this.togglePlay}
             toggleMute={this.toggleMute}
             toggleLike={this.toggleLike}
           />
@@ -173,6 +172,13 @@ class PostScreen extends Component {
             <ReportOverlay
               post_id={this.state.reportClipId}
               clearReport={this.clearReport}
+            />
+          )}
+          {this.state.showTagsOverlay && (
+            <TagsOverlay
+              post={this.state.post}
+              showOverlay={this.state.showTagsOverlay}
+              hideTagsOverlay={this.toggleTags}
             />
           )}
         </View>
