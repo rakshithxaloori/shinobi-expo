@@ -143,6 +143,7 @@ class PostScreen extends Component {
           <ClipPost
             type={"Feed"}
             post={this.state.post}
+            hToWRatio={this.state.post.clip.height / this.state.post.clip.width}
             dateDiff={dateDiff}
             navigateProfile={this.navigateProfile}
             reportPost={this.reportPost}
