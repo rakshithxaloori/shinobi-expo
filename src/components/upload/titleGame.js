@@ -26,6 +26,8 @@ const TitleGame = ({
   uploadVideo,
   selectedGame,
   setSelectedGame,
+  tags,
+  setTags,
 }) => {
   const navigation = useNavigation();
   const cancelTokenSource = axios.CancelToken.source();
@@ -38,7 +40,10 @@ const TitleGame = ({
 
   const _keyboardDidHide = React.useCallback(() => {
     navigation.setOptions({
-      tabBarStyle: { display: "flex", ...tabBarStyles.tabBarStyle },
+      tabBarStyle: {
+        display: "flex",
+        ...tabBarStyles.tabBarStyle,
+      },
     });
   }, [navigation]);
 
@@ -72,27 +77,13 @@ const TitleGame = ({
         setTitle={onChangeTitle}
         game={selectedGame}
         setGame={setSelectedGame}
-        tags={[]}
-        setTags={() => {}}
+        tags={tags}
+        setTags={setTags}
         disable={disable}
+        finish={uploadVideo}
+        iconName="cloud-upload"
+        buttonText={is_uploading ? "Uploading..." : "Upload Clip"}
       />
-      {is_uploading ? (
-        <Text style={styles.uploadingText}>Uploading clip...</Text>
-      ) : (
-        <TouchableOpacity
-          disabled={disable}
-          onPress={uploadVideo}
-          style={styles.uploadButton}
-        >
-          <Ionicons
-            style={styles.icon}
-            name="cloud-upload"
-            size={ICON_SIZE}
-            color={darkTheme.primary}
-          />
-          <Text style={styles.uploadText}>Upload Video</Text>
-        </TouchableOpacity>
-      )}
       <Text
         style={styles.requestGameText}
         onPress={() => {

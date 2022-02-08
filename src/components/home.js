@@ -190,7 +190,7 @@ const StackNavigatorComponent = () => {
         component={TabNavigatorComponent}
         options={({ route }) => {
           const routeName = getFocusedRouteNameFromRoute(route) || "Feed";
-          return routeName && routeName !== "Feed" && routeName !== "Explore"
+          return routeName && routeName === "Notifications"
             ? {
                 headerTitle: routeName,
               }

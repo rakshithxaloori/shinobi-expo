@@ -1,5 +1,11 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  SafeAreaView,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 import SearchGame from "../../game/searchGame";
@@ -23,25 +29,22 @@ const PostDetails = ({
   buttonText,
 }) => {
   // Only take and return values that post uses
-  const [showSearchBar, setShowSearchBar] = React.useState(false);
   const [showTags, setShowTags] = React.useState(false);
 
   const onSelectGame = (newSelectedGame) => {
     setGame(newSelectedGame);
-    setShowSearchBar(false);
   };
 
   const onRemoveGame = () => {
     if (disable) return;
     setGame(null);
-    setShowSearchBar(true);
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {showTags ? (
         <>
-          <Tags tags={tags} setTags={setTags} done={() => setShowTags(false)} />
+          <Tags tags={tags} setTags={setTags} />
           <TouchableOpacity
             disabled={disable}
             onPress={() => setShowTags(false)}
@@ -59,10 +62,9 @@ const PostDetails = ({
       ) : (
         <>
           <PostTitle title={title} onChangeTitle={setTitle} disable={disable} />
-          {game && (
+          {game ? (
             <SelectedGame selectedGame={game} onRemoveGame={onRemoveGame} />
-          )}
-          {showSearchBar && (
+          ) : (
             <SearchGame onSelectGame={onSelectGame} disable={disable} />
           )}
           <TouchableOpacity
@@ -100,7 +102,7 @@ const PostDetails = ({
           </TouchableOpacity>
         </>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -119,9 +121,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 2,
     backgroundColor: darkTheme.primary,
+    position: "absolute",
+    bottom: 5,
   },
   container: {
-    flex: 1,
+    // flex: 1,
+    height: "100%",
     margin: 10,
     justifyContent: "center",
     alignItems: "center",

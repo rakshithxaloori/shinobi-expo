@@ -6,7 +6,7 @@ import {
   Text,
   StyleSheet,
   Keyboard,
-  ScrollView,
+  FlatList,
 } from "react-native";
 import { Avatar } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
@@ -19,7 +19,7 @@ import { handleAPIError } from "../../../utils";
 import { avatarDefaultStyling } from "../../../utils/styles";
 import { flashAlert } from "../../../utils/flash_message";
 
-const Tags = ({ tags, setTags, done }) => {
+const Tags = ({ tags, setTags }) => {
   const cancelTokenSource = axios.CancelToken.source();
   const [searchText, setSearchText] = useState("");
   const [searches, setSearches] = useState([]);
@@ -61,6 +61,10 @@ const Tags = ({ tags, setTags, done }) => {
   };
 
   const addToTags = (newTag) => {
+    if (tags.length >= 10) {
+      flashAlert("You can only add upto 10 tags");
+      return;
+    }
     if (tags.filter((e) => e.username === newTag.username).length > 0)
       flashAlert(`${newTag.username} already tagged`);
     else setTags([...tags, newTag]);
@@ -75,6 +79,11 @@ const Tags = ({ tags, setTags, done }) => {
     });
     setTags(newTags);
   };
+
+  const renderTagItem = ({ item }) => (
+    <TagItem user={item} removeUser={removeFromTags} />
+  );
+  const tagKeyExtractor = (item) => item.username;
 
   return (
     <View style={styles.container}>
@@ -119,13 +128,11 @@ const Tags = ({ tags, setTags, done }) => {
               Tagged in the post
             </Text>
           )}
-          {tags.map((user) => (
-            <TagItem
-              key={user.username}
-              user={user}
-              removeUser={removeFromTags}
-            />
-          ))}
+          <FlatList
+            data={tags}
+            renderItem={renderTagItem}
+            keyExtractor={tagKeyExtractor}
+          />
         </>
       )}
     </View>
@@ -148,7 +155,7 @@ const styles = StyleSheet.create({
     height: "100%",
     color: darkTheme.on_background,
   },
-  container: { flex: 1 },
+  container: {},
 });
 
 const SearchItem = ({ user, selectUser }) => (
@@ -223,7 +230,7 @@ const tagItemStyles = StyleSheet.create({
     backgroundColor: darkTheme.surface,
     paddingVertical: 5,
     paddingHorizontal: 10,
-    marginVertical: 10,
+    marginBottom: 10,
     borderRadius: 10,
     alignItems: "center",
   },

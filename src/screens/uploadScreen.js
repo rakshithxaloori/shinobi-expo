@@ -40,6 +40,7 @@ class UploadScreen extends Component {
     selectText: "Select",
     title: "",
     selectedGame: null,
+    tags: [],
     file_key: null,
     disable: true,
     loaded: false,
@@ -202,7 +203,8 @@ class UploadScreen extends Component {
           clip_size: videoInfo.size,
           clip_type: splitList[splitList.length - 1],
           game_code: this.state.selectedGame.id,
-          title: this.state.title,
+          title: this.state.title.trim(),
+          tags: this.state.tags.map((tag) => tag.username),
           duration: this.state.duration,
           clip_height: this.state.videoHeight,
           clip_width: this.state.videoWidth,
@@ -267,7 +269,7 @@ class UploadScreen extends Component {
                 title={this.state.title}
                 onChangeTitle={(value) => {
                   this.setState({
-                    title: value.trim(),
+                    title: value,
                   });
                 }}
                 uploadVideo={this.uploadVideo}
@@ -275,6 +277,8 @@ class UploadScreen extends Component {
                 setSelectedGame={(game) =>
                   this.setState({ selectedGame: game })
                 }
+                tags={this.state.tags}
+                setTags={(tags) => this.setState({ tags })}
               />
             )
           : null}

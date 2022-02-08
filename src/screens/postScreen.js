@@ -15,7 +15,7 @@ import { flashAlert } from "../utils/flash_message";
 import { dateTimeDiff, handleAPIError } from "../utils";
 import ClipPost from "../components/posts/post";
 import ReportOverlay from "../components/posts/reportOverlay";
-import { clipUrlByNetSpeed, getVideoHeight } from "../utils/clipUtils";
+import { clipUrlByNetSpeed } from "../utils/clipUtils";
 import { darkTheme } from "../utils/theme";
 import { shareClip } from "../utils/share";
 import TagsOverlay from "../components/posts/tagsOverlay";
