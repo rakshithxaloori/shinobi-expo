@@ -229,11 +229,6 @@ class Posts extends Component {
         type={this.props.type}
         post={item}
         hToWRatio={item.clip.height / item.clip.width}
-        // REPOST_HEIGHT={REPOST_HEIGHT}
-        // TITLE_HEIGHT={TITLE_HEIGHT}
-        // VIDEO_HEIGHT={video_height}
-        // FOOTER_HEIGHT={FOOTER_HEIGHT}
-        // MARGIN={ITEM_MARGIN}
         dateDiff={dateDiff}
         navigateProfile={this.navigateProfile}
         setSelectedPost={this.setSelectedPost}
@@ -254,23 +249,6 @@ class Posts extends Component {
     return post.id;
   };
 
-  // getItemLayout = (data, index) => {
-  //   const video_height = getVideoHeight(
-  //     data[index].clip.height,
-  //     data[index].clip.width
-  //   );
-
-  //   let item_height = video_height + TITLE_HEIGHT + FOOTER_HEIGHT;
-  //   if (data[index].is_repost == true) item_height += REPOST_HEIGHT;
-  //   return {
-  //     length: item_height,
-  //     // TODO how to calculate offset value when items have different heights
-  //     // The below formula doesn't work
-  //     offset: (item_height + ITEM_MARGIN) * index,
-  //     index,
-  //   };
-  // };
-
   navigateProfile = async (username) => {
     await this.unmountViewableVideo();
     const resetAction = CommonActions.reset({
@@ -282,7 +260,10 @@ class Posts extends Component {
   };
 
   toggleTags = (post) => {
-    this.setState({ selectedPost: post, showTagsOverlay: true });
+    this.setState((prevState) => ({
+      selectedPost: post,
+      showTagsOverlay: !prevState.showTagsOverlay,
+    }));
   };
 
   togglePlay = () => {
