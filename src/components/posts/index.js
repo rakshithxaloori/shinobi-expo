@@ -641,6 +641,5 @@ const styles = StyleSheet.create({
 export default function (props) {
   const navigation = useNavigation();
   const route = useRoute();
-  console.log(route.name);
   return <Posts {...props} navigation={navigation} route={route} />;
 }
