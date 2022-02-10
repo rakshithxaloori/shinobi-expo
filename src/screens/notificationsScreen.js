@@ -6,7 +6,6 @@ import {
   ActivityIndicator,
   Dimensions,
 } from "react-native";
-import { Divider } from "react-native-elements";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import axios from "axios";
@@ -113,17 +112,6 @@ class Notifications extends Component {
     return placeholders;
   };
 
-  renderSeperator = () => (
-    <Divider
-      style={{
-        borderWidth: StyleSheet.hairlineWidth,
-        marginHorizontal: 5,
-      }}
-      insetType="middle"
-      orientation="horizontal"
-    />
-  );
-
   renderNotification = (notification) => (
     <Notification
       avatarSize={this.avatarSize}
@@ -171,7 +159,6 @@ class Notifications extends Component {
           onEndReached={this.fetchNotifications}
           onEndReachedThreshold={5}
           showsVerticalScrollIndicator={false}
-          // ItemSeparatorComponent={this.renderSeperator}
           ListFooterComponent={
             <ActivityIndicator
               animating={this.state.isLoading}
