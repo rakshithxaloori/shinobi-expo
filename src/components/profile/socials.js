@@ -10,51 +10,62 @@ import { openURL } from "../../utils/link";
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
+const ICON_SIZE = 22;
+
 const Socials = ({ profile_loaded, socials }) => {
-  const iconSize = 22;
   const iconColor = darkTheme.on_surface_subtitle;
 
   return (
     <View style={styles.container}>
       {profile_loaded ? (
-        <View style={{ flexDirection: "row" }}>
-          {typeof socials?.instagram === "string" && (
-            <TouchableOpacity
-              style={styles.socialIcon}
-              onPress={() =>
-                openURL(`https://instagram.com/${socials.instagram}`)
-              }
-            >
-              <Ionicons
-                name="logo-instagram"
-                size={iconSize}
-                color={iconColor}
-              />
-            </TouchableOpacity>
-          )}
-          {typeof socials?.twitch === "string" && (
-            <TouchableOpacity
-              style={styles.socialIcon}
-              onPress={() => openURL(`https://twitch.tv/${socials.twitch}`)}
-            >
-              <Ionicons name="logo-twitch" size={iconSize} color={iconColor} />
-            </TouchableOpacity>
-          )}
+        <View>
+          <View style={{ flexDirection: "row" }}>
+            {typeof socials?.instagram === "string" && (
+              <TouchableOpacity
+                style={styles.socialIcon}
+                onPress={() =>
+                  openURL(`https://instagram.com/${socials.instagram}`)
+                }
+              >
+                <Ionicons
+                  name="logo-instagram"
+                  size={ICON_SIZE}
+                  color={iconColor}
+                />
+              </TouchableOpacity>
+            )}
+            {typeof socials?.twitch === "string" && (
+              <TouchableOpacity
+                style={styles.socialIcon}
+                onPress={() => openURL(`https://twitch.tv/${socials.twitch}`)}
+              >
+                <Ionicons
+                  name="logo-twitch"
+                  size={ICON_SIZE}
+                  color={iconColor}
+                />
+              </TouchableOpacity>
+            )}
 
-          {typeof socials?.youtube === "string" && (
-            <TouchableOpacity
-              style={styles.socialIcon}
-              onPress={() =>
-                openURL(`https://youtube.com/channel/${socials.youtube}`)
-              }
-            >
-              <Ionicons name="logo-youtube" size={iconSize} color={iconColor} />
-            </TouchableOpacity>
-          )}
+            {typeof socials?.youtube === "string" && (
+              <TouchableOpacity
+                style={styles.socialIcon}
+                onPress={() =>
+                  openURL(`https://youtube.com/channel/${socials.youtube}`)
+                }
+              >
+                <Ionicons
+                  name="logo-youtube"
+                  size={ICON_SIZE}
+                  color={iconColor}
+                />
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
       ) : (
         <ShimmerPlaceHolder
-          height={iconSize}
+          height={ICON_SIZE}
           width={80}
           shimmerStyle={{ borderRadius: 10 }}
           shimmerColors={shimmerColors}
@@ -69,9 +80,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 3,
   },
   container: {
-    position: "absolute",
-    top: 100,
-    left: 10,
+    marginVertical: 10,
     width: 80,
     flexDirection: "row",
     alignItems: "center",

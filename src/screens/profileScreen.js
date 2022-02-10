@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { Avatar } from "react-native-elements";
 import { LinearGradient } from "expo-linear-gradient";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import axios from "axios";
 import FastImage from "react-native-fast-image";
 
@@ -103,78 +104,106 @@ class Profile extends Component {
     return (
       <VirtualizedList style={styles.container}>
         <View style={styles.profile}>
-          <View style={styles.profilePicture}>
-            {this.state.profile_loaded ? (
-              <Avatar
-                rounded
-                size={profileIconSize}
-                title={this.state.user?.username[0] || "s"}
-                source={{ uri: this.state.user.picture }}
-                overlayContainerStyle={avatarDefaultStyling}
-                ImageComponent={FastImage}
-              />
-            ) : (
-              <ShimmerPlaceHolder
-                width={profileIconSize}
-                height={profileIconSize}
-                shimmerStyle={{ borderRadius: profileIconSize / 2 }}
-                shimmerColors={shimmerColors}
-              />
-            )}
-          </View>
-          <Username
-            user={this.state.user}
-            profile_loaded={this.state.profile_loaded}
-          />
-          <FollowStats
-            username={this.state.user?.username}
-            followers_count={this.state.followers_count}
-            following_count={this.state.following_count}
-            profile_loaded={this.state.profile_loaded}
-          />
-          <Socials
-            socials={this.state.socials}
-            profile_loaded={this.state.profile_loaded}
-          />
-          {this.state.profile_loaded && (
-            <View style={styles.buttonContainer}>
-              {username && this.context.user.username !== username ? (
-                <FollowButton
-                  username={username}
-                  following={this.state.me_following}
-                  setFollowing={this.setFollowing}
-                  buttonStyle={styles.button}
-                  buttonTextStyle={styles.buttonText}
+          <View style={{ flex: 1, flexDirection: "row" }}>
+            <View style={{ flex: 1 }}>
+              {this.state.profile_loaded ? (
+                <Avatar
+                  rounded
+                  size={profileIconSize}
+                  title={this.state.user?.username[0] || "s"}
+                  source={{ uri: this.state.user.picture }}
+                  overlayContainerStyle={avatarDefaultStyling}
+                  ImageComponent={FastImage}
                 />
               ) : (
-                <EditProfileButton
-                  username={this.context.user.username}
-                  picture={this.state.user.picture}
-                  bio={this.state.bio}
-                  updateBioProfile={(newBio) => this.setState({ bio: newBio })}
-                  updatePictureProfile={(newPicture) => {
-                    const { saveUser } = this.context;
-                    this.setState((prevState) => {
-                      const newUser = {
-                        username: prevState.user.username,
-                        picture: newPicture,
-                      };
-                      saveUser(newUser);
-                      return {
-                        user: newUser,
-                      };
-                    });
-                  }}
-                  buttonStyle={styles.button}
-                  buttonTextStyle={styles.buttonText}
+                <ShimmerPlaceHolder
+                  width={profileIconSize}
+                  height={profileIconSize}
+                  shimmerStyle={{ borderRadius: profileIconSize / 2 }}
+                  shimmerColors={shimmerColors}
                 />
               )}
+              <Socials
+                socials={this.state.socials}
+                profile_loaded={this.state.profile_loaded}
+              />
             </View>
-          )}
+            <View style={{ flex: 2 }}>
+              <Username
+                user={this.state.user}
+                profile_loaded={this.state.profile_loaded}
+              />
+              <FollowStats
+                username={this.state.user?.username}
+                followers_count={this.state.followers_count}
+                following_count={this.state.following_count}
+                profile_loaded={this.state.profile_loaded}
+              />
+
+              {this.state.profile_loaded && (
+                <>
+                  {username && this.context.user.username !== username ? (
+                    <FollowButton
+                      username={username}
+                      following={this.state.me_following}
+                      setFollowing={this.setFollowing}
+                      buttonStyle={styles.button}
+                      buttonTextStyle={styles.buttonText}
+                    />
+                  ) : (
+                    <EditProfileButton
+                      username={this.context.user.username}
+                      picture={this.state.user.picture}
+                      bio={this.state.bio}
+                      updateBioProfile={(newBio) =>
+                        this.setState({ bio: newBio })
+                      }
+                      updatePictureProfile={(newPicture) => {
+                        const { saveUser } = this.context;
+                        this.setState((prevState) => {
+                          const newUser = {
+                            username: prevState.user.username,
+                            picture: newPicture,
+                          };
+                          saveUser(newUser);
+                          return {
+                            user: newUser,
+                          };
+                        });
+                      }}
+                      buttonStyle={styles.button}
+                      buttonTextStyle={styles.buttonText}
+                    />
+                  )}
+                </>
+              )}
+            </View>
+          </View>
           <BioText
             profile_loaded={this.state.profile_loaded}
             bio={this.state.bio}
           />
+          {typeof this.state.socials?.custom_url &&
+            this.state.socials?.custom_url.length > 0 && (
+              <TouchableOpacity
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginVertical: 3,
+                }}
+                onPress={() => openURL(this.state.socials.custom_url)}
+              >
+                <MaterialCommunityIcons
+                  style={{ marginRight: 5 }}
+                  name="link-variant"
+                  size={18}
+                  color={darkTheme.on_surface_subtitle}
+                />
+                <Text style={styles.custom_url}>
+                  {this.state.socials.custom_url}
+                </Text>
+              </TouchableOpacity>
+            )}
         </View>
 
         {this.state.user !== undefined && (
@@ -190,23 +219,17 @@ class Profile extends Component {
 }
 
 const styles = StyleSheet.create({
+  custom_url: {
+    color: darkTheme.on_surface_subtitle,
+    fontSize: 15,
+    textDecorationLine: "underline",
+  },
   profile: {
-    flex: 3,
-    height: 200,
+    flex: 1,
     backgroundColor: darkTheme.surface,
     borderRadius: 10,
     padding: 10,
     marginHorizontal: 15,
-  },
-  profilePicture: {
-    marginLeft: 10,
-    position: "absolute",
-    top: 10,
-  },
-  buttonContainer: {
-    position: "absolute",
-    top: 90,
-    left: 120,
   },
   button: {
     borderRadius: 5,

@@ -34,7 +34,6 @@ const EditProfileOverlay = ({
   visible,
   setVisible,
 }) => {
-  const { user } = useContext(AuthContext);
   let cancelTokenSource = axios.CancelToken.source();
 
   const [disable, setDisable] = React.useState(true);
@@ -85,10 +84,15 @@ const EditProfileOverlay = ({
       setVisible(false);
     };
     try {
+      console.log("BIO", newBio, picture === newPicture);
       if (picture == newPicture) {
         // Send a normal API post request
         const APIKit = await createAPIKit();
-        APIKit.post("profile/update/", { bio: newBio }).then(onSuccess);
+        APIKit.post(
+          "profile/update/",
+          { bio: newBio },
+          { cancelToken: cancelTokenSource.token }
+        ).then(onSuccess);
       } else {
         uploadFile("/profile/update/", newPicture, "picture", {
           bio: newBio,

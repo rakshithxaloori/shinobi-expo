@@ -26,9 +26,6 @@ const BioText = ({ profile_loaded, bio }) => {
 const styles = StyleSheet.create({
   container: {
     flexShrink: 1,
-    position: "absolute",
-    top: 160,
-    left: 10,
   },
   text: { color: darkTheme.on_surface_subtitle },
 });

@@ -72,9 +72,7 @@ const Follow = (props) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    position: "absolute",
-    top: 50,
-    left: 120,
+    marginVertical: 10,
   },
   section: {
     marginRight: 15,

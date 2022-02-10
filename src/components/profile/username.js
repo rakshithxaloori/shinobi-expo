@@ -37,9 +37,6 @@ const Username = ({ profile_loaded, user }) => (
 
 const styles = StyleSheet.create({
   container: {
-    position: "absolute",
-    top: 10,
-    left: 120,
     flexDirection: "row",
     alignItems: "center",
   },
