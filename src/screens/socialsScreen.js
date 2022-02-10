@@ -1,14 +1,24 @@
 import React, { Component } from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
-import { Input } from "react-native-elements";
-import { Ionicons } from "@expo/vector-icons";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  TextInput,
+  Keyboard,
+} from "react-native";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 import { darkTheme } from "../utils/theme";
 import { createAPIKit } from "../utils/APIKit";
 import { handleAPIError } from "../utils";
 import { flashAlert } from "../utils/flash_message";
 
+const INPUT_FONT_SIZE = 15;
+const ICON_SIZE = 17;
+
 const CustomInput = ({
+  prefix,
   value,
   placeholder,
   label,
@@ -16,24 +26,36 @@ const CustomInput = ({
   iconName,
   onChangeText,
 }) => (
-  <Input
-    autoCapitalize="none"
-    autoCorrect={false}
-    placeholder={placeholder}
-    label={label}
-    maxLength={maxLength}
-    value={value}
-    inputStyle={styles.input}
-    leftIcon={() => (
+  <View style={{ marginBottom: 20 }}>
+    <View style={{ flexDirection: "row", alignItems: "center" }}>
       <Ionicons
         style={styles.icon}
         name={iconName}
-        size={20}
+        size={ICON_SIZE}
         color={darkTheme.primary}
       />
-    )}
-    onChangeText={onChangeText}
-  />
+      <Text style={styles.label}>{label}</Text>
+    </View>
+    <View
+      style={{
+        flexDirection: "row",
+        height: 40,
+        alignItems: "center",
+      }}
+    >
+      <Text style={styles.prefix}>{prefix}</Text>
+      <TextInput
+        autoCapitalize="none"
+        autoCorrect={false}
+        placeholder={placeholder}
+        maxLength={maxLength}
+        value={value}
+        style={styles.input}
+        placeholderTextColor={darkTheme.on_surface_subtitle}
+        onChangeText={onChangeText}
+      />
+    </View>
+  </View>
 );
 
 class Socials extends Component {
@@ -41,6 +63,8 @@ class Socials extends Component {
     youtube: "",
     instagram: "",
     twitch: "",
+    custom_title: "",
+    custom_url: "",
   };
 
   componentDidMount = async () => {
@@ -49,8 +73,9 @@ class Socials extends Component {
 
   getSocials = async () => {
     const onSuccess = (response) => {
-      const { youtube, instagram, twitch } = response.data?.payload;
-      this.setState({ youtube, instagram, twitch });
+      const { youtube, instagram, twitch, custom_title, custom_url } =
+        response.data?.payload;
+      this.setState({ youtube, instagram, twitch, custom_title, custom_url });
     };
 
     const APIKit = await createAPIKit();
@@ -62,22 +87,38 @@ class Socials extends Component {
   };
 
   updateSocials = async () => {
-    // TODO set socials
-    // TODO can't have spaces
-    const minTwitchLen = 4;
-    const minYTLen = 24;
+    if (this.state.custom_title.length > 20) {
+      flashAlert("Custom Title has to be less than 20 characters");
+    }
+
+    const expression =
+      /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi;
+    const regex = new RegExp(expression);
+
+    if (this.state.custom_url !== "") {
+      if (!this.state.custom_url.trim().match(regex)) {
+        flashAlert("Custom Link is invalid");
+        return;
+      }
+    } else {
+      if (this.state.custom_title === "") {
+        flashAlert("Title with an empty URL ignored");
+      }
+    }
 
     const onSuccess = () => {
       flashAlert("Socials updated!");
+      Keyboard.dismiss();
     };
-
-    // TODO if urls, parse them
 
     const APIKit = await createAPIKit();
     APIKit.post("socials/update/", {
-      youtube: this.state.youtube,
-      instagram: this.state.instagram,
-      twitch: this.state.twitch,
+      youtube: this.state.youtube.trim(),
+      instagram: this.state.instagram.trim(),
+      twitch: this.state.twitch.trim(),
+      custom_title:
+        this.state.custom_url === "" ? "" : this.state.custom_title.trim(),
+      custom_url: this.state.custom_url.trim(),
     })
       .then(onSuccess)
       .catch((e) => {
@@ -89,8 +130,9 @@ class Socials extends Component {
     return (
       <View style={styles.container} showsVerticalScrollIndicator={false}>
         <CustomInput
+          prefix="https://instagram.com/"
           value={this.state.instagram}
-          placeholder="Username or Profile URL"
+          placeholder="username"
           label="Instagram"
           maxLength={30}
           iconName="logo-instagram"
@@ -99,8 +141,9 @@ class Socials extends Component {
           }}
         />
         <CustomInput
+          prefix="https://youtube.com/channel/"
           value={this.state.youtube}
-          placeholder="Channel ID or URL with Channel ID"
+          placeholder="channel ID"
           label="YouTube"
           maxLength={24}
           iconName="logo-youtube"
@@ -109,8 +152,9 @@ class Socials extends Component {
           }}
         />
         <CustomInput
+          prefix="https://twitch.tv/"
           value={this.state.twitch}
-          placeholder="Username or Channel URL"
+          placeholder="username"
           label="Twitch"
           maxLength={25}
           iconName="logo-twitch"
@@ -118,6 +162,51 @@ class Socials extends Component {
             this.setState({ twitch: text });
           }}
         />
+
+        <View style={{ marginBottom: 20 }}>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <MaterialCommunityIcons
+              style={styles.icon}
+              name="link-variant"
+              size={ICON_SIZE + 3}
+              color={darkTheme.primary}
+            />
+            <Text style={styles.label}>Custom Link</Text>
+          </View>
+          <View style={{ height: 80 }}>
+            <TextInput
+              autoCapitalize="none"
+              autoCorrect={false}
+              value={this.state.custom_title}
+              style={[
+                styles.input,
+                {
+                  color:
+                    this.state.custom_title.length > 20
+                      ? "red"
+                      : darkTheme.on_background,
+                },
+              ]}
+              placeholder="Link Title (20 characters)"
+              placeholderTextColor={darkTheme.on_surface_subtitle}
+              onChangeText={(text) => {
+                this.setState({ custom_title: text });
+              }}
+            />
+            <TextInput
+              autoCapitalize="none"
+              autoCorrect={false}
+              value={this.state.custom_url}
+              style={styles.input}
+              placeholder="https://example.com"
+              placeholderTextColor={darkTheme.on_surface_subtitle}
+              onChangeText={(text) => {
+                this.setState({ custom_url: text });
+              }}
+            />
+          </View>
+        </View>
+
         <TouchableOpacity onPress={this.updateSocials} style={styles.save}>
           <Ionicons name="save" color={darkTheme.primary} size={35} />
         </TouchableOpacity>
@@ -127,8 +216,21 @@ class Socials extends Component {
 }
 
 const styles = StyleSheet.create({
-  input: { color: darkTheme.on_background, fontSize: 15 },
-  icon: { paddingRight: 5 },
+  label: {
+    color: darkTheme.on_background,
+    fontSize: ICON_SIZE + 3,
+    fontWeight: "bold",
+  },
+  prefix: { color: darkTheme.on_surface_subtitle, fontSize: INPUT_FONT_SIZE },
+  input: {
+    color: darkTheme.on_background,
+    fontSize: INPUT_FONT_SIZE,
+    borderBottomWidth: 1,
+    borderColor: darkTheme.on_background,
+    padding: 5,
+    marginVertical: 5,
+  },
+  icon: { marginRight: 8 },
   save: {
     position: "absolute",
     bottom: 20,
