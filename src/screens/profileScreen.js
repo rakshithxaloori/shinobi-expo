@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { Avatar } from "react-native-elements";
 import { LinearGradient } from "expo-linear-gradient";
+import * as Linking from "expo-linking";
 import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import axios from "axios";
@@ -191,13 +192,13 @@ class Profile extends Component {
                   alignItems: "center",
                   marginVertical: 3,
                 }}
-                onPress={() => openURL(this.state.socials.custom_url)}
+                onPress={() => Linking.openURL(this.state.socials.custom_url)}
               >
                 <MaterialCommunityIcons
                   style={{ marginRight: 5 }}
                   name="link-variant"
                   size={18}
-                  color={darkTheme.on_surface_subtitle}
+                  color={darkTheme.primary}
                 />
                 <Text style={styles.custom_url}>
                   {this.state.socials.custom_url}
@@ -220,9 +221,8 @@ class Profile extends Component {
 
 const styles = StyleSheet.create({
   custom_url: {
-    color: darkTheme.on_surface_subtitle,
+    color: darkTheme.primary,
     fontSize: 15,
-    textDecorationLine: "underline",
   },
   profile: {
     flex: 1,
