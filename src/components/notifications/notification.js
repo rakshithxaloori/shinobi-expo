@@ -1,4 +1,4 @@
-import React from "react";
+import React, { PureComponent } from "react";
 import {
   View,
   Text,
@@ -15,35 +15,38 @@ import { darkTheme } from "../../utils/theme";
 
 const screenWidth = Dimensions.get("screen").width;
 
-const Notification = ({ avatarSize, notification, textString, onPress }) => {
-  const { sender, sent_at, type, extra_data } = notification.item;
+class Notification extends PureComponent {
+  render = () => {
+    const { avatarSize, notification, textString, onPress } = this.props;
+    const { sender, sent_at, type, extra_data } = notification.item;
 
-  const dateThen = new Date(sent_at);
-  const dateDiff = dateTimeDiff(dateThen);
+    const dateThen = new Date(sent_at);
+    const dateDiff = dateTimeDiff(dateThen);
 
-  return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() => onPress(sender, type, extra_data)}
-    >
-      <Avatar
-        rounded
-        size={avatarSize}
-        title={sender.username[0]}
-        source={{ uri: sender.picture }}
-        overlayContainerStyle={avatarDefaultStyling}
-        ImageComponent={FastImage}
-      />
-      <View style={styles.textArea}>
-        <Text style={[styles.text, { fontWeight: "bold" }]}>
-          {sender.username}
-        </Text>
-        <Text style={styles.text}> {textString}</Text>
-        <Text style={[styles.text, styles.date]}> {dateDiff}</Text>
-      </View>
-    </TouchableOpacity>
-  );
-};
+    return (
+      <TouchableOpacity
+        style={styles.container}
+        onPress={() => onPress(sender, type, extra_data)}
+      >
+        <Avatar
+          rounded
+          size={avatarSize}
+          title={sender.username[0]}
+          source={{ uri: sender.picture }}
+          overlayContainerStyle={avatarDefaultStyling}
+          ImageComponent={FastImage}
+        />
+        <View style={styles.textArea}>
+          <Text style={[styles.text, { fontWeight: "bold" }]}>
+            {sender.username}
+          </Text>
+          <Text style={styles.text}> {textString}</Text>
+          <Text style={[styles.text, styles.date]}> {dateDiff}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+}
 
 const styles = StyleSheet.create({
   text: {
@@ -56,7 +59,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: screenWidth - 20,
     alignItems: "center",
-    marginVertical: 5,
+    marginVertical: 10,
   },
 });
 

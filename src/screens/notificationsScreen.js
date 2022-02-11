@@ -39,42 +39,50 @@ class Notifications extends Component {
   cancelTokenSource = axios.CancelToken.source();
 
   fetchNotifications = async () => {
+    if (this.state.isLoading) return;
     if (!this.state.endReached) {
-      this.setState({ isLoading: this.state.notifications.length === 0 });
+      const makeAPICall = async () => {
+        const onSuccess = (response) => {
+          const callback = () => {
+            if (this.state.notifications.length === 0) {
+              this.profileAnimation.play();
+            }
+          };
 
-      const onSuccess = (response) => {
-        const callback = () => {
-          if (this.state.notifications.length === 0) {
-            this.profileAnimation.play();
-          }
+          const { notifications } = response.data?.payload;
+          this.setState(
+            (prevState) => ({
+              initialLoading: false,
+              notifications: [...prevState.notifications, ...notifications],
+              endReached: notifications.length !== this.fetchCount,
+              isLoading: false,
+            }),
+            callback
+          );
         };
 
-        const { notifications } = response.data?.payload;
-        this.setState(
-          (prevState) => ({
-            initialLoading: false,
-            notifications: [...prevState.notifications, ...notifications],
-            endReached: notifications.length !== this.fetchCount,
-            isLoading: false,
-          }),
-          callback
-        );
+        const APIKit = await createAPIKit();
+        const dateNow = new Date();
+        APIKit.post(
+          "/notification/",
+          {
+            datetime:
+              this.state.notifications[this.state.notifications.length - 1]
+                ?.sent_at || dateNow,
+            fetch_count: this.fetchCount,
+          },
+          { cancelToken: this.cancelTokenSource.token }
+        )
+          .then(onSuccess)
+          .catch((e) => {
+            this.setState({
+              isLoading: false,
+              error: handleAPIError(e),
+            });
+          });
       };
 
-      const APIKit = await createAPIKit();
-      APIKit.get(
-        `/notification/${this.state.notifications.length}/${
-          this.state.notifications.length + this.fetchCount
-        }/`,
-        { cancelToken: this.cancelTokenSource.token }
-      )
-        .then(onSuccess)
-        .catch((e) => {
-          this.setState({
-            isLoading: false,
-            error: handleAPIError(e),
-          });
-        });
+      this.setState({ isLoading: true }, makeAPICall);
     }
   };
 
