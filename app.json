@@ -54,7 +54,7 @@
       }
     },
     "scheme": "shn",
-    "plugins": ["react-native-fast-image", "expo-image-picker"],
+    "plugins": ["expo-image-picker"],
     "currentFullName": "@rakshith.aloori/Shinobi",
     "originalFullName": "@rakshith.aloori/Shinobi"
   }
