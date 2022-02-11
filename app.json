@@ -57,7 +57,7 @@
     "plugins": [
       "expo-image-picker",
       {
-        "photosPermission": "The app accesses your photos to let you update your profile picture."
+        "photosPermission": "Allow $(PRODUCT_NAME) to access your photos."
       }
     ],
     "currentFullName": "@rakshith.aloori/Shinobi",
