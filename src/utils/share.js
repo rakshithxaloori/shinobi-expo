@@ -12,18 +12,20 @@ export const DEEP_LINK_TYPES = {
   CLIP: "c",
   FOLLOW: "f",
   LIKE: "l",
+  TAG: "t",
   REPOST: "rp",
 };
 
 export const getDeepLink = (type, params) => {
+  console.log(type, params);
   const baseURL = "https://www.shinobi.cc/";
+  const username = params?.username;
+  const post_id = params?.post_id;
   switch (type) {
     case DEEP_LINK_TYPES.PROFILE:
-      const { username } = params;
       return baseURL + `profile/${username}`;
 
     case DEEP_LINK_TYPES.CLIP:
-      const { post_id } = params;
       return baseURL + `clip/${post_id}`;
 
     case DEEP_LINK_TYPES.FOLLOW:
@@ -31,6 +33,9 @@ export const getDeepLink = (type, params) => {
 
     case DEEP_LINK_TYPES.LIKE:
       return baseURL + "notifications";
+
+    case DEEP_LINK_TYPES.TAG:
+      return baseURL + `clip/${post_id}`;
 
     case DEEP_LINK_TYPES.REPOST:
       return baseURL + "notifications";

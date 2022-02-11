@@ -7,13 +7,7 @@
     },
     "release": {},
     "production": {
-      "releaseChannel": "prod-v1",
-      "env": {
-        "CI_CD_STAGE": "production",
-        "BASE_API_ENDPOINT": "api.shinobi.cc",
-        "SENTRY_ORG": "shinobi",
-        "SENTRY_PROJECT": "shinobi"
-      }
+      "releaseChannel": "prod-v1"
     },
     "development": {
       "developmentClient": true,
