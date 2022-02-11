@@ -17,7 +17,6 @@ export const DEEP_LINK_TYPES = {
 };
 
 export const getDeepLink = (type, params) => {
-  console.log(type, params);
   const baseURL = "https://www.shinobi.cc/";
   const username = params?.username;
   const post_id = params?.post_id;
