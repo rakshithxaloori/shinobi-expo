@@ -27,7 +27,7 @@ const VideoPlayer = ({
   globalMute,
   globalToggleMute,
 }) => {
-  const VIDEO_HEIGHT = getVideoHeight(hToWRatio);
+  const VIDEO_HEIGHT = getVideoHeight(hToWRatio || 9 / 16);
   const PLAY_PAUSE_SIZE = (VIDEO_HEIGHT * 6) / 10;
 
   const toggleMute = async () => {
