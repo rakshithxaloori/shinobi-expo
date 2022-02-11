@@ -163,11 +163,12 @@ class Posts extends Component {
     const APIKit = await createAPIKit();
     const dateNow = new Date();
     let url = undefined;
-    let postData = undefined;
+    let postData = { fetch_count: this.fetchCount };
     if (this.props.type === "Feed") {
       if (this.props.feedType === 1) url = "feed/posts/world/";
       else url = "/feed/posts/following/";
       postData = {
+        ...postData,
         datetime:
           this.state.posts[this.state.posts.length - 1]?.created_datetime ||
           dateNow,
@@ -175,6 +176,7 @@ class Posts extends Component {
     } else if (this.props.type === "Profile") {
       url = "/feed/posts/profile/";
       postData = {
+        ...postData,
         username: this.props.username,
         datetime:
           this.state.posts[this.state.posts.length - 1]?.created_datetime ||
