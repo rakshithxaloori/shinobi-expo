@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
+import { View, Dimensions } from "react-native";
 import {
   NavigationContainer,
   DefaultTheme,
@@ -41,6 +41,7 @@ import AuthContext from "../authContext";
 import { createAPIKit } from "../utils/APIKit";
 import { flashAlert } from "../utils/flash_message";
 import { handleAPIError } from "../utils";
+import { tabBarStyles } from "../utils/styles";
 
 const fullScreenWidth = Dimensions.get("window").width;
 const TAB_ICON_SIZE = 22;
@@ -317,14 +318,5 @@ const NavigatorWithContext = () => {
     </View>
   );
 };
-
-export const tabBarStyles = StyleSheet.create({
-  tabBarStyle: {
-    borderTopWidth: 0,
-    backgroundColor: darkTheme.background,
-    elevation: 0,
-    shadowOpacity: 0,
-  },
-});
 
 export default NavigatorWithContext;

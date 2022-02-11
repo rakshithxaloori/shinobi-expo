@@ -1,22 +1,13 @@
 import React from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Dimensions,
-  Keyboard,
-} from "react-native";
+import { View, Text, StyleSheet, Dimensions, Keyboard } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 
 import { darkTheme } from "../../utils/theme";
-import { tabBarStyles } from "../home";
 import PostDetails from "../posts/postDetails";
+import { tabBarStyles } from "../../utils/styles";
 
 const { width, height } = Dimensions.get("window");
-const ICON_SIZE = 20;
 
 const TitleGame = ({
   is_uploading,
