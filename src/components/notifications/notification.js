@@ -10,45 +10,21 @@ import { Avatar } from "react-native-elements";
 import FastImage from "react-native-fast-image";
 
 import { dateTimeDiff } from "../../utils";
-import { DEEP_LINK_TYPES } from "../../utils/share";
 import { avatarDefaultStyling } from "../../utils/styles";
 import { darkTheme } from "../../utils/theme";
 
 const screenWidth = Dimensions.get("screen").width;
 
-const Notification = ({ avatarSize, notification, navigateProfile }) => {
-  const { sender, type, sent_at } = notification.item;
+const Notification = ({ avatarSize, notification, textString, onPress }) => {
+  const { sender, sent_at, type, extra_data } = notification.item;
 
   const dateThen = new Date(sent_at);
   const dateDiff = dateTimeDiff(dateThen);
 
-  let textString = "";
-  switch (type) {
-    case DEEP_LINK_TYPES.FOLLOW:
-      textString = "follows you";
-      break;
-
-    case DEEP_LINK_TYPES.LIKE:
-      textString = "liked your clip";
-      break;
-
-    case DEEP_LINK_TYPES.REPOST:
-      textString = "reposted your clip";
-      break;
-
-    case DEEP_LINK_TYPES.CLIP:
-      textString = "uploaded a clip";
-      break;
-  }
-
-  if (textString == "") return null;
-
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => {
-        navigateProfile(sender.username);
-      }}
+      onPress={() => onPress(sender, type, extra_data)}
     >
       <Avatar
         rounded

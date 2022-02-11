@@ -20,6 +20,7 @@ import { handleAPIError } from "../utils";
 import { darkTheme } from "../utils/theme";
 import { shimmerColors } from "../utils/styles";
 import VirtualizedList from "../utils/virtualizedList";
+import { DEEP_LINK_TYPES } from "../utils/share";
 
 const screenWidth = Dimensions.get("screen").width;
 
@@ -85,10 +86,6 @@ class Notifications extends Component {
     this.cancelTokenSource.cancel();
   };
 
-  navigateProfile = (username) => {
-    this.props.navigation.navigate("Profile", { username });
-  };
-
   placeholders = () => {
     const placeholders = [];
     for (let i = 0; i < 5; i++) {
@@ -112,13 +109,76 @@ class Notifications extends Component {
     return placeholders;
   };
 
-  renderNotification = (notification) => (
-    <Notification
-      avatarSize={this.avatarSize}
-      notification={notification}
-      navigateProfile={this.navigateProfile}
-    />
-  );
+  onNotificationPress = (sender, type, extra_data) => {
+    const { navigation } = this.props;
+    const username = sender.username;
+    const post_id = extra_data?.post_id;
+
+    switch (type) {
+      case DEEP_LINK_TYPES.FOLLOW:
+        navigation.navigate("Profile", { username });
+        break;
+
+      case DEEP_LINK_TYPES.LIKE:
+        navigation.navigate("Profile", { username });
+        break;
+
+      case DEEP_LINK_TYPES.TAG:
+        if (typeof post_id === "string")
+          navigation.navigate("Clip", { post_id });
+        else navigation.navigate("Profile", { username });
+        break;
+
+      case DEEP_LINK_TYPES.REPOST:
+        // Redirect to Profile or Clip?
+        navigation.navigate("Profile", { username });
+        break;
+
+      case DEEP_LINK_TYPES.CLIP:
+        if (typeof post_id === "string")
+          navigation.navigate("Clip", { post_id });
+        else navigation.navigate("Profile", { username });
+        break;
+    }
+  };
+
+  renderNotification = (notification) => {
+    const { type } = notification.item;
+
+    let textString = "";
+    switch (type) {
+      case DEEP_LINK_TYPES.FOLLOW:
+        textString = "follows you";
+        break;
+
+      case DEEP_LINK_TYPES.LIKE:
+        textString = "liked your clip";
+        break;
+
+      case DEEP_LINK_TYPES.TAG:
+        textString = "tagged you in a clip";
+        break;
+
+      case DEEP_LINK_TYPES.REPOST:
+        textString = "reposted your clip";
+        break;
+
+      case DEEP_LINK_TYPES.CLIP:
+        textString = "uploaded a clip";
+        break;
+    }
+
+    if (textString == "") return null;
+
+    return (
+      <Notification
+        avatarSize={this.avatarSize}
+        notification={notification}
+        textString={textString}
+        onPress={this.onNotificationPress}
+      />
+    );
+  };
 
   keyExtractor = (notification) => notification.id.toString();
 
