@@ -184,7 +184,7 @@ class Profile extends Component {
             profile_loaded={this.state.profile_loaded}
             bio={this.state.bio}
           />
-          {typeof this.state.socials?.custom_url &&
+          {typeof this.state.socials?.custom_url === "string" &&
             this.state.socials?.custom_url.length > 0 && (
               <TouchableOpacity
                 style={{
