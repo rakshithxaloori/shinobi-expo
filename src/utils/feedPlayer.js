@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
   },
   poster: {
     height: POSTER_SIZE,
+    width: "100%",
     alignSelf: "center",
   },
   icon: {
