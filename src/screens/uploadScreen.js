@@ -130,7 +130,7 @@ class UploadScreen extends Component {
           } else {
             const videoInfo = await FileSystem.getInfoAsync(result.uri);
             if (videoInfo.size > VIDEO_SIZE_IN_MB * 1000 * 1000) {
-              flashAlert("Video should be smaller than 100 MB");
+              flashAlert(`Video should be smaller than ${VIDEO_SIZE_IN_MB} MB`);
             } else {
               let videoHeight = result.height;
               let videoWidth = result.width;
