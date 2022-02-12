@@ -43,7 +43,7 @@ const INITIAL_STATE = {
   posts: [],
   is_upload: false,
   viewable: null,
-  play: false,
+  play: true,
   mute: true,
   initLoaded: false,
   isLoading: true,
