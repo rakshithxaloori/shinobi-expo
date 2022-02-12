@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { View, Dimensions } from "react-native";
 import {
   NavigationContainer,
@@ -42,6 +42,7 @@ import { createAPIKit } from "../utils/APIKit";
 import { flashAlert } from "../utils/flash_message";
 import { handleAPIError } from "../utils";
 import { tabBarStyles } from "../utils/styles";
+import { WEEKLY_NOTIFICATIONS } from "../utils/notifications";
 
 const fullScreenWidth = Dimensions.get("window").width;
 const TAB_ICON_SIZE = 22;
@@ -60,7 +61,7 @@ const Tab = createBottomTabNavigator();
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
-    shouldPlaySound: false,
+    shouldPlaySound: true,
     shouldSetBadge: false,
   }),
 });
@@ -247,6 +248,17 @@ const StackNavigatorComponent = () => {
 };
 
 const NavigatorWithContext = () => {
+  useEffect(() => {
+    // Schedule weekly notifications
+    const scheduleNotifications = async () => {
+      await Notifications.cancelAllScheduledNotificationsAsync();
+      WEEKLY_NOTIFICATIONS.forEach(async (weekly) => {
+        await Notifications.scheduleNotificationAsync(weekly);
+      });
+    };
+
+    scheduleNotifications();
+  }, []);
   return (
     <View style={{ flex: 1, backgroundColor: darkTheme.background }}>
       <NavigationContainer
