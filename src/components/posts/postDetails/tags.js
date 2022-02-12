@@ -74,9 +74,7 @@ const Tags = ({ tags, setTags }) => {
   };
 
   const removeFromTags = (removeTag) => {
-    const newTags = tags.filter((tag) => {
-      tag.username !== removeTag.username;
-    });
+    const newTags = tags.filter((tag) => tag.username !== removeTag.username);
     setTags(newTags);
   };
 
@@ -211,7 +209,7 @@ const TagItem = ({ user, removeUser }) => (
       style={tagItemStyles.removeTag}
       size={24}
       color={darkTheme.on_background}
-      onPress={removeUser}
+      onPress={() => removeUser(user)}
     />
   </View>
 );
