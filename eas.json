@@ -1,11 +1,19 @@
 {
   "build": {
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "CI_CD_STAGE": "production",
+        "BASE_API_ENDPOINT": "api.shinobi.cc"
+      }
     },
     "release": {},
     "production": {
-      "releaseChannel": "prod-v1"
+      "releaseChannel": "prod-v1",
+      "env": {
+        "CI_CD_STAGE": "production",
+        "BASE_API_ENDPOINT": "api.shinobi.cc"
+      }
     },
     "development": {
       "developmentClient": true,
