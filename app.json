@@ -17,7 +17,7 @@
       "package": "cc.shinobi.android",
       "permissions": ["CAMERA"],
       "googleServicesFile": "./google-services.json",
-      "versionCode": 56,
+      "versionCode": 57,
       "intentFilters": [
         {
           "action": "VIEW",
