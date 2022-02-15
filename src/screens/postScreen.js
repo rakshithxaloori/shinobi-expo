@@ -54,7 +54,10 @@ class PostScreen extends Component {
   };
 
   unmountVideo = async () => {
-    this.state.post && (await this.state.post.videoRef.current.unloadAsync());
+    if (this.state.post?.videoRef) {
+      await this.state.post.videoRef.current.stopAsync();
+      await this.state.post.videoRef.current.unloadAsync();
+    }
   };
 
   componentWillUnmount = async () => {

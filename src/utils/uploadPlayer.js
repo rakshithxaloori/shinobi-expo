@@ -5,8 +5,8 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { darkTheme } from "./theme";
 
-const videoIconSize = 20;
-const screenHeight = Dimensions.get("screen").width;
+const VIDEO_ICON_SIZE = 20;
+const SCREEN_HEIGHT = Dimensions.get("screen").width;
 
 const VideoPlayer = ({ videoUri, videoHeight }) => {
   const videoRef = React.useRef();
@@ -27,9 +27,12 @@ const VideoPlayer = ({ videoUri, videoHeight }) => {
     loadVideo();
 
     return async () => {
-      videoRef.current && (await videoRef.current.unloadAsync());
+      if (videoRef?.current) {
+        await videoRef.current.stopAsync();
+        await videoRef.current.unloadAsync();
+      }
     };
-  }, [videoRef.current]);
+  }, [videoRef?.current]);
 
   const toggleMute = async () => {
     const status = await videoRef.current.getStatusAsync();
@@ -48,7 +51,7 @@ const VideoPlayer = ({ videoUri, videoHeight }) => {
     <View
       style={[
         styles.container,
-        { height: Math.min((3 * screenHeight) / 4, videoHeight) },
+        { height: Math.min((3 * SCREEN_HEIGHT) / 4, videoHeight) },
       ]}
     >
       <Video
@@ -64,14 +67,14 @@ const VideoPlayer = ({ videoUri, videoHeight }) => {
       />
       <Ionicons
         name={mute ? "volume-mute" : "volume-high"}
-        size={videoIconSize}
+        size={VIDEO_ICON_SIZE}
         style={[styles.icon, styles.mute]}
         color={darkTheme.on_surface_title}
         onPress={toggleMute}
       />
       <Ionicons
         name={play ? "pause" : "play"}
-        size={videoIconSize}
+        size={VIDEO_ICON_SIZE}
         style={[styles.icon, styles.play]}
         color={darkTheme.on_surface_title}
         onPress={togglePlay}
@@ -88,7 +91,7 @@ const styles = StyleSheet.create({
   },
   video: { height: "100%", width: "100%" },
   icon: {
-    borderRadius: videoIconSize / 2,
+    borderRadius: VIDEO_ICON_SIZE / 2,
     backgroundColor: darkTheme.surface,
     zIndex: 1,
     padding: 5,

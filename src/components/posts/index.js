@@ -119,8 +119,7 @@ class Posts extends Component {
   };
 
   unmountViewableVideo = async () => {
-    this.state.viewable?.videoRef?.current &&
-      (await this.state.viewable.videoRef.current.unloadAsync());
+    await this.stopUnloadRef(this.state.viewable?.videoRef);
   };
 
   playViewableVideo = async () => {
@@ -133,9 +132,16 @@ class Posts extends Component {
       (await this.state.viewable.videoRef.current.pauseAsync());
   };
 
+  stopUnloadRef = async (ref) => {
+    if (ref?.current) {
+      await ref.current.stopAsync();
+      await ref.current.unloadAsync();
+    }
+  };
+
   deletePostFromList = async (post) => {
     const post_id = post.id;
-    post.videoRef.current && (await post.videoRef.current.unloadAsync());
+    await this.stopUnloadRef(post.videoRef);
     const filteredData = this.state.posts.filter((item) => item.id !== post_id);
     this.setState({ posts: filteredData });
   };
@@ -336,19 +342,22 @@ class Posts extends Component {
     if (item?.videoRef?.current == undefined) return;
     const status = await item.videoRef.current.getStatusAsync();
     const positionMillis = status.positionMillis;
-    item?.videoRef?.current && (await item.videoRef.current.unloadAsync());
+
     if (typeof positionMillis != "number") return;
     let newPost = {
       ...item,
       positionMillis: positionMillis,
     };
-    this.setState((prevState) => {
-      return {
-        posts: prevState.posts.map((item) =>
-          item.id === newPost.id ? newPost : item
-        ),
-      };
-    });
+    this.setState(
+      (prevState) => {
+        return {
+          posts: prevState.posts.map((item) =>
+            item.id === newPost.id ? newPost : item
+          ),
+        };
+      },
+      async () => await this.stopUnloadRef(item.videoRef)
+    );
   };
 
   onViewableItemsChanged = async ({ viewableItems, changed }) => {
@@ -375,7 +384,7 @@ class Posts extends Component {
           positionMillis: currentViewable.item?.positionMillis || 0,
         }
       );
-      this.setState({ viewable: currentViewable.item });
+      this.setState({ viewable: currentViewable });
     };
 
     if (viewableItems.length > 0) {
