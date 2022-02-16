@@ -63,7 +63,6 @@ class Socials extends Component {
     youtube: "",
     instagram: "",
     twitch: "",
-    custom_title: "",
     custom_url: "",
   };
 
@@ -73,9 +72,8 @@ class Socials extends Component {
 
   getSocials = async () => {
     const onSuccess = (response) => {
-      const { youtube, instagram, twitch, custom_title, custom_url } =
-        response.data?.payload;
-      this.setState({ youtube, instagram, twitch, custom_title, custom_url });
+      const { youtube, instagram, twitch, custom_url } = response.data?.payload;
+      this.setState({ youtube, instagram, twitch, custom_url });
     };
 
     const APIKit = await createAPIKit();
@@ -87,10 +85,6 @@ class Socials extends Component {
   };
 
   updateSocials = async () => {
-    if (this.state.custom_title.length > 20) {
-      flashAlert("Custom Title has to be less than 20 characters");
-    }
-
     const expression =
       /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi;
     const regex = new RegExp(expression);
@@ -99,10 +93,6 @@ class Socials extends Component {
       if (!this.state.custom_url.trim().match(regex)) {
         flashAlert("Custom Link is invalid");
         return;
-      }
-    } else {
-      if (this.state.custom_title === "") {
-        flashAlert("Title with an empty URL ignored");
       }
     }
 
@@ -116,8 +106,6 @@ class Socials extends Component {
       youtube: this.state.youtube.trim(),
       instagram: this.state.instagram.trim(),
       twitch: this.state.twitch.trim(),
-      custom_title:
-        this.state.custom_url === "" ? "" : this.state.custom_title.trim(),
       custom_url: this.state.custom_url.trim(),
     })
       .then(onSuccess)
@@ -174,25 +162,6 @@ class Socials extends Component {
             <Text style={styles.label}>Custom Link</Text>
           </View>
           <View style={{ height: 80 }}>
-            <TextInput
-              autoCapitalize="none"
-              autoCorrect={false}
-              value={this.state.custom_title}
-              style={[
-                styles.input,
-                {
-                  color:
-                    this.state.custom_title.length > 20
-                      ? "red"
-                      : darkTheme.on_background,
-                },
-              ]}
-              placeholder="Link Title (20 characters)"
-              placeholderTextColor={darkTheme.on_surface_subtitle}
-              onChangeText={(text) => {
-                this.setState({ custom_title: text });
-              }}
-            />
             <TextInput
               autoCapitalize="none"
               autoCorrect={false}
