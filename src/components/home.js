@@ -7,7 +7,6 @@ import {
 } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import axios from "axios";
 import * as Notifications from "expo-notifications";
 import * as Linking from "expo-linking";
 import { StatusBar } from "expo-status-bar";
@@ -67,35 +66,6 @@ Notifications.setNotificationHandler({
 });
 
 const TabNavigatorComponent = () => {
-  let cancelTokenSource = axios.CancelToken.source();
-
-  const updateCountry = async (country_code) => {
-    const APIKit = await createAPIKit();
-    APIKit.post("auth/update/country/", { country_code }).catch((e) => {
-      flashAlert(handleAPIError(e));
-    });
-  };
-
-  React.useEffect(() => {
-    const getCountryCode = async () => {
-      let publicIpAddress = await axios.get("https://api.ipify.org");
-      publicIpAddress = publicIpAddress?.data;
-      let geoResponse = await axios.get(
-        `http://www.geoplugin.net/json.gp?ip=${publicIpAddress}`
-      );
-
-      if (geoResponse.status === 200) {
-        await updateCountry(geoResponse.data.geoplugin_countryCode);
-      }
-    };
-
-    getCountryCode();
-
-    return () => {
-      cancelTokenSource.cancel();
-    };
-  }, []);
-
   return (
     <Tab.Navigator
       screenOptions={{

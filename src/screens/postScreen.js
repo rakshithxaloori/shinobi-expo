@@ -1,14 +1,7 @@
 import React, { Component } from "react";
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  Text,
-  TouchableOpacity,
-} from "react-native";
+import { ScrollView, View, StyleSheet, Dimensions } from "react-native";
 import axios from "axios";
 import LottieView from "lottie-react-native";
-import { Ionicons } from "@expo/vector-icons";
 
 import { createAPIKit } from "../utils/APIKit";
 import { flashAlert } from "../utils/flash_message";
@@ -17,8 +10,8 @@ import ClipPost from "../components/posts/post";
 import ReportOverlay from "../components/posts/reportOverlay";
 import { clipUrlByNetSpeed } from "../utils/clipUtils";
 import { darkTheme } from "../utils/theme";
-import { shareClip } from "../utils/share";
 import TagsOverlay from "../components/posts/tagsOverlay";
+import SharePost from "../components/posts/share";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -142,7 +135,7 @@ class PostScreen extends Component {
       }
 
       return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
           <ClipPost
             type={"Feed"}
             post={this.state.post}
@@ -158,20 +151,8 @@ class PostScreen extends Component {
             toggleMute={this.toggleMute}
             toggleLike={this.toggleLike}
           />
-          <TouchableOpacity
-            onPress={() => {
-              shareClip(post_id, title, username, game_name);
-            }}
-            style={styles.button}
-          >
-            <Ionicons
-              style={styles.icon}
-              name="share-social-outline"
-              size={25}
-              color={darkTheme.on_background}
-            />
-            <Text style={styles.buttonText}>Share Clip</Text>
-          </TouchableOpacity>
+
+          <SharePost post={this.state.post} />
           {this.state.reportClipId && (
             <ReportOverlay
               post_id={this.state.reportClipId}
@@ -185,7 +166,7 @@ class PostScreen extends Component {
               hideTagsOverlay={this.toggleTags}
             />
           )}
-        </View>
+        </ScrollView>
       );
     } else {
       return (

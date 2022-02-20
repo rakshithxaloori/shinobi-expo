@@ -213,7 +213,7 @@ class UploadScreen extends Component {
       );
 
       if (get_s3_url_response.status === 200) {
-        const url_payload = get_s3_url_response.data.payload;
+        const url_payload = get_s3_url_response.data.payload?.url;
 
         this.setState({ file_key: url_payload.fields.key });
         flashAlert("Uploading clip...", "Don't close the app", undefined, 5000);
