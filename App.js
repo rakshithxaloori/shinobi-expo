@@ -1,12 +1,13 @@
 // https://logomakr.com/2i81xD
 
 import React from "react";
-import { AppState, Platform, View, Text } from "react-native";
+import { AppState, Platform, View, Text, TouchableOpacity } from "react-native";
 import * as SecureStore from "expo-secure-store";
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 import axios from "axios";
+import * as Linking from "expo-linking";
 
 import AuthContext from "./src/authContext";
 
@@ -220,14 +221,33 @@ const App = () => {
   );
 };
 
-const Empty = () => (
-  <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-    <Text>
-      Shinobi - the app to share gaming clips - has been shut down. We're
-      working on a different idea. Thanks for checking out the app!
-    </Text>
-  </View>
-);
+const Empty = () => {
+  const onPressUrl = (url) => {
+    try {
+      Linking.openURL(url);
+    } catch (e) {}
+  };
+  return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text>
+        Shinobi - the app to share gaming clips - has been shut down. We're
+        working on a different idea. Thanks for checking out the app!
+      </Text>
+      <TouchableOpacity
+        onPress={() =>
+          onPressUrl("https://www.shinobi.cc/legal/privacy-policy")
+        }
+      >
+        <Text style={{ textDecorationLine: "underline" }}>Privacy Policy</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => onPressUrl("https://www.shinobi.cc/legal/terms")}
+      >
+        <Text style={{ textDecorationLine: "underline" }}>Terms</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 // export default App;
 
