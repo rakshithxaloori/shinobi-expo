@@ -1,7 +1,7 @@
 // https://logomakr.com/2i81xD
 
 import React from "react";
-import { AppState, Platform } from "react-native";
+import { AppState, Platform, View, Text } from "react-native";
 import * as SecureStore from "expo-secure-store";
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
@@ -220,7 +220,18 @@ const App = () => {
   );
 };
 
-export default App;
+const Empty = () => (
+  <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <Text>
+      Shinobi - the app to share gaming clips - has been shut down. We're
+      working on a different idea. Thanks for checking out the app!
+    </Text>
+  </View>
+);
+
+// export default App;
+
+export default Empty;
 
 async function registerForPushNotificationsAsync() {
   let token;
